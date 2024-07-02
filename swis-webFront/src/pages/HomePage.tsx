@@ -7,7 +7,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import BarChart from "../components/HomePage/BarChart";
+import BarChart from "../components/Home/BarChart";
 
 ChartJS.register(
   CategoryScale,

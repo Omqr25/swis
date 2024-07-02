@@ -1,12 +1,12 @@
-import { Box, FormControl, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
+import { Box, FormControl, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
 import { BsSearch } from "react-icons/bs";
-import { Field, Form, Formik } from "formik"
 interface Search{
     text : string;
 }
-export const SearchInput = () => {
+export const SearchInput = () => {  
     const handleSearch = (vlaues : Search) => {
-        
+        console.log(vlaues);
     }
   return (
     <Formik
@@ -22,7 +22,7 @@ export const SearchInput = () => {
                     name="text"
                     as={Input}
                     borderRadius={20}
-                    width="1100px"
+                    width={{lg:'1100px' , base:"550px"}}
                     placeholder="Search about your product"
                     _placeholder={{ color: "gray.700" }}
                     pl={10}

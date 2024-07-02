@@ -1,8 +1,14 @@
 import axios, { AxiosRequestConfig } from "axios";
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
-});
+  headers: {
+   Accept: "application/json",
 
+  }
+});
+export const setAuthToken = (token: string) => {
+  axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+};
 class APIClient<T> {
   endPoint: string;
 
@@ -14,10 +20,10 @@ class APIClient<T> {
       .get<T>(this.endPoint, config)
       .then((res) => res.data);
   };
-  post = (data: T) => {
+  post = <D>(data: D) => {
     return axiosInstance.post<T>(this.endPoint, data).then((res) => res.data);
   };
-  get = (id: number | string) => {
+  get = (id: number | undefined) => {
     return axiosInstance
       .get<T>(this.endPoint + "/" + id)
       .then((res) => res.data);
@@ -25,3 +31,4 @@ class APIClient<T> {
 }
 
 export default APIClient;
+

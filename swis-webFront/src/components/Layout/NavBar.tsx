@@ -1,12 +1,12 @@
 import { HStack, IconButton, Image } from "@chakra-ui/react";
-import logo from "../../assets/LOGO.png";
-import { SearchInput } from "../SearchInput";
-import { ColorModeSwitch } from "../ColorModeSwitch";
-import { Link } from "react-router-dom";
-import profile from "../../assets/Profile.jfif";
-import { IoIosNotifications, IoMdSettings } from "react-icons/io";
-import Mycolor from "../../constants";
 import { css, keyframes } from "@emotion/react";
+import { IoIosNotifications, IoMdSettings } from "react-icons/io";
+import { Link } from "react-router-dom";
+import logo from "../../assets/LOGO.png";
+import profile from "../../assets/Profile.jfif";
+import Mycolor from "../../constants";
+import { ColorModeSwitch } from "../ColorModeSwitch";
+import { SearchInput } from "../SearchInput";
 const rotate = keyframes`
   from {
     transform: rotate(0deg);
