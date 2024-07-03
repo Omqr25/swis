@@ -58,6 +58,7 @@ export const SubBranch = () => {
       borderRadius={20}
       overflowY={"auto"}
       maxHeight="590px"
+      color={'black'}
     >
       <Heading fontSize={30} pb={4} textAlign={"center"}>
         {branch.name}

@@ -6,8 +6,11 @@ const axiosInstance = axios.create({
 
   }
 });
-export const setAuthToken = (token: string) => {
+export const setAuthToken = () => {
+const token = localStorage.getItem('token');
+if (token) {
   axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 };
 class APIClient<T> {
   endPoint: string;

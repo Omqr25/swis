@@ -1,4 +1,4 @@
-import { HStack, IconButton, Image } from "@chakra-ui/react";
+import { HStack, IconButton, Image, useColorMode } from "@chakra-ui/react";
 import { css, keyframes } from "@emotion/react";
 import { IoIosNotifications, IoMdSettings } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -19,10 +19,12 @@ const animation = css`
   animation: ${rotate} 2s linear infinite;
 `;
 export const NavBar = () => {
+  const {colorMode} = useColorMode();
+  const colorr = colorMode === "light" ? Mycolor : "#333333";
   return (
     <HStack
       justifyContent={"space-between"}
-      bgColor={Mycolor}
+      bgColor={colorr}
       p={2}
       color={"white"}
     >
@@ -31,7 +33,7 @@ export const NavBar = () => {
           src={logo}
           boxSize="60px"
           w={"150px"}
-          bgColor={Mycolor}
+          bgColor={colorr}
           objectFit={"fill"}
           borderRadius={20}
         ></Image>
@@ -40,7 +42,7 @@ export const NavBar = () => {
         <IconButton
           aria-label=""
           icon={<IoMdSettings size={"30px"} color="white" />}
-          bgColor={Mycolor}
+          bgColor={colorr}
           _hover={{ bg: "red.500" }}
           css={animation}
         ></IconButton>
@@ -51,7 +53,7 @@ export const NavBar = () => {
         <IconButton
           aria-label=""
           icon={<IoIosNotifications size={"30px"} color="white" />}
-          bgColor={Mycolor}
+          bgColor={colorr}
           _hover={{ bg: "red.500" }}
         ></IconButton>
       </Link>

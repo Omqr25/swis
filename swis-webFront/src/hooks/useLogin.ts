@@ -14,8 +14,10 @@ const useLogin = () => {
         .post<Response<User>>("http://127.0.0.1:8000/api/login", user)
         .then((res) => {
           // save the token so that you can use any request after logging in
-          if(res.data.data.access_token)
-          setAuthToken(res.data.data.access_token);
+          if(res.data.data.access_token){
+          localStorage.setItem('token', res.data.data.access_token);
+          setAuthToken();
+        }
           // save the data of the current user
           setUser(res.data.data);
           console.log(res.data.data.access_token);

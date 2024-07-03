@@ -15,7 +15,7 @@ export const Layout = () => {
       }}
       templateRows={{ lg: 'auto 1fr' }}
       templateColumns={{ lg: 'auto 1fr' }}
-      h="100vh" 
+      
     >
       <GridItem
         area={"nav"}

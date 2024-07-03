@@ -43,7 +43,7 @@ export const BranchTable = () => {
   return (
     <Box m={4} bg={"gray.100"} borderRadius={20}>
       <TableContainer borderRadius={20} maxHeight={'590px'} overflowY={'auto'}>
-        <Table variant={"simple"} size={"lg"}>
+        <Table variant={"simple"} size={"lg"} color={'black'}>
           <Thead>
             <Tr>
               <Th></Th>

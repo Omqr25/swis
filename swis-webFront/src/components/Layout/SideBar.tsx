@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Icon, List, ListItem } from "@chakra-ui/react";
+import { Box, Button, Divider, Icon, List, ListItem, useColorMode } from "@chakra-ui/react";
 import {
     FaBoxOpen,
     FaChartLine,
@@ -25,8 +25,10 @@ export const SideBar = () => {
     Transactions: FaExchangeAlt,
     Reports: FaChartLine,
   };
+  const {colorMode} = useColorMode();
+  const colorr = colorMode === "light" ? Mycolor : "#333333";
   return (
-    <List bgColor={Mycolor} w={"200px"} color={"white"}>
+    <List bgColor={colorr} w={"200px"} color={"white"}>
       <Divider />
       {Object.entries(Tabs).map(([name, icon], index) => (
         <Box

@@ -4,6 +4,7 @@ import Mycolor from "../constants";
 export const ColorModeSwitch = () => {
     const { colorMode, toggleColorMode } = useColorMode();
     const IconComponent = colorMode === "light" ? FaMoon : FaSun;
+    const colorr = colorMode === "light" ? Mycolor : "#333333";
   return (
     <>
       <HStack>
@@ -11,7 +12,7 @@ export const ColorModeSwitch = () => {
       aria-label={`switch to ${colorMode === "light" ? "dark" : "light"} mode `}
       icon={ <Box as={IconComponent} size="24px"  color="white" />}
       onClick={toggleColorMode}
-      bgColor={Mycolor}
+      bgColor={colorr}
       _hover={{bg:"red.500"}}
     />
       </HStack>
