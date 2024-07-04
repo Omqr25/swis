@@ -26,4 +26,5 @@ class BranchResource extends JsonResource
             'address'   => $this->address,
         ];
     }
+
 }

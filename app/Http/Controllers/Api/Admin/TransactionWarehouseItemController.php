@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Enums\transactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\transactionWarehousesItemRepository;
 use App\Http\Requests\Transaction\storeTransactionWarehouseRequest;
@@ -12,6 +13,7 @@ use App\Models\transactionWarehouseItem;
 use App\Services\TransactionWarehouseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransactionWarehouseItemController extends Controller
 {
@@ -74,6 +76,39 @@ class TransactionWarehouseItemController extends Controller
 
         $data = $this->transactionWarehousesRepository->restore($request);
         return [$data['message'],$data['code']];
+    }
+    public function calculateInventory(Request $request)
+    {
+        // Validate the request parameters
+        $request->validate([
+            'warehouse_id' => 'required|integer',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $warehouseId = $request->input('warehouse_id');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        // Query to get all transactions of type 'IN' for the specified warehouse and date range
+        $inventory = TransactionWarehouseItem::select('item_id', DB::raw('SUM(quantity) as total_quantity'))
+            ->where('transaction_type', transactionType::transactionIn)
+            ->where('warehouse_id', $warehouseId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('item_id')
+            ->with('item')
+            ->get();
+
+        // Format the results
+        $results = $inventory->map(function($transaction) {
+            return [
+                'item_id' => $transaction->item_id,
+                'item_name' => $transaction->item->name,
+                'total_quantity' => $transaction->total_quantity,
+            ];
+        });
+
+        return response()->json($results);
     }
 
 }

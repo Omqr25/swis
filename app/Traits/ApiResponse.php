@@ -10,8 +10,8 @@ trait ApiResponse
 {
     protected function response($message, $data = null, $meta = null, $code = Response::HTTP_OK): JsonResponse
     {
-        $response = ['message' => $message, 'status_code' => $code];
 
+        $response = ['message' => $message, 'status_code' => $code];
         if ($meta) {
             $response = array_merge(['meta' => $meta], $response);
         }
@@ -44,11 +44,12 @@ trait ApiResponse
       }
   */
 
-    protected function showAll($data, $resource, $message = 'success', $code = 200): JsonResponse
+    protected function showAll($data, $resource,$pagination, $message = 'success', $code = 200): JsonResponse
     {
-        $response = $resource::collection($data);
 
-        return $this->response($message, $response, $code);
+        $response = $resource::collection($data);
+        return $this->response(message:$message,data:$response,meta:['pagination' => $pagination],code:$code);
+
     }
 
     protected function showCollection($data, $resource, $message = 'success', $code = 200): JsonResponse
@@ -58,14 +59,13 @@ trait ApiResponse
         return $this->response($message, $response, $code);
     }
 
-    protected function getPaginationMeta(LengthAwarePaginator $paginator): array
+    protected function getPaginationMeta($paginator): array
     {
         return [
             'total' => $paginator->total(),
             'per_page' => $paginator->perPage(),
             'count' => count($paginator->items()),
             'current_page' => $paginator->currentPage(),
-
         ];
     }
 
