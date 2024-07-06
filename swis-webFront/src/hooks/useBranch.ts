@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import Branches from "../entities/Branches";
 import Response from "../entities/GlobalResponse";
-import APIClient, { setAuthToken } from "../services/APIClient";
+import APIClient from "../services/APIClient";
 interface CustomError extends Error {
     response?: {
       status: number;
@@ -11,7 +11,7 @@ interface CustomError extends Error {
   const useBranche = (id : number) =>{
     const apiClient = new APIClient<Response<Branches>>(`/branches`);
     const navigate = useNavigate();
-    setAuthToken();
+   
     return useQuery({
         queryKey: ["branche" , id],
         queryFn: () => apiClient.get(id),

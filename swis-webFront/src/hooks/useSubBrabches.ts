@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
-import { GetAllResponse } from "../entities/GlobalResponse";
-import Branches from "../entities/Branches";
-import APIClient, { setAuthToken } from "../services/APIClient";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import Branches from "../entities/Branches";
+import { GetAllResponse } from "../entities/GlobalResponse";
+import APIClient from "../services/APIClient";
 interface CustomError extends Error {
     response?: {
       status: number;
@@ -11,7 +11,6 @@ interface CustomError extends Error {
   const useSubBranches = (id : number | undefined) =>{
     const apiClient = new APIClient<GetAllResponse<Branches>>(`/branches/indexSubBranch/${id}`);
     const navigate = useNavigate();
-    setAuthToken();
     return useQuery({
         queryKey: ["subbranches" , id],
         queryFn: apiClient.getAll,

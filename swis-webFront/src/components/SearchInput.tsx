@@ -22,7 +22,7 @@ export const SearchInput = () => {
                     name="text"
                     as={Input}
                     borderRadius={20}
-                    width={{lg:'1100px' , base:"550px"}}
+                    width={{lg:'1100px' , base:"40px"}}
                     placeholder="Search about your product"
                     _placeholder={{ color: "gray.700" }}
                     pl={10}

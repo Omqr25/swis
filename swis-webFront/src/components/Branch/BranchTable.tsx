@@ -10,22 +10,22 @@ import {
   Thead,
   Tr,
   useColorMode,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AiOutlineCode,
   AiOutlineEllipsis,
   AiOutlinePhone,
 } from "react-icons/ai";
+import { MyDarkColor } from "../../constants";
 import useBranches from "../../hooks/useBranches";
 import useBranchStore from "../../stores/branchesStore";
+import DeleteC from "../Delete";
 import CustomModal from "../Modal";
 import { BranchForm } from "./BranchForm";
-import { useState } from "react";
 import { BranchTableSkeleton } from "./BranchTableSkeleton";
-import DeleteC from "../Delete";
-import { MyDarkColor } from "../../constants";
-import { useTranslation } from "react-i18next";
 
 export const BranchTable = () => {
   const setBranch = useBranchStore((s) => s.setBranch);
@@ -45,9 +45,9 @@ export const BranchTable = () => {
     return <BranchTableSkeleton />
   }
   return (
-    <Box m={4} bg={"gray.100"} borderRadius={20}>
+    <Box m={4} bg={"gray.100"} borderRadius={20} w={'380px'}>
       <TableContainer borderRadius={20} maxHeight={'590px'} overflowY={'auto'} bgColor={colorMode === 'dark' ? MyDarkColor : 'white'}>
-        <Table variant={"simple"} size={"lg"}>
+        <Table variant={"simple"} size={{lg:"lg" , base:"sm"}}>
           <Thead>
             <Tr>
               <Th></Th>
