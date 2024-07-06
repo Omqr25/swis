@@ -1,6 +1,7 @@
 import { Button, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, Spinner } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import useDelete from "../hooks/useDelete";
+import { useTranslation } from "react-i18next";
 
 interface Props{
     ID : number;
@@ -17,13 +18,14 @@ function DeleteC({ID , target} : Props) {
         _method : 'DELETE',
     });
   };
+  const {t} = useTranslation();
   if(Delete.isLoading){
     if(isOpen == true)onClose();
     return <Spinner />}
   return (
     <>
       <Button colorScheme="red" onClick={(e) => {e.stopPropagation();setIsOpen(true);}}>
-        Delete
+        {t("Delete")}
       </Button>
 
       <AlertDialog
@@ -34,19 +36,19 @@ function DeleteC({ID , target} : Props) {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Item
+              {t("DItem")}
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure you want to delete this item?
+              {t("DMess")}
             </AlertDialogBody>
 
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose}>
-                Cancel
+                {t("Cancel")}
               </Button>
               <Button colorScheme="red" onClick={handleDelete} ml={3}>
-                Delete
+                {t("Delete")}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

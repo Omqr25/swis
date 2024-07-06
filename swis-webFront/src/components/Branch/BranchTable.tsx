@@ -9,6 +9,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
 import {
@@ -23,6 +24,8 @@ import { BranchForm } from "./BranchForm";
 import { useState } from "react";
 import { BranchTableSkeleton } from "./BranchTableSkeleton";
 import DeleteC from "../Delete";
+import { MyDarkColor } from "../../constants";
+import { useTranslation } from "react-i18next";
 
 export const BranchTable = () => {
   const setBranch = useBranchStore((s) => s.setBranch);
@@ -36,28 +39,29 @@ export const BranchTable = () => {
    onOpen();
   }
 };
-  
+  const {colorMode} = useColorMode();
+  const {t} = useTranslation();
   if(isLoading){
     return <BranchTableSkeleton />
   }
   return (
     <Box m={4} bg={"gray.100"} borderRadius={20}>
-      <TableContainer borderRadius={20} maxHeight={'590px'} overflowY={'auto'}>
-        <Table variant={"simple"} size={"lg"} color={'black'}>
+      <TableContainer borderRadius={20} maxHeight={'590px'} overflowY={'auto'} bgColor={colorMode === 'dark' ? MyDarkColor : 'white'}>
+        <Table variant={"simple"} size={"lg"}>
           <Thead>
             <Tr>
               <Th></Th>
               <Th>
                 <Icon as={AiOutlineEllipsis} pr={1} />
-                Name
+                {t("Name")}
               </Th>
               <Th>
                 <Icon as={AiOutlineCode} pr={1} />
-                Code
+                {t("Code")}
               </Th>
               <Th>
                 <Icon as={AiOutlinePhone} pr={1} />
-                Phone
+                {t("Phone")}
               </Th>
               
             </Tr>
@@ -82,7 +86,7 @@ export const BranchTable = () => {
                     handleEditBranch(Br.id);
                     }}
                   >
-                    EDIT
+                    {t("Edit")}
                   </Button>
                   {Br.id && <DeleteC ID={Br.id} target="branches"/>}
                 </Td>

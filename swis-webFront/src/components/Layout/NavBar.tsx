@@ -4,7 +4,7 @@ import { IoIosNotifications, IoMdSettings } from "react-icons/io";
 import { Link } from "react-router-dom";
 import logo from "../../assets/LOGO.png";
 import profile from "../../assets/Profile.jfif";
-import Mycolor from "../../constants";
+import Mycolor, { MyDarkColor } from "../../constants";
 import { ColorModeSwitch } from "../ColorModeSwitch";
 import { SearchInput } from "../SearchInput";
 const rotate = keyframes`
@@ -20,7 +20,7 @@ const animation = css`
 `;
 export const NavBar = () => {
   const {colorMode} = useColorMode();
-  const colorr = colorMode === "light" ? Mycolor : "#333333";
+  const colorr = colorMode === "light" ? Mycolor : MyDarkColor;
   return (
     <HStack
       justifyContent={"space-between"}

@@ -2,9 +2,15 @@ import { Grid, GridItem, Show } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import { NavBar } from "../components/Layout/NavBar";
 import { SideBar } from "../components/Layout/SideBar";
+import useLanguage from "../stores/LanguageStore";
 
+const setDirection = () =>{
+  const lng = useLanguage(s => s.lng);
+  document.dir = lng ==='ar' ? 'rtl' : 'ltr';
+}
 
 export const Layout = () => {
+  setDirection();
   return (
     <Grid
       templateAreas={{

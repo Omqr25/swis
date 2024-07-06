@@ -34,7 +34,7 @@ export const BranchPage = () => {
         left={204}
         onClick={() => handleSubmit()}
       />
-        <CustomModal buttonLabel={"Add New Branch"} isOpen={isOpen} onClose={onClose}>
+        <CustomModal buttonLabel={"Add"} isOpen={isOpen} onClose={onClose}>
         <BranchForm isEdit={false} ID={1} />
       </CustomModal>
     </Box>

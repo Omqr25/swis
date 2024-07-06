@@ -18,12 +18,14 @@ import Branches2 from "../../entities/Branches2";
 import useBranche from "../../hooks/useBranch";
 import useEditBranch from "../../hooks/useEditBranch";
 import useCreateBranch from "../../hooks/useCreateBranch";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   isEdit: boolean;
   ID : number;
 }
 export const BranchForm = ({ isEdit , ID }: Props) => {
+  const {t} = useTranslation();
   const validationsEditBranch = yup
     .object()
     .shape({
@@ -107,7 +109,7 @@ export const BranchForm = ({ isEdit , ID }: Props) => {
         <Text color={'red'}>{(Edit.error?.message || Create.error?.message) ? 'Check Again your fields!' : ''}</Text>
         <Text color={'green'}>{(Edit.isSuccess || Create.isSuccess) ? 'Done Successfully' : ''}</Text>
         <FormControl id="name">
-        <FormLabel fontFamily={"cursive"} color={'white'}>Name </FormLabel>
+        <FormLabel fontFamily={"cursive"} color={'white'}>{t("Name")} </FormLabel>
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -130,7 +132,7 @@ export const BranchForm = ({ isEdit , ID }: Props) => {
             </ErrorMessage>
         </FormControl>
         <FormControl id="phone">
-        <FormLabel fontFamily={"cursive"} color={'white'}>Phone </FormLabel>
+        <FormLabel fontFamily={"cursive"} color={'white'}>{t("Phone")} </FormLabel>
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -153,7 +155,7 @@ export const BranchForm = ({ isEdit , ID }: Props) => {
             </ErrorMessage>
         </FormControl>
         <FormControl id="address">
-        <FormLabel fontFamily={"cursive"} color={'white'}>Address </FormLabel>
+        <FormLabel fontFamily={"cursive"} color={'white'}>{t("Address")} </FormLabel>
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -176,7 +178,7 @@ export const BranchForm = ({ isEdit , ID }: Props) => {
             </ErrorMessage>
         </FormControl>
         <FormControl id="parent_id">
-        <FormLabel fontFamily={"cursive"} color={'white'}>MainBranch_id </FormLabel>
+        <FormLabel fontFamily={"cursive"} color={'white'}>{t("MainBranch_id")} </FormLabel>
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -206,7 +208,7 @@ export const BranchForm = ({ isEdit , ID }: Props) => {
             marginTop={5}
             borderRadius={"20"}
           >
-            {isEdit ? "Edit" : "Add"}
+            {isEdit ? t("Edit") : t("Add")}
           </Button>
       </Form>
     </Formik>

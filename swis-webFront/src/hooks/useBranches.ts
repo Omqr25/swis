@@ -25,7 +25,9 @@ const useBranches = () =>{
         if (statusCode === 401) {
           // Unauthorized
           navigate("/login");
-        } 
+        } else {
+          window.alert("Check Your Connection!");
+        }
         }
       }});
     }

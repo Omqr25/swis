@@ -4,6 +4,8 @@ import { Layout } from "./pages/Layout";
 import { LoginPage } from "./pages/LoginPage";
 import { ErrorPage } from "./pages/ErrorPage";
 import { BranchPage } from "./pages/BranchPage";
+import { SettingPage } from "./pages/SettingPage";
+import { Languages } from "./components/Setting/Languages";
 
 const  router = createBrowserRouter([
     {
@@ -13,6 +15,11 @@ const  router = createBrowserRouter([
         children: [
             {path: "Home" , element : <HomePage />},
             {path: "Branches" , element: <BranchPage />},
+            {path: "Settings", element: <SettingPage /> ,
+              children: [
+                {path:"Languages", element: <Languages />}
+              ]
+            }
         ]   
     },
     {

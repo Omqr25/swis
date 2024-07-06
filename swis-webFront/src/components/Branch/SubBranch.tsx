@@ -7,6 +7,7 @@ import {
   Spacer,
   Spinner,
   Text,
+  useColorMode,
   useDisclosure
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -18,6 +19,8 @@ import { BranchForm } from "./BranchForm";
 import { BranchInfo } from "./BranchInfo";
 import useSubBranches from "../../hooks/useSubBrabches";
 import DeleteC from "../Delete";
+import { MyDarkColor } from "../../constants";
+import { useTranslation } from "react-i18next";
 export const SubBranch = () => {
   const branch = useBranchStore((s) => s.branch);
 
@@ -31,6 +34,9 @@ export const SubBranch = () => {
 
   const {data , isLoading} = useSubBranches(branch.id);
 
+  const {colorMode} = useColorMode();
+  
+  const {t} = useTranslation();
   if (!branch.id) return <></>;
 
   const handleSubBranch = (SubBranch: Branches) => {
@@ -58,16 +64,16 @@ export const SubBranch = () => {
       borderRadius={20}
       overflowY={"auto"}
       maxHeight="590px"
-      color={'black'}
+      bgColor={colorMode === 'dark' ? MyDarkColor : 'white'}
     >
       <Heading fontSize={30} pb={4} textAlign={"center"}>
         {branch.name}
       </Heading>
       <Text fontSize={20} pl={4} pb={2}>
-        <Icon as={BiMap} /> <b>address</b> : {branch.address}
+        <Icon as={BiMap} /> <b>{t("Address")}</b> : {branch.address}
       </Text>
       <Heading fontSize={30} pb={4} textAlign={"center"}>
-        SubBranches
+        {t("SubBranches")}
       </Heading>
       {data?.data.map((b) => (
         <Box
@@ -78,20 +84,20 @@ export const SubBranch = () => {
           pb={4}
           m={3}
           _hover={{ bg: "gray.500" }}
+          bgColor={colorMode === 'dark' ? MyDarkColor : 'white'}
         >
           <Flex align="center" pt={3} pr={2} onClick={() => handleSubBranch(b)}>
             <Text>{b.name}</Text>
             <Spacer />
             <Button
               colorScheme="blue"
-              size="sm"
               mr={2}
               onClick={(e) => {
                 e.stopPropagation();
                 handleEditSubBranch(b);
               }}
             >
-              Edit
+              {t("Edit")}
             </Button>
             {b.id && <DeleteC ID={b.id} target="branches" />}
           </Flex>
