@@ -86,6 +86,7 @@ Route::controller(WarehouseItemController::class)->group(function(){
 Route::controller(TransactionWarehouseItemController::class)->group(function(){
     Route::post('TransactionWarehouseItem/restore','restore');
     Route::get('TransactionWarehouseItem/showDeleted','showDeleted');
+    Route::get('TransactionWarehouseItem/calculateInventory','calculateInventory');
 });
 Route::controller(DonorItemController::class)->group(function(){
     Route::post('donorItems/restore','restore');
