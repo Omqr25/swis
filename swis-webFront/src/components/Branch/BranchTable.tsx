@@ -23,6 +23,7 @@ import { MyDarkColor } from "../../constants";
 import useBranches from "../../hooks/useBranches";
 import useBranchStore from "../../stores/branchesStore";
 import DeleteC from "../Delete";
+import { Error } from "../Error";
 import CustomModal from "../Modal";
 import { BranchForm } from "./BranchForm";
 import { BranchTableSkeleton } from "./BranchTableSkeleton";
@@ -32,7 +33,7 @@ export const BranchTable = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); 
   const branch = useBranchStore((s) => s.branch);
   const [BranchId , setBranchId] = useState(0);
-  const {data , isLoading} = useBranches();
+  const {data , error ,  isLoading} = useBranches();
   const handleEditBranch = (id : number | undefined) => {
    if(onOpen && id){
    setBranchId(id);
@@ -43,6 +44,9 @@ export const BranchTable = () => {
   const {t} = useTranslation();
   if(isLoading){
     return <BranchTableSkeleton />
+  }
+  if(error){
+    return <Error message={error.message} />
   }
   return (
     <Box m={4} bg={"gray.100"} borderRadius={20} w={'380px'}>

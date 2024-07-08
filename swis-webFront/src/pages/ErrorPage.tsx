@@ -3,7 +3,11 @@ import { isRouteErrorResponse, useRouteError } from "react-router-dom";
 import { NavBar } from "../components/Layout/NavBar";
 import { SideBar } from "../components/Layout/SideBar";
 
-export const ErrorPage = () => {
+interface Props{
+  message?: string;
+}
+
+export const ErrorPage = ({message} : Props) => {
   const error = useRouteError();
   return (
     <Grid
@@ -25,7 +29,7 @@ export const ErrorPage = () => {
           <Text>
             {isRouteErrorResponse(error)
               ? "This page does not exist"
-              : "An unexpected error occurred"}
+              : message}
           </Text>
         </Box>
       </GridItem>

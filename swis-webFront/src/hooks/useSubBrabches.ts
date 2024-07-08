@@ -11,7 +11,7 @@ interface CustomError extends Error {
   const useSubBranches = (id : number | undefined) =>{
     const apiClient = new APIClient<GetAllResponse<Branches>>(`/branches/indexSubBranch/${id}`);
     const navigate = useNavigate();
-    return useQuery({
+     const { data, error, isLoading } = useQuery({
         queryKey: ["subbranches" , id],
         queryFn: apiClient.getAll,
         onError: (err : CustomError) => {
@@ -27,5 +27,6 @@ interface CustomError extends Error {
         } 
         }
       }});
-}
+      return { data, error, isLoading };
+};
 export default useSubBranches;

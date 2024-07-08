@@ -21,6 +21,7 @@ import useSubBranches from "../../hooks/useSubBrabches";
 import DeleteC from "../Delete";
 import { MyDarkColor } from "../../constants";
 import { useTranslation } from "react-i18next";
+import { Error } from "../Error";
 export const SubBranch = () => {
   const branch = useBranchStore((s) => s.branch);
 
@@ -32,7 +33,7 @@ export const SubBranch = () => {
 
   const [showForm , setShowForm] = useState(false);
 
-  const {data , isLoading} = useSubBranches(branch.id);
+  const {data , error , isLoading} = useSubBranches(branch.id);
 
   const {colorMode} = useColorMode();
   
@@ -57,6 +58,7 @@ export const SubBranch = () => {
     }
   };
   if(isLoading)return <Spinner />
+  if(error)return <Error message={error.message} />
   return (
     <Box
       m={4}
