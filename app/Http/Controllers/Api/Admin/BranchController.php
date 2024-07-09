@@ -26,10 +26,10 @@ class BranchController extends Controller
         $this->branchRepository =$branchRepository;
         $this->middleware(['auth:sanctum']);
     }
-        public function index():JsonResponse
+        public function index(): JsonResponse
         {
             $data=$this->branchRepository->index();
-            return $this->showAll($data['Branch'],BranchResource::class,$data['message']);
+            return $this->showAll($data,BranchResource::class,'message');
         }
 
     public function show(Branch $branch): JsonResponse
@@ -48,19 +48,16 @@ class BranchController extends Controller
         return $this->showOne($data['Branch'],BranchResource::class,$data['message']);
 
     }
-    public function indexSubBranch($branch): JsonResponse
+    public function indexSubBranch($branch):JsonResponse
     {
 
         $data=$this->branchRepository->indexSubBranch( $branch);
-//        return  BranchResource::collection($data['Branch']);
 
         return $this->showAll($data['Branch'],BranchResource::class,$data['message']);
-    } public function indexMainBranch(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    } public function indexMainBranch():JsonResponse
 {
         $data=$this->branchRepository->indexMainBranch();
-        return  BranchResource::collection($data['Branch']);
-
-//        return $this->showAll($data['Branch'],indexMainBranchResource::class,$data['message']);
+        return $this->showAll($data['Branch'],indexMainBranchResource::class,$data['message']);
     }
 
 
