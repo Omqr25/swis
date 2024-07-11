@@ -13,7 +13,7 @@ class branchRepository extends baseRepository
     }
     public function index()
     {
-        $data =Branch::with('parentBranch')->paginate(10);
+        $data = Branch::with('parentBranch')->paginate(10);
         if ($data->isEmpty()){
             $message="There are no branch at the moment";
         }else
@@ -23,6 +23,7 @@ class branchRepository extends baseRepository
         return ['message'=>$message,"Branch"=>$data];
 
     }
+
     public function indexSubBranch($branch):array
     {
         $data =Branch::where('parent_id',$branch)

@@ -26,18 +26,15 @@ class BranchController extends Controller
         $this->branchRepository =$branchRepository;
         $this->middleware(['auth:sanctum']);
     }
-        public function index(): JsonResponse
-        {
-            $data=$this->branchRepository->index();
-            return $this->showAll($data,BranchResource::class,'message');
-        }
+    public function index(): JsonResponse
+    {
+        $data = $this->branchRepository->index();
+        return $this->showAll($data['Branch'], BranchResource::class,$data['message']);
+    }
 
     public function show(Branch $branch): JsonResponse
     {
-
         return $this->showOne($branch,BranchResource::class);
-
-
     }
 
 
@@ -52,7 +49,6 @@ class BranchController extends Controller
     {
 
         $data=$this->branchRepository->indexSubBranch( $branch);
-
         return $this->showAll($data['Branch'],BranchResource::class,$data['message']);
     } public function indexMainBranch():JsonResponse
 {
