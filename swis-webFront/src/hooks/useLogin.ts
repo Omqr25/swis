@@ -15,6 +15,7 @@ const useLogin = () => {
         .then((res) => {
           // save the token so that you can use any request after logging in
           if(res.data.data.access_token){
+          localStorage.removeItem('token');
           localStorage.setItem('token', res.data.data.access_token);
           setAuthToken();
         }

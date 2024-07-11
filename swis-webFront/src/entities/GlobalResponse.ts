@@ -1,3 +1,4 @@
+import meta from "./metaResponse";
 
 export default interface Response<T> {
     status: string;
@@ -7,6 +8,7 @@ export default interface Response<T> {
 
   export interface GetAllResponse<T>{
     status : string;
+    meta: meta;
     data : T[];
     message: string;
   }

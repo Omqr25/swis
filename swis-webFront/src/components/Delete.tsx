@@ -27,7 +27,7 @@ function DeleteC({ID , target} : Props) {
       <Button colorScheme="red" onClick={(e) => {e.stopPropagation();setIsOpen(true);}}>
         {t("Delete")}
       </Button>
-
+    
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
