@@ -10,7 +10,6 @@ trait ApiResponse
 {
     protected function response($message, $data = null, $meta = null, $code = Response::HTTP_OK): JsonResponse
     {
-
         $response = ['message' => $message, 'status_code' => $code];
         if ($meta) {
             $response = array_merge(['meta' => $meta], $response);
@@ -28,28 +27,17 @@ trait ApiResponse
         return $this->response($message, null, null, $code);
     }
 
-    protected function showOne($instance, $resource, $message = 'success',$code=200): JsonResponse
+    protected function showOne($instance, $resource, $message = 'success', $code = 200): JsonResponse
     {
-
         return $this->response($message, new $resource($instance));
     }
 
-    /*  protected function showAll(QueryBuilder $query, $resource, $message = 'success', $code = 200, $perPage = 15): JsonResponse
-      {
-          $per_page = request('per_page', $perPage);
-          $paginator = $query->paginate($per_page);
-          $data = $resource::collection($paginator->items());
-
-          return $this->response($message, $data, ["pagination" => $this->getPaginationMeta($paginator)], $code);
-      }
-  */
-
-    protected function showAll($data, $resource,$pagination, $message = 'success', $code = 200): JsonResponse
+    protected function showAll($data, $resource, $message = 'success', $code = 200): JsonResponse
     {
+        $paginationMeta = $this->getPaginationMeta($data);
 
         $response = $resource::collection($data);
-        return $this->response(message:$message,data:$response,meta:['pagination' => $pagination],code:$code);
-
+        return $this->response($message, $response, $paginationMeta, $code);
     }
 
     protected function showCollection($data, $resource, $message = 'success', $code = 200): JsonResponse
@@ -64,8 +52,18 @@ trait ApiResponse
         return [
             'total' => $paginator->total(),
             'per_page' => $paginator->perPage(),
-            'count' => count($paginator->items()),
+            'count' => $paginator->count(),
             'current_page' => $paginator->currentPage(),
+            'last_page' => $paginator->lastPage(),
+            'path' => $paginator->path(),
+            'from' => $paginator->firstItem(),
+            'to' => $paginator->lastItem(),
+            'links' => [
+                'first' => $paginator->url(1),
+                'last' => $paginator->url($paginator->lastPage()),
+                'prev' => $paginator->previousPageUrl(),
+                'next' => $paginator->nextPageUrl(),
+            ]
         ];
     }
 
