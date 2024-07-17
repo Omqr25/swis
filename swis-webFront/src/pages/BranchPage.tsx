@@ -1,16 +1,11 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Box, Grid, GridItem, IconButton, useDisclosure } from "@chakra-ui/react";
+import { Box, Grid, GridItem, useDisclosure } from "@chakra-ui/react";
+import { AddButton } from "../components/AddButton";
+import { BranchForm } from "../components/Branch/BranchForm";
 import { BranchTable } from "../components/Branch/BranchTable";
 import { SubBranch } from "../components/Branch/SubBranch";
 import CustomModal from "../components/Modal";
-import { BranchForm } from "../components/Branch/BranchForm";
 export const BranchPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); 
-  const handleSubmit = () => {
-    if(onOpen){
-      onOpen();
-    }
-  }
   return (
     <Box>
       <Grid
@@ -24,16 +19,7 @@ export const BranchPage = () => {
           <SubBranch />
         </GridItem>
       </Grid>
-      <IconButton
-        colorScheme="green"
-        aria-label="Add Branch"
-        icon={<AddIcon />}
-        isRound
-        position={"fixed"}
-        bottom={4}
-        left={204}
-        onClick={() => handleSubmit()}
-      />
+      <AddButton onOpen={onOpen} />
         <CustomModal buttonLabel={"Add"} isOpen={isOpen} onClose={onClose}>
         <BranchForm isEdit={false} ID={1} />
       </CustomModal>

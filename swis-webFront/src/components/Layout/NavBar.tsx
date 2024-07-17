@@ -21,7 +21,7 @@ const animation = css`
 `;
 export const NavBar = () => {
   const {colorMode} = useColorMode();
-  const showTabs = useBreakpointValue({ base: false, lg: true });
+  const showTabs = useBreakpointValue({ base: false, md: true });
   const colorr = colorMode === "light" ? Mycolor : MyDarkColor;
   return (
     <HStack
@@ -29,6 +29,7 @@ export const NavBar = () => {
       bgColor={colorr}
       spacing={1}
       p={2}
+      w={"100%"}
       color={"white"}
     >
       <Link to={"/Home"}>

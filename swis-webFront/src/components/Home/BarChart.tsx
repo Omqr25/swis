@@ -58,14 +58,14 @@ ChartJS.register(
       <HStack  bgColor={bgColor} borderColor={borderColor}>
         <Box
           height={{ base: "300px", lg: "625px" }}
-          width={{ base: "100%", lg: "700px" }}
+          width={{ base: "100%", lg: "600px" }}
         >
           <Bar data={data} options={options} />
         </Box>
   
         <Box
           height={{ base: "300px", lg: "625px" }}
-          width={{ base: "100%", lg: "700px" }}
+          width={{ base: "100%", lg: "600px" }}
         >
           <Bar data={data} options={options} />
         </Box>

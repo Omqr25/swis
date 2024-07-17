@@ -8,7 +8,7 @@ import {
   Spinner,
   Text,
   useColorMode,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { BiMap } from "react-icons/bi";
@@ -17,7 +17,7 @@ import useBranchStore from "../../stores/branchesStore";
 import CustomModal from "../Modal";
 import { BranchForm } from "./BranchForm";
 import { BranchInfo } from "./BranchInfo";
-import useSubBranches from "../../hooks/useSubBrabches";
+import useSub from "../../hooks/useSub";
 import DeleteC from "../Delete";
 import { MyDarkColor } from "../../constants";
 import { useTranslation } from "react-i18next";
@@ -25,19 +25,25 @@ import { Error } from "../Error";
 export const SubBranch = () => {
   const branch = useBranchStore((s) => s.branch);
 
-  const { isOpen, onOpen, onClose } = useDisclosure(); 
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [buttonLabel, setButtonLabel] = useState("");
 
-  const [SubBranchInfo , setSubBranchInfo] = useState<Branches>({name : '' , code: '' , phone: '', address:'',main_branch:{id:0,name:''}}); 
+  const [SubBranchInfo, setSubBranchInfo] = useState<Branches>({
+    name: "",
+    code: "",
+    phone: "",
+    address: "",
+    main_branch: { id: 0, name: "" },
+  });
 
-  const [showForm , setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
-  const {data , error , isLoading} = useSubBranches(branch.id);
+  const { data, error, isLoading } = useSub<Branches>(branch.id , "branches/indexSubBranch");
 
-  const {colorMode} = useColorMode();
-  
-  const {t} = useTranslation();
+  const { colorMode } = useColorMode();
+
+  const { t } = useTranslation();
   if (!branch.id) return <></>;
 
   const handleSubBranch = (SubBranch: Branches) => {
@@ -57,8 +63,8 @@ export const SubBranch = () => {
       onOpen();
     }
   };
-  if(isLoading)return <Spinner />
-  if(error)return <Error message={error.message} />
+  if (isLoading) return <Spinner />;
+  if (error) return <Error message={error.message} />;
   return (
     <Box
       m={4}
@@ -66,7 +72,7 @@ export const SubBranch = () => {
       borderRadius={20}
       overflowY={"auto"}
       maxHeight="590px"
-      bgColor={colorMode === 'dark' ? MyDarkColor : 'white'}
+      bgColor={colorMode === "dark" ? MyDarkColor : "white"}
     >
       <Heading fontSize={30} pb={4} textAlign={"center"}>
         {branch.name}
@@ -86,7 +92,7 @@ export const SubBranch = () => {
           pb={4}
           m={3}
           _hover={{ bg: "gray.500" }}
-          bgColor={colorMode === 'dark' ? MyDarkColor : 'white'}
+          bgColor={colorMode === "dark" ? MyDarkColor : "white"}
         >
           <Flex align="center" pt={3} pr={2} onClick={() => handleSubBranch(b)}>
             <Text>{b.name}</Text>
@@ -106,7 +112,14 @@ export const SubBranch = () => {
         </Box>
       ))}
       <CustomModal buttonLabel={buttonLabel} isOpen={isOpen} onClose={onClose}>
-        {showForm ? <BranchForm isEdit={true} ID={SubBranchInfo.id ? SubBranchInfo.id : 0}/> : <BranchInfo Branch={SubBranchInfo} />}
+        {showForm ? (
+          <BranchForm
+            isEdit={true}
+            ID={SubBranchInfo.id ? SubBranchInfo.id : 0}
+          />
+        ) : (
+          <BranchInfo Branch={SubBranchInfo} />
+        )}
       </CustomModal>
     </Box>
   );

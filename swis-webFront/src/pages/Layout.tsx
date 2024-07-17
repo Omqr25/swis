@@ -16,11 +16,11 @@ export const Layout = () => {
       templateAreas={{
         base: `"nav"
                "main"`,
-        lg: `"nav nav"
+        md: `"nav nav"
              "aside main"`,
       }}
-      templateRows={{ lg: 'auto 1fr' }}
-      templateColumns={{ lg: 'auto 1fr' }}
+      templateRows={{ md: 'auto 1fr' }}
+      templateColumns={{ md: 'auto 1fr' }}
       
     >
       <GridItem
@@ -32,13 +32,11 @@ export const Layout = () => {
       >
         <NavBar />
       </GridItem>
-      <Show above="lg">
+      <Show above="md">
       <GridItem
-        area={"aside"}
-        
+        area={"aside"} 
       >
         <SideBar />
-        
       </GridItem>
       </Show>
       <GridItem  area={"main"} >

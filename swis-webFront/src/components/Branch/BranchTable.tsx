@@ -36,6 +36,7 @@ export const BranchTable = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const branch = useBranchStore((s) => s.branch);
   const [BranchId, setBranchId] = useState(0);
+  
   const {
     data,
     error,
@@ -43,6 +44,7 @@ export const BranchTable = () => {
     fetchNextPage,
     hasNextPage,
   } = useGetAll<Branches>("branches");
+
   const handleEditBranch = (id: number | undefined) => {
     if (onOpen && id) {
       setBranchId(id);

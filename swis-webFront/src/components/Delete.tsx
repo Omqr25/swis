@@ -1,33 +1,65 @@
-import { Button, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, Spinner } from "@chakra-ui/react";
+import {
+  Button,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Spinner,
+  CloseButton,
+} from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import useDelete from "../hooks/useDelete";
 import { useTranslation } from "react-i18next";
 
-interface Props{
-    ID : number;
-    target : string;
+interface Props {
+  ID: number;
+  target: string;
 }
 
-function DeleteC({ID , target} : Props) {
+function DeleteC({ ID, target }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = useRef(null);
-  const Delete = useDelete(ID , target);
+  const Delete = useDelete(ID, target);
   const handleDelete = () => {
     Delete.mutate({
-        _method : 'DELETE',
+      _method: "DELETE",
     });
   };
-  const {t} = useTranslation();
-  if(Delete.isLoading){
-    if(isOpen == true)onClose();
-    return <Spinner />}
+  const { t } = useTranslation();
+  if (Delete.isLoading) {
+    if (isOpen == true) onClose();
+    return <Spinner />;
+  }
   return (
     <>
-      <Button colorScheme="red" onClick={(e) => {e.stopPropagation();setIsOpen(true);}}>
-        {t("Delete")}
-      </Button>
-    
+      {target != "warehouses" && (
+        <Button
+          colorScheme="red"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(true);
+          }}
+        >
+          {t("Delete")}
+        </Button>
+      )}
+      {target === "warehouses" && (
+        <CloseButton
+          position="absolute"
+          top="8px"
+          right="8px"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(true);
+          }}
+          _hover={{
+            bg: "red.500",
+          }}
+        />
+      )}
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -39,9 +71,7 @@ function DeleteC({ID , target} : Props) {
               {t("DItem")}
             </AlertDialogHeader>
 
-            <AlertDialogBody>
-              {t("DMess")}
-            </AlertDialogBody>
+            <AlertDialogBody>{t("DMess")}</AlertDialogBody>
 
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose}>
@@ -56,5 +86,5 @@ function DeleteC({ID , target} : Props) {
       </AlertDialog>
     </>
   );
-};
+}
 export default DeleteC;

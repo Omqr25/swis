@@ -19,7 +19,7 @@ import useLanguage from "../../stores/LanguageStore";
 export const Tabs: Record<string, IconType> = {
   Home:FaHome,
   Branches: FaCodeBranch,
-  Wearhouses: FaWarehouse,
+  Warehouses: FaWarehouse,
   Users: FaUsers,
   Drivers: FaTruck,
   Donor: FaHandHoldingHeart,
@@ -34,7 +34,7 @@ export const SideBar = () => {
   const colorr = colorMode === "light" ? Mycolor : MyDarkColor;
   const lng = useLanguage(s => s.lng);
   return (
-    <List bgColor={colorr} w={"200px"} color={"white"}>
+    <List bgColor={colorr} w={"200px"} color={"white"} h={"89vh"}>
       <Divider />
       {Object.entries(Tabs).map(([name, icon], index) => (
         <Box

@@ -1,6 +1,7 @@
 import { Box, FormControl, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { BsSearch } from "react-icons/bs";
+import resizeWindow from "../resizeWindow";
 interface Search{
     text : string;
 }
@@ -8,6 +9,7 @@ export const SearchInput = () => {
     const handleSearch = (vlaues : Search) => {
         console.log(vlaues);
     }
+    const {width} = resizeWindow();
   return (
     <Formik
     initialValues={{text : ''}}
@@ -22,7 +24,7 @@ export const SearchInput = () => {
                     name="text"
                     as={Input}
                     borderRadius={20}
-                    width={{lg:'1100px' , base:"40px"}}
+                    width={{lg:width * 2/3 , base: width * 1 / 3}}
                     placeholder="Search about your product"
                     _placeholder={{ color: "gray.700" }}
                     pl={10}

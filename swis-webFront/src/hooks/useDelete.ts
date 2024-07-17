@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import APIClient, { setAuthToken } from "../services/APIClient";
 
 interface Response{
@@ -6,6 +6,7 @@ interface Response{
  status : string;
 }
 const useDelete = (id : number , target : string) => {
+  const queryClient = useQueryClient();
     const apiClient = new APIClient<Response>(`/${target}/${id}`);
      setAuthToken();
      return useMutation<any , Error , any>({
@@ -13,6 +14,7 @@ const useDelete = (id : number , target : string) => {
       mutationFn: (branch) => apiClient.post(branch),
       onSuccess : (vlaues , variables) => {
         console.log(vlaues , variables);
+        queryClient.invalidateQueries([target]);
       },
       
      })
