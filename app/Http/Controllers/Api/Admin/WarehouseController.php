@@ -16,6 +16,7 @@ use App\Http\Resources\showKeeperItemResource;
 use App\Http\Responses\Response;
 use App\Services\warehouseService;
 use Illuminate\Http\JsonResponse;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
 
 class WarehouseController extends Controller
@@ -51,6 +52,7 @@ class WarehouseController extends Controller
     public function store(StoreWarehouseRequest $request): JsonResponse
     {
         $WarehouseData=$request->validated();
+       // dd($WarehouseData);
         if (isset($WarehouseData['location'])) {
             $location = $WarehouseData['location'];
             $WarehouseData['location'] = new Point($location['longitude'], $location['latitude']);
