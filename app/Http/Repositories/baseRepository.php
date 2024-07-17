@@ -83,7 +83,7 @@ class baseRepository
     {
         $modelName = class_basename($this->model);
 
-        $data =$this->model::onlyTrashed()->get()->all();
+        $data =$this->model::onlyTrashed()->paginate(10);
         if (!$data){
             $message="There are no $modelName deleted at the moment";
         }else

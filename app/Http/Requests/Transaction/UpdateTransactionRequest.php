@@ -41,13 +41,13 @@ class UpdateTransactionRequest extends FormRequest
             'drivers' => 'sometimes|array',
             'drivers.*.driver_id' => 'sometimes|exists:drivers,id',
             'notes_ar' => 'nullable|string',
-            'status' => new Enum(transactionStatusType::class),
+          //  'status' => new Enum(transactionStatusType::class),
             'status_ar' => new Enum(transactionStatusType::class),
-            'date' => 'date',
-            'waybill_num' => 'integer',
-            'waybill_img' => [ 'image'],
-            'qr_code' => 'image',
-            'CTN' => 'string',
+         //   'date' => 'date',
+          //  'waybill_num' => 'integer',
+           // 'waybill_img' => [ 'image'],
+          //  'qr_code' => 'image',
+          //  'CTN' => 'string',
 
         ];
     }

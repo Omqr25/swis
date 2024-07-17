@@ -71,5 +71,5 @@ trait ApiResponse
     {
         return response()->json($data, $code);
     }
-    
+
 }

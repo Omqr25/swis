@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\User;
 
+use App\Enums\userType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class updateUserRequests extends FormRequest
 {
@@ -29,6 +31,8 @@ class updateUserRequests extends FormRequest
             'name' => [ 'string','min:4'],
             'phone' => [ 'string',Rule::unique('Users', 'phone'),'phone:sy,INTERNATIONAL'],
             'photo' => [ 'image'],
+            'type' => [ new Enum(userType::class)],
+
         ];
     }
 }

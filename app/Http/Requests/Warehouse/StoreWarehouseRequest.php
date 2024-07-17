@@ -21,15 +21,15 @@ class StoreWarehouseRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            'name'      => 'required|string|min:4',
-           // 'location'  => 'required',
+            'name' => 'required|string|min:4',
             'branch_id' => 'required|integer|exists:branches,id',
-            'capacity'  => 'required|integer|min:0',
+            'capacity' => 'required|integer|min:0',
             'parent_id' => 'required|integer|exists:warehouses,id',
-            'user_id'   => 'required|unique|integer|exists:users,id',
-            'location.latitude' => 'numeric',
-            'location.longitude' => 'numeric',
+            'user_id' => 'required|integer|exists:users,id|unique:warehouses,user_id',
+            'location.latitude' => 'required_with:location|numeric',
+            'location.longitude' => 'required_with:location|numeric',
             'is_Distribution_point' => 'required|boolean',
         ];
     }
