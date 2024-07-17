@@ -7,6 +7,7 @@ import { BranchPage } from "./pages/BranchPage";
 import { SettingPage } from "./pages/SettingPage";
 import { Languages } from "./components/Setting/Languages";
 import { WarehousePage } from "./pages/WarehousePage";
+import { UserPage } from "./pages/UserPage";
 
 const isAuthenticated = () => {
   return localStorage.getItem("token") !== null;
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
         ) : (
           <Navigate to="/login" />
         ),
+      },
+      {
+        path: "Users",
+        element: isAuthenticated() ? <UserPage /> : <Navigate to="/login" />
       },
       {
         path: "Settings",

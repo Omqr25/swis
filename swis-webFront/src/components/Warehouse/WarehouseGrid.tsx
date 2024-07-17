@@ -7,9 +7,9 @@ import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Warehouse from "../../entities/warehouse";
 import useGetAll from "../../hooks/useGetAll";
-import { BranchTableSkeleton } from "../Branch/BranchTableSkeleton";
 import { Error } from "../Error";
 import { WarehouseBox } from "./WarehouseBox";
+import { WarehouseBoxSkeleton } from "./WarehouseBoxSkeleton";
 
 export const WarehouseGrid = () => {
   const { data, error, isLoading, fetchNextPage, hasNextPage } =
@@ -18,9 +18,7 @@ export const WarehouseGrid = () => {
 
   const fetchedBranchesCount =
     data?.pages.reduce((total, page) => total + page.data.length, 0) || 0;
-  if (isLoading) {
-    return <BranchTableSkeleton />;
-  }
+    const skeleton = [1, 2, 3, 4];
   if (error) {
     return <Error message={error.message} />;
   }
@@ -39,6 +37,7 @@ export const WarehouseGrid = () => {
           overflowY={"auto"}
           maxHeight={"88vh"}
         >
+          {isLoading && skeleton.map((s) => <WarehouseBoxSkeleton key={s}></WarehouseBoxSkeleton>)}
           {data?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page.data.map((warehouse) => (
