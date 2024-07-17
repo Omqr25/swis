@@ -36,14 +36,9 @@ export const BranchTable = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const branch = useBranchStore((s) => s.branch);
   const [BranchId, setBranchId] = useState(0);
-  
-  const {
-    data,
-    error,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-  } = useGetAll<Branches>("branches");
+
+  const { data, error, isLoading, fetchNextPage, hasNextPage } =
+    useGetAll<Branches>("branches");
 
   const handleEditBranch = (id: number | undefined) => {
     if (onOpen && id) {
@@ -70,17 +65,17 @@ export const BranchTable = () => {
       borderRadius={20}
       w={{ base: "380px", lg: "948px" }}
     >
-      <InfiniteScroll
-        dataLength={fetchedBranchesCount}
-        hasMore={!!hasNextPage}
-        next={() => fetchNextPage()}
-        loader={<Spinner />}
+      <TableContainer
+        borderRadius={20}
+        maxHeight={"600px"}
+        overflowY={"auto"}
+        bgColor={colorMode === "dark" ? MyDarkColor : "white"}
       >
-        <TableContainer
-          borderRadius={20}
-          maxHeight={"590px"}
-          overflowY={"auto"}
-          bgColor={colorMode === "dark" ? MyDarkColor : "white"}
+        <InfiniteScroll
+          dataLength={fetchedBranchesCount}
+          hasMore={!!hasNextPage}
+          next={() => fetchNextPage()}
+          loader={<Spinner />}
         >
           <Table variant={"simple"} size={{ lg: "lg", base: "sm" }}>
             <Thead>
@@ -136,8 +131,8 @@ export const BranchTable = () => {
               ))}
             </Tbody>
           </Table>
-        </TableContainer>
-      </InfiniteScroll>
+        </InfiniteScroll>
+      </TableContainer>
       <CustomModal buttonLabel={"Edit"} isOpen={isOpen} onClose={onClose}>
         <BranchForm isEdit={true} ID={BranchId} />
       </CustomModal>

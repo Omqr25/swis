@@ -48,7 +48,7 @@ function Drawerr() {
           <DrawerHeader bgColor={MyColor} color={"white"}>
             {"SWIS"}
           </DrawerHeader>
-          <DrawerBody bgColor={MyColor} overflowY={"auto"} maxHeight={"600px"}>
+          <DrawerBody bgColor={MyColor} overflowY={"auto"} maxHeight={"100vh"}>
             <Divider />
             <List color={"white"}>
               <Box

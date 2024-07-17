@@ -32,7 +32,7 @@ export const WarehouseGrid = () => {
       >
         <SimpleGrid
           m={1}
-          columns={[1, 2]}
+          columns={{lg:2 , base:1}}
           spacing={4}
           overflowY={"auto"}
           maxHeight={"88vh"}
@@ -41,7 +41,7 @@ export const WarehouseGrid = () => {
           {data?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page.data.map((warehouse) => (
-                <WarehouseBox warehouse={warehouse} />
+                <WarehouseBox key={warehouse.id} warehouse={warehouse} />
               ))}
             </React.Fragment>
           ))}
