@@ -11,7 +11,6 @@ trait ApiResponse
     protected function response($message, $data = null, $meta = null, $code = Response::HTTP_OK): JsonResponse
     {
         $response = ['message' => $message, 'status_code' => $code];
-
         if ($meta) {
             $response = array_merge(['meta' => $meta], $response);
         }
@@ -28,27 +27,17 @@ trait ApiResponse
         return $this->response($message, null, null, $code);
     }
 
-    protected function showOne($instance, $resource, $message = 'success',$code=200): JsonResponse
+    protected function showOne($instance, $resource, $message = 'success', $code = 200): JsonResponse
     {
-
         return $this->response($message, new $resource($instance));
     }
 
-    /*  protected function showAll(QueryBuilder $query, $resource, $message = 'success', $code = 200, $perPage = 15): JsonResponse
-      {
-          $per_page = request('per_page', $perPage);
-          $paginator = $query->paginate($per_page);
-          $data = $resource::collection($paginator->items());
-
-          return $this->response($message, $data, ["pagination" => $this->getPaginationMeta($paginator)], $code);
-      }
-  */
-
     protected function showAll($data, $resource, $message = 'success', $code = 200): JsonResponse
     {
-        $response = $resource::collection($data);
+        $paginationMeta = $this->getPaginationMeta($data);
 
-        return $this->response($message, $response, $code);
+        $response = $resource::collection($data);
+        return $this->response($message, $response, $paginationMeta, $code);
     }
 
     protected function showCollection($data, $resource, $message = 'success', $code = 200): JsonResponse
@@ -58,14 +47,23 @@ trait ApiResponse
         return $this->response($message, $response, $code);
     }
 
-    protected function getPaginationMeta(LengthAwarePaginator $paginator): array
+    protected function getPaginationMeta($paginator): array
     {
         return [
             'total' => $paginator->total(),
             'per_page' => $paginator->perPage(),
-            'count' => count($paginator->items()),
+            'count' => $paginator->count(),
             'current_page' => $paginator->currentPage(),
-
+            'last_page' => $paginator->lastPage(),
+            'path' => $paginator->path(),
+            'from' => $paginator->firstItem(),
+            'to' => $paginator->lastItem(),
+            'links' => [
+                'first' => $paginator->url(1),
+                'last' => $paginator->url($paginator->lastPage()),
+                'prev' => $paginator->previousPageUrl(),
+                'next' => $paginator->nextPageUrl(),
+            ]
         ];
     }
 
@@ -73,4 +71,5 @@ trait ApiResponse
     {
         return response()->json($data, $code);
     }
+
 }

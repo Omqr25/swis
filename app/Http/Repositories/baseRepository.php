@@ -4,6 +4,7 @@ namespace App\Http\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use mysql_xdevapi\Collection;
 
 class baseRepository
 {
@@ -13,7 +14,7 @@ class baseRepository
         $this->model = $model;
 
     }
-    public function index():array
+    public function index()
     {
         $modelName = class_basename($this->model);
 
@@ -42,11 +43,10 @@ class baseRepository
         $validatedData=$request;
         $modelName = class_basename($this->model);
 
-        $data = $this->model::find($model->id);
-        if (!is_null($data)) {
+
             if (Auth::user()->hasRole('admin')) {
                 // Update the model with the request data
-                $data->update($validatedData);
+                $model->update($validatedData);
 
             }
             // Retrieve the updated data
@@ -54,10 +54,7 @@ class baseRepository
 
             $message = "$modelName updated successfully";
             $code = 200;
-        } else {
-            $message = "$modelName not found";
-            $code = 404;
-        }
+
         return ["$modelName" => $data, 'message' => $message, 'code' => $code];
     }
 
@@ -86,7 +83,7 @@ class baseRepository
     {
         $modelName = class_basename($this->model);
 
-        $data =$this->model::onlyTrashed()->get()->all();
+        $data =$this->model::onlyTrashed()->paginate(10);
         if (!$data){
             $message="There are no $modelName deleted at the moment";
         }else

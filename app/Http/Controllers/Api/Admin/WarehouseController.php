@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Repositories\warehouseRepository;
 use App\Http\Requests\Warehouse\StoreWarehouseRequest;
 use App\Http\Requests\Warehouse\UpdateWarehouseRequest;
+use App\Http\Resources\indexMainWarehouseResource;
+use App\Http\Resources\indexWarehouseResource;
 use App\Http\Resources\WarehouseResource;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\showKeeperItemResource;
 use App\Http\Responses\Response;
 use Illuminate\Http\JsonResponse;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
 
 class WarehouseController extends Controller
@@ -31,23 +34,20 @@ class WarehouseController extends Controller
     {
 
             $data=$this->warehouseRepository->index();
-        return $this->showAll($data['Warehouse'],WarehouseResource::class,$data['message']);
+        return $this->showAll($data['Warehouse'],indexWarehouseResource::class,$data['message']);
 
     }
 
 
     public function show(Warehouse $warehouse): JsonResponse
     {
-
-            $data = $this->warehouseRepository->show($warehouse);
-        return $this->showAll($data['Warehouse'],WarehouseResource::class,$data['message']);
-
+        return $this->showOne($warehouse , warehouseResource::class);
     }
-
 
     public function store(StoreWarehouseRequest $request): JsonResponse
     {
         $WarehouseData=$request->validated();
+       // dd($WarehouseData);
         if (isset($WarehouseData['location'])) {
             $location = $WarehouseData['location'];
             $WarehouseData['location'] = new Point($location['longitude'], $location['latitude']);
@@ -93,6 +93,26 @@ class WarehouseController extends Controller
     {
         $data = $this->warehouseRepository->showWarehouseForKeeper(Auth::user()->id);
         return $this->showAll($data['Warehouse'],showKeeperItemResource::class,$data['message']);
+    }
+    public function indexSubWarehouse($warehouse_id): JsonResponse
+    {
+
+        $data=$this->warehouseRepository->indexSubWarehouse($warehouse_id);
+        return $this->showAll($data['Warehouse'],indexWarehouseResource::class,$data['message']);
+
+    }
+    public function indexMainWarehouse(): JsonResponse
+    {
+
+        $data=$this->warehouseRepository->indexMainWarehouse();
+        return $this->showAll($data['Warehouse'],indexMainWarehouseResource::class,$data['message']);
+
+    }
+    public function indexDistributionPoint():JsonResponse
+    {
+        $data=$this->warehouseRepository->indexDistributionPoint();
+        return $this->showAll($data['Warehouse'],indexMainWarehouseResource::class,$data['message']);
+
     }
 
 }

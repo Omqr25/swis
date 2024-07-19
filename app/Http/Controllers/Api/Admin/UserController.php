@@ -25,8 +25,13 @@ class UserController extends Controller
     }
     public function index()
     {
-
         $data=$this->userRepository->index();
+        return $this->showAll($data['User'],UserResource::class,$data['message']);
+    }
+
+    public function indexKeeper()
+    {
+        $data=$this->userRepository->indexKeeper();
         return $this->showAll($data['User'],UserResource::class,$data['message']);
     }
 

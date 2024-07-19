@@ -8,10 +8,12 @@ use App\Http\Repositories\branchRepository;
 use App\Http\Requests\Branch\StoreBranchRequest;
 use App\Http\Requests\Branch\UpdateBranchRequest;
 use App\Http\Resources\BranchResource;
+use App\Http\Resources\indexMainBranchResource;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Http\Responses\Response;
 use Illuminate\Http\JsonResponse;
+use mysql_xdevapi\Collection;
 use Throwable;
 
 
@@ -26,28 +28,32 @@ class BranchController extends Controller
     }
     public function index(): JsonResponse
     {
-
-            $data=$this->branchRepository->index();
-        return $this->showAll($data['Branch'],BranchResource::class,$data['message']);
-
+        $data = $this->branchRepository->index();
+        return $this->showAll($data['Branch'], BranchResource::class,$data['message']);
     }
 
     public function show(Branch $branch): JsonResponse
     {
-
         return $this->showOne($branch,BranchResource::class);
-
-
     }
 
 
     public function store(StoreBranchRequest $request): JsonResponse
     {
         $newData=$request->validated();
-
             $data=$this->branchRepository->create($newData);
         return $this->showOne($data['Branch'],BranchResource::class,$data['message']);
 
+    }
+    public function indexSubBranch($branch):JsonResponse
+    {
+
+        $data=$this->branchRepository->indexSubBranch( $branch);
+        return $this->showAll($data['Branch'],BranchResource::class,$data['message']);
+    } public function indexMainBranch():JsonResponse
+{
+        $data=$this->branchRepository->indexMainBranch();
+        return $this->showAll($data['Branch'],indexMainBranchResource::class,$data['message']);
     }
 
 
@@ -69,10 +75,12 @@ class BranchController extends Controller
 
     }
 
-    public function showDeleted(): JsonResponse
+    public function showDeleted(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $data=$this->branchRepository->showDeleted();
-        return $this->showAll($data['Branch'],BranchResource::class,$data['message']);
+        return  BranchResource::collection($data['Branch']);
+
+//        return $this->showAll($data['Branch'],BranchResource::class,$data['message']);
     }
     public function restore(Request $request){
 
