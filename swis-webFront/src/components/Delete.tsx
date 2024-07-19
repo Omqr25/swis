@@ -12,13 +12,15 @@ import {
 import { useRef, useState } from "react";
 import useDelete from "../hooks/useDelete";
 import { useTranslation } from "react-i18next";
+import { FaTrash } from "react-icons/fa";
 
 interface Props {
   ID: number;
   target: string;
+  type: string;
 }
 
-function DeleteC({ ID, target }: Props) {
+function DeleteC({ ID, target , type }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = useRef(null);
@@ -35,8 +37,9 @@ function DeleteC({ ID, target }: Props) {
   }
   return (
     <>
-      {target != "warehouses" && (
+      {type === "Button" && (
         <Button
+        leftIcon={<FaTrash/>} 
           colorScheme="red"
           onClick={(e) => {
             e.stopPropagation();
@@ -46,7 +49,7 @@ function DeleteC({ ID, target }: Props) {
           {t("Delete")}
         </Button>
       )}
-      {target === "warehouses" && (
+      {type != "Button" && (
         <CloseButton
           position="absolute"
           top="8px"

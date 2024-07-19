@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Icon,
+  Show,
   Spinner,
   Table,
   TableContainer,
@@ -30,6 +31,8 @@ import { Error } from "../Error";
 import CustomModal from "../Modal";
 import { BranchForm } from "./BranchForm";
 import { BranchTableSkeleton } from "./BranchTableSkeleton";
+import { FaEdit } from "react-icons/fa";
+import resizeWindow from "../../resizeWindow";
 
 export const BranchTable = () => {
   const setBranch = useBranchStore((s) => s.setBranch);
@@ -49,6 +52,7 @@ export const BranchTable = () => {
   const { colorMode } = useColorMode();
   const { t } = useTranslation();
 
+  const {width} = resizeWindow();
   const fetchedBranchesCount =
     data?.pages.reduce((total, page) => total + page.data.length, 0) || 0;
 
@@ -63,13 +67,14 @@ export const BranchTable = () => {
       m={4}
       bg={"gray.100"}
       borderRadius={20}
-      w={{ base: "380px", lg: "948px" }}
+      w={{ base: "380px", lg: width * (1.8)/3 }}
     >
       <TableContainer
         borderRadius={20}
         maxHeight={"600px"}
         overflowY={"auto"}
         bgColor={colorMode === "dark" ? MyDarkColor : "white"}
+        w={"100%"}
       >
         <InfiniteScroll
           dataLength={fetchedBranchesCount}
@@ -77,7 +82,9 @@ export const BranchTable = () => {
           next={() => fetchNextPage()}
           loader={<Spinner />}
         >
-          <Table variant={"simple"} size={{ lg: "lg", base: "sm" }}>
+          <Table variant={"simple"} size={{ lg: "lg", base: "sm" }}
+           w={"100%"}
+          >
             <Thead>
               <Tr>
                 <Th></Th>
@@ -85,14 +92,12 @@ export const BranchTable = () => {
                   <Icon as={AiOutlineEllipsis} pr={1} />
                   {t("Name")}
                 </Th>
-                <Th>
-                  <Icon as={AiOutlineCode} pr={1} />
-                  {t("Code")}
-                </Th>
+                <Show above="lg">
                 <Th>
                   <Icon as={AiOutlinePhone} pr={1} />
                   {t("Phone")}
                 </Th>
+                </Show>
               </Tr>
             </Thead>
             <Tbody>
@@ -109,11 +114,12 @@ export const BranchTable = () => {
                     >
                       <Td>{index + 1}</Td>
                       <Td>{Br.name}</Td>
-                      <Td>{Br.code}</Td>
+                      <Show above="lg">
                       <Td>{Br.phone}</Td>
-
+                      </Show>
                       <Td>
                         <Button
+                          leftIcon={<FaEdit />}
                           mr={3}
                           colorScheme={"blue"}
                           onClick={(e) => {
@@ -123,7 +129,9 @@ export const BranchTable = () => {
                         >
                           {t("Edit")}
                         </Button>
-                        {Br.id && <DeleteC ID={Br.id} target="branches" />}
+                        {Br.id && (
+                          <DeleteC ID={Br.id} target="branches" type="Button" />
+                        )}
                       </Td>
                     </Tr>
                   ))}

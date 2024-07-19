@@ -7,40 +7,45 @@ import {
   ListItem,
   useColorMode,
 } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import {
   FaBoxOpen,
   FaChartLine,
   FaCodeBranch,
   FaExchangeAlt,
   FaHandHoldingHeart,
+  FaHome,
   FaTruck,
   FaUsers,
   FaWarehouse,
-  FaHome,
 } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Mycolor, { MyDarkColor } from "../../constants";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import useLanguage from "../../stores/LanguageStore";
 export const Tabs: Record<string, IconType> = {
   Home: FaHome,
   Branches: FaCodeBranch,
   Warehouses: FaWarehouse,
-  Users: FaUsers,
+  Keepers: FaUsers,
   Drivers: FaTruck,
-  Donor: FaHandHoldingHeart,
+  Donors: FaHandHoldingHeart,
   Products: FaBoxOpen,
   Transactions: FaExchangeAlt,
   Reports: FaChartLine,
 };
 export const SideBar = () => {
   const { t } = useTranslation();
+
   const { colorMode } = useColorMode();
-  const [selectedTab, setSelectedTab] = useState("d");
+
+  const location = useLocation();
+
+
   const colorr = colorMode === "light" ? Mycolor : MyDarkColor;
+  
   const lng = useLanguage((s) => s.lng);
+  
   return (
     <List bgColor={colorr} w={"200px"} color={"white"}>
       <Divider />
@@ -50,7 +55,7 @@ export const SideBar = () => {
           borderBottom="1px"
           borderColor="gray.200"
           pb={3}
-          bgColor={selectedTab === name ? "red.500" : ""}
+          bgColor={location.pathname.startsWith(`/${name}`) ? "red.500" : ""}
           _last={{ borderBottom: "none" }}
           _hover={{
             bg: "red.500",
@@ -72,7 +77,6 @@ export const SideBar = () => {
                 fontSize={"large"}
                 variant={"link"}
                 color={"white"}
-                onClick={() => setSelectedTab(name)}
               >
                 {t(name)}
               </Button>

@@ -19,7 +19,7 @@ const useLogin = () => {
           localStorage.setItem('token', res.data.data.access_token);
           setAuthToken();
         }
-          // save the data of the current user
+            
           setUser(res.data.data);
           console.log(res.data.data.access_token);
           return res.data;

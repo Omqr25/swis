@@ -22,6 +22,7 @@ import DeleteC from "../Delete";
 import { MyDarkColor } from "../../constants";
 import { useTranslation } from "react-i18next";
 import { Error } from "../Error";
+import { FaEdit } from "react-icons/fa";
 export const SubBranch = () => {
   const branch = useBranchStore((s) => s.branch);
 
@@ -98,6 +99,7 @@ export const SubBranch = () => {
             <Text>{b.name}</Text>
             <Spacer />
             <Button
+              leftIcon={<FaEdit />}
               colorScheme="blue"
               mr={2}
               onClick={(e) => {
@@ -107,7 +109,7 @@ export const SubBranch = () => {
             >
               {t("Edit")}
             </Button>
-            {b.id && <DeleteC ID={b.id} target="branches" />}
+            {b.id && <DeleteC ID={b.id} target="branches" type="Button" />}
           </Flex>
         </Box>
       ))}

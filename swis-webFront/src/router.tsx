@@ -7,7 +7,9 @@ import { BranchPage } from "./pages/BranchPage";
 import { SettingPage } from "./pages/SettingPage";
 import { Languages } from "./components/Setting/Languages";
 import { WarehousePage } from "./pages/WarehousePage";
-import { UserPage } from "./pages/UserPage";
+import { KeeperPage } from "./pages/KeeperPage";
+import { DonorPage } from "./pages/DonorPage";
+import { DriverPage } from "./pages/DriverPage";
 
 const isAuthenticated = () => {
   return localStorage.getItem("token") !== null;
@@ -24,8 +26,8 @@ const router = createBrowserRouter([
         element: isAuthenticated() ? <HomePage /> : <Navigate to="/login" />,
       },
       {
-        path:'Home',
-        element:isAuthenticated() ? <HomePage /> : <Navigate to="/login" />,
+        path: "Home",
+        element: isAuthenticated() ? <HomePage /> : <Navigate to="/login" />,
       },
       {
         path: "Branches",
@@ -40,8 +42,16 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "Users",
-        element: isAuthenticated() ? <UserPage /> : <Navigate to="/login" />
+        path: "Keepers",
+        element: isAuthenticated() ? <KeeperPage /> : <Navigate to="/login" />,
+      },
+      {
+        path: "Donors",
+        element: isAuthenticated() ? <DonorPage /> : <Navigate to="/login" />,
+      },
+      {
+        path: "Drivers",
+        element: isAuthenticated() ? <DriverPage /> : <Navigate to="/login" />,
       },
       {
         path: "Settings",

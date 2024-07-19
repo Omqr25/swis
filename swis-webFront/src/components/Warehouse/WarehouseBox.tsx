@@ -1,11 +1,14 @@
-import { Box, Icon, IconButton, Text } from "@chakra-ui/react";
-import DeleteC from "../Delete";
-import { CiEdit } from "react-icons/ci";
+import { Box, Icon, IconButton, Text, useDisclosure } from "@chakra-ui/react";
 import { BiCode } from "react-icons/bi";
-import { IoLogoCapacitor } from "react-icons/io5";
+import { CiEdit } from "react-icons/ci";
 import { FaCity, FaUser, FaWarehouse } from "react-icons/fa";
+import { IoLogoCapacitor } from "react-icons/io5";
 import Warehouse from "../../entities/warehouse";
 import useWarehouse from "../../stores/warehouses";
+import DeleteC from "../Delete";
+import { useState } from "react";
+import CustomModal from "../Modal";
+import { WarehouseForm } from "./WarehouseForm";
 
 interface Props {
   warehouse: Warehouse;
@@ -13,6 +16,16 @@ interface Props {
 export const WarehouseBox = ({ warehouse }: Props) => {
   const setWarehouse = useWarehouse((s) => s.setWarehouse);
 
+  const [warehouse_id , setWarehouse_Id] = useState(0);
+
+  const { isOpen, onOpen, onClose } = useDisclosure(); 
+
+  const handleEditWarehouse = (id : number | undefined) => {
+    if(onOpen && id){
+      setWarehouse_Id(id);
+      onOpen();
+    }
+  }
   return (
     <Box
       key={warehouse.id}
@@ -20,23 +33,27 @@ export const WarehouseBox = ({ warehouse }: Props) => {
       borderRadius="lg"
       p={4}
       m={2}
-      transition={"transform 0.2s ease-in-out"}
       _hover={{
         bgColor: "gray.500",
-        transform: "sclae(1.1)",
       }}
       position="relative"
       onClick={() => {
         setWarehouse(warehouse);
       }}
     >
-      {warehouse.id && <DeleteC ID={warehouse.id} target="warehouses" />}
+      {warehouse.id && (
+        <DeleteC ID={warehouse.id} target="warehouses" type="ذ" />
+      )}
 
       <Text fontSize={22} fontWeight="bold">
         <IconButton
           aria-label="editing the warehouse"
           icon={<CiEdit />}
           size={"20px"}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEditWarehouse(warehouse.id);
+          }}
         />{" "}
         {warehouse.name}
       </Text>
@@ -58,6 +75,9 @@ export const WarehouseBox = ({ warehouse }: Props) => {
       <Text mt={2}>
         <Icon as={FaCity} mr={1} /> <b>Branch:</b> {warehouse.branch?.name}
       </Text>
+      <CustomModal buttonLabel={"Edit"} isOpen={isOpen} onClose={onClose}>
+        <WarehouseForm isEdit={true} ID={warehouse_id} />
+      </CustomModal>
     </Box>
   );
 };

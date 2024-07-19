@@ -10,6 +10,7 @@ import useGetAll from "../../hooks/useGetAll";
 import { Error } from "../Error";
 import { WarehouseBox } from "./WarehouseBox";
 import { WarehouseBoxSkeleton } from "./WarehouseBoxSkeleton";
+import { motion } from "framer-motion";
 
 export const WarehouseGrid = () => {
   const { data, error, isLoading, fetchNextPage, hasNextPage } =
@@ -41,7 +42,9 @@ export const WarehouseGrid = () => {
           {data?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page.data.map((warehouse) => (
-                <WarehouseBox key={warehouse.id} warehouse={warehouse} />
+                <motion.div  key={warehouse.id}  whileHover={{ scale: 1.1 }}>
+                <WarehouseBox warehouse={warehouse} />
+                </motion.div>
               ))}
             </React.Fragment>
           ))}

@@ -1,3 +1,5 @@
+import item from "./items";
+
 export interface City {
   id: number;
   name: string;
@@ -16,4 +18,5 @@ export default interface Warehouse {
   Free_capacity?: number;
   main_Warehouse?: City;
   keeper?: string;
+  items?: item[];
 }
