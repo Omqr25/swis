@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\showKeeperItemResource;
 use App\Http\Responses\Response;
-use App\Services\warehouseService;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 

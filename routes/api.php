@@ -68,6 +68,7 @@ Route::controller(TransactionController::class)->group(function(){
 });
 
 Route::controller(UserController::class)->group(function(){
+    Route::get('users/indexKeeper','indexKeeper');
     Route::post('users/restore','restore');
     Route::get('users/showDeleted','showDeleted');
 });

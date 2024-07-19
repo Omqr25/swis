@@ -22,7 +22,7 @@ class storeDonorItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'donor_id' => 'required|exists:donors,id',
+            'user_id' => 'required|exists:users,id',
             'item_id' => 'required|exists:items,id',
             'quantity' => 'required|integer|min:1',
         ];

@@ -9,6 +9,7 @@ use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Http\Resources\DonorTransactionResource;
+use App\Http\Responses\Response;
 use App\Http\services\QRCodeService;
 use App\Models\Transaction;
 use App\Services\TransactionService;
@@ -22,6 +23,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class TransactionController extends Controller
 {
@@ -53,6 +55,9 @@ class TransactionController extends Controller
     {
         $dataItem=$request->validated();
         $transaction=null;
+        $this->transactionRepository->UpdateSystemItemsQuantity($dataItem);
+        $this->transactionRepository->UpdateWarehouseItemsQuantity($dataItem);
+        $this->transactionRepository->UpdateDonorItemsQuantity($dataItem);    
         if ($request->hasFile('waybill_img')) {
             $file = $request->file('waybill_img');
             $fileName ='Transaction/'.'waybill_Images/' . $file->hashName() ;
@@ -60,9 +65,9 @@ class TransactionController extends Controller
             $dataItem['waybill_img'] = $imagePath;
             $transaction=$this->transactionRepository->create($dataItem);
         }
-        $imagePath=$this->qrCodeService->generateQRCode( $transaction['Transaction']);
-        $dataItem['qr_code'] = $imagePath;
-        $transaction =$this->transactionRepository->update($dataItem,$transaction['Transaction']);
+        // $imagePath=$this->qrCodeService->generateQRCode( $transaction['Transaction']);
+        // $dataItem['qr_code'] = $imagePath;
+        // $transaction =$this->transactionRepository->update($dataItem,$transaction['Transaction']);
         return $this->showOne($transaction['Transaction'],TransactionResource::class,$transaction['message']);
 
     }

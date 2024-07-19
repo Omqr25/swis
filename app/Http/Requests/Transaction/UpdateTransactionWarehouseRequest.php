@@ -32,7 +32,7 @@ class UpdateTransactionWarehouseRequest extends FormRequest
             'transaction_type_ar' => new Enum(transType::class),
             'transaction_mode_type' => new Enum(transactionModeType::class),
             'quantity' => ['numeric', 'min:1'],
-            'item_id'=>'integer'
+            'item_id'=>'integer',
             'transaction_mode_type_ar' => new Enum(transactionModeType::class),
         ];
     }

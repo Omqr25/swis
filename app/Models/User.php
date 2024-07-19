@@ -57,7 +57,7 @@ class User extends Authenticatable
 
     ];
 
-    public function wharehouse()
+    public function warehouse()
     {
         return $this->hasOne(Warehouse::class);
     }
