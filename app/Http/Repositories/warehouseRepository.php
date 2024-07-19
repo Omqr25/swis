@@ -61,7 +61,7 @@ class warehouseRepository extends baseRepository
     {
         $data =$warehouse::where('id',$warehouse->id)
             ->with('user','branch','parentWarehouse','warehouseItem.item')
-            ->paginate(10);
+            ->get();
 
         if ($data->isEmpty()){
             $message="There are no Warehouse at the moment";

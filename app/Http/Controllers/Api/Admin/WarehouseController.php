@@ -44,8 +44,7 @@ class WarehouseController extends Controller
     {
 
             $data = $this->warehouseRepository->show($warehouse);
-        return $this->showAll($data['Warehouse'],WarehouseResource::class,$data['message']);
-
+        return $this->showOneCollection($data['Warehouse'],WarehouseResource::class,$data['message']);
     }
 
 
