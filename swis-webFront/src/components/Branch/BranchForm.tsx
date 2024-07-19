@@ -5,18 +5,22 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Select,
   Text,
 } from "@chakra-ui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { AiOutlineEllipsis, AiOutlinePhone } from "react-icons/ai";
-import { BiDice6, BiMap } from "react-icons/bi";
-import * as yup from "yup";
-import Branches2 from "../../entities/Branches2";
-import useGetOne from "../../hooks/useGetOne";
-import useEdit from "../../hooks/useEdit";
-import useCreate from "../../hooks/useCreate";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { AiOutlineEllipsis, AiOutlinePhone } from "react-icons/ai";
+import { BiMap } from "react-icons/bi";
+import * as yup from "yup";
 import Branches from "../../entities/Branches";
+import Branches2 from "../../entities/Branches2";
+import useCreate from "../../hooks/useCreate";
+import useEdit from "../../hooks/useEdit";
+import useGetAll from "../../hooks/useGetAll";
+import useGetOne from "../../hooks/useGetOne";
+import useSub from "../../hooks/useSub";
 
 interface Props {
   isEdit: boolean;
@@ -24,21 +28,32 @@ interface Props {
 }
 export const BranchForm = ({ isEdit, ID }: Props) => {
   const { t } = useTranslation();
+
+  const branches = useGetAll<Branches>("branches/indexMainBranch");
+
+  const [selectedMainBranch, setSelectedMainBranch] = useState<number>(0);
+
+  const [branch_id, setBranch_Id] = useState<number>(0);
+
+  const subBranches = useSub<Branches>(
+    Number(selectedMainBranch),
+    "branches/indexSubBranch"
+  );
+
   const validationsEditBranch = yup
     .object()
     .shape({
       name: yup.string(),
       phone: yup.string(),
       address: yup.string(),
-      parent_id: yup.string(),
     })
     .test(
       "at-least-one-required",
       "At least one field is required",
       function (value) {
-        const { name, phone, address, parent_id } = value;
+        const { name, phone, address } = value;
         const atLeastOneFieldHasValue =
-          !!name || !!phone || !!address || !!parent_id;
+          !!name || !!phone || !!address;
 
         if (!atLeastOneFieldHasValue) {
           return this.createError({
@@ -54,7 +69,6 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
     name: yup.string().required("Name is required"),
     phone: yup.string().required("Phone is required"),
     address: yup.string().required("address is required"),
-    parent_id: yup.string().required("Main Branch Id is required"),
   });
 
   const Edit = useEdit<Branches,Branches2>(ID , "branches");
@@ -66,14 +80,14 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
         name: values.name,
         phone: values.phone,
         address: values.address,
-        parent_id: values.parent_id,
+        parent_id: branch_id,
         _method: "PUT",
       });
     else
       Edit.mutate({
         name: values.name,
         address: values.address,
-        parent_id: values.parent_id,
+        parent_id:branch_id,
         _method: "PUT",
       });
   };
@@ -83,9 +97,26 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
       name: values.name,
       phone: values.phone,
       address: values.address,
-      parent_id: values.parent_id,
+      parent_id: selectedMainBranch,
     });
   };
+
+  const handleMainBranchChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedMainBranch(Number(event.target.value));
+    setBranch_Id(Number(event.target.value));
+
+   
+  };
+
+  const handleSubBranchChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setBranch_Id(Number(event.target.value));
+    
+  };
+
   if (isEdit && branch.isLoading)
     return <Text color={"white"}>Loading...</Text>;
   return (
@@ -95,7 +126,6 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
         code: isEdit ? branch.data?.data.code : "",
         phone: "",
         address: isEdit ? branch.data?.data.address : "",
-        parent_id: isEdit ? branch.data?.data.main_branch?.id : 1,
       }}
       validationSchema={isEdit ? validationsEditBranch : validationsAddBranch}
       onSubmit={isEdit ? handleEditBranch : handleAddBranch}
@@ -184,28 +214,46 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
             {(msg) => <Text color="red.500">{msg}</Text>}
           </ErrorMessage>
         </FormControl>
-        <FormControl id="parent_id">
+        <FormControl id="branch">
           <FormLabel fontFamily={"cursive"} color={"white"}>
-            {t("MainBranch_id")}{" "}
+            {t("Branch")}{" "}
           </FormLabel>
-          <InputGroup>
-            <InputLeftElement
-              pointerEvents="none"
-              children={<BiDice6 color="white" />}
-            />
-            <Field
-              name="parent_id"
-              color="white"
-              as={Input}
-              type="parent_id"
-              placeholder="MainBranch_id"
-              _placeholder={{ color: "white" }}
-              borderRadius={"20"}
-              width={{ base: "100px", lg: "400px" }}
-              pl={"30px"}
-            />
-          </InputGroup>
-          <ErrorMessage name="parent_id">
+
+          <Select
+            placeholder="Select main branch"
+            onChange={handleMainBranchChange}
+            borderRadius={"20"}
+            width={"full"}
+            color="gray.400"
+          >
+            {branches.data?.pages.map((page, index) => (
+              <React.Fragment key={index}>
+                {page.data.map((br) => (
+                  <option key={br.id} value={br.id}>
+                    {br.name}
+                  </option>
+                ))}
+              </React.Fragment>
+            ))}
+          </Select>
+
+          <Select
+            placeholder="Select sub branch"
+            onChange={handleSubBranchChange}
+            isDisabled={!selectedMainBranch}
+            color="gray.400"
+            pt={2}
+            borderRadius={"20"}
+            width={"full"}
+          >
+            {subBranches.data?.data.map((br) => (
+              <option key={br.id} value={br.id}>
+                {br.name}
+              </option>
+            ))}
+          </Select>
+
+          <ErrorMessage name="branch">
             {(msg) => <Text color="red.500">{msg}</Text>}
           </ErrorMessage>
         </FormControl>

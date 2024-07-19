@@ -17,7 +17,6 @@ import {
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  AiOutlineCode,
   AiOutlineEllipsis,
   AiOutlinePhone,
 } from "react-icons/ai";
@@ -41,7 +40,7 @@ export const BranchTable = () => {
   const [BranchId, setBranchId] = useState(0);
 
   const { data, error, isLoading, fetchNextPage, hasNextPage } =
-    useGetAll<Branches>("branches");
+    useGetAll<Branches>("branches/indexMainBranch");
 
   const handleEditBranch = (id: number | undefined) => {
     if (onOpen && id) {

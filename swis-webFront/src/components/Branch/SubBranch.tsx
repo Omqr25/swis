@@ -4,6 +4,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Show,
   Spacer,
   Spinner,
   Text,
@@ -12,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { BiMap } from "react-icons/bi";
+import {  AiOutlineCode , AiOutlinePhone} from "react-icons/ai";
 import Branches from "../../entities/Branches";
 import useBranchStore from "../../stores/branchesStore";
 import CustomModal from "../Modal";
@@ -81,6 +83,14 @@ export const SubBranch = () => {
       <Text fontSize={20} pl={4} pb={2}>
         <Icon as={BiMap} /> <b>{t("Address")}</b> : {branch.address}
       </Text>
+      <Text fontSize={20} pl={4} pb={2}>
+        <Icon as={AiOutlineCode} /> <b>{t("Code")}</b> : {branch.code}
+      </Text>
+      <Show below="lg">
+      <Text fontSize={20} pl={4} pb={2}>
+        <Icon as={AiOutlinePhone} /> <b>{t("Phone")}</b> : {branch.phone}
+      </Text>
+      </Show>
       <Heading fontSize={30} pb={4} textAlign={"center"}>
         {t("SubBranches")}
       </Heading>

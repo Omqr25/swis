@@ -40,7 +40,7 @@ export const WarehouseForm = ({ isEdit, ID }: Props) => {
 
   const warehouses = useGetAll<Warehouse>("warehouses");
 
-  const branches = useGetAll<Branches>("branches");
+  const branches = useGetAll<Branches>("branches/indexMainBranch");
 
   const keepers = useGetAll<User>("users/indexKeeper");
 
