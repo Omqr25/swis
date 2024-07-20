@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\donorItem;
+use App\Models\Item;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +15,26 @@ class DonorItemSeeder extends Seeder
      */
     public function run(): void
     {
-        donorItem::factory()->count(50)->create();
+        $donors = User::all();
+        $items = Item::all();
 
+        foreach ($donors as $donor) {
+            foreach ($items as $item) {
+                $quantity = rand(1, 100);
+
+                $donorItem = DonorItem::firstOrNew([
+                    'user_id' => $donor->id,
+                    'item_id' => $item->id,
+                ]);
+
+                if ($donorItem->exists) {
+                    $donorItem->quantity += $quantity;
+                } else {
+                    $donorItem->quantity = $quantity;
+                }
+
+                $donorItem->save();
+            }
+        }
     }
 }

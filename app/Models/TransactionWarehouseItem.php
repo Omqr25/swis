@@ -16,7 +16,9 @@ class TransactionWarehouseItem extends Model
         'transaction_id',
         'warehouse_id',
         'transaction_type',
+        'transaction_type_ar',
         'transaction_mode_type',
+        'transaction_mode_type_ar',
         'item_id',
         'quantity',
     ];

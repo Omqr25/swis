@@ -16,9 +16,10 @@ return new class extends Migration
     {
         Schema::create('donor_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Item::class);
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('item_id')->constrained();
             $table->integer('quantity');
+            $table->unique(['user_id', 'item_id']);
             $table->timestamps();
             $table->softDeletes();
 

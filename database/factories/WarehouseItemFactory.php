@@ -18,6 +18,7 @@ class WarehouseItemFactory extends Factory
      */
     public function definition(): array
     {
+        $this->faker->unique(true);
         return [
             'warehouse_id' =>Warehouse::inRandomOrder()->value('id'),
             'item_id' => Item::inRandomOrder()->value('id'),

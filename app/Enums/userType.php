@@ -4,8 +4,10 @@ namespace App\Enums;
 
 enum userType: int
 {
-    case keeper = 1;
-    case donor = 2;
 
+    case admin = 1;
+    case keeper = 2;
+    case donor = 3;
+    case spAd = 4;
 
 }
