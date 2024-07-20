@@ -26,8 +26,8 @@ class storeUserRequests extends FormRequest
     {
         return [
             'password' => ['required', 'min:8'],
-            'email' => ['required', 'string','email'],
-            'contact_email' => ['required', 'string','email'],
+            'email' => ['required', 'string', 'email', Rule::unique('users', 'email')],
+            'contact_email' =>['required', 'string', 'email', Rule::unique('users', 'contact_email')],
             'name' => ['required', 'string','min:4'],
             'phone' => ['required',Rule::unique('Users', 'phone'),'phone:sy,INTERNATIONAL'],
             'photo' => [ 'required', 'image'],
