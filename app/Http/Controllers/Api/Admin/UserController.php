@@ -29,11 +29,6 @@ class UserController extends Controller
         return $this->showAll($data['User'],UserResource::class,$data['message']);
     }
 
-    public function indexKeeper()
-    {
-        $data=$this->userRepository->indexKeeper();
-        return $this->showAll($data['User'],UserResource::class,$data['message']);
-    }
 
     public function show(User $user): JsonResponse
     {
