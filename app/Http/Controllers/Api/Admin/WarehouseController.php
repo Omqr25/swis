@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\showKeeperItemResource;
 use App\Http\Responses\Response;
-use App\Services\warehouseService;
 use Illuminate\Http\JsonResponse;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
@@ -42,8 +41,11 @@ class WarehouseController extends Controller
 
     public function show(Warehouse $warehouse): JsonResponse
     {
-        return $this->showOne($warehouse , warehouseResource::class);
+
+            $data = $this->warehouseRepository->show($warehouse);
+        return $this->showOneCollection($data['Warehouse'],WarehouseResource::class,$data['message']);
     }
+
 
     public function store(StoreWarehouseRequest $request): JsonResponse
     {

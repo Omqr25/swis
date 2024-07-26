@@ -28,6 +28,8 @@ class indexWarehouseResource extends JsonResource
                 'id' =>$this->parent_id,
                 'name' =>$this->parentWarehouse->name ?? null],
             'keeper'   => $this->user->name ?? null,
+            'is_Distribution_point'=>$this->is_Distribution_point,
+
 
         ];
     }

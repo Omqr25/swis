@@ -22,7 +22,7 @@ class UpdateDonorItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'donor_id' => 'exists:donors,id',
+            'user_id' => 'exists:users,id',
             'item_id' => 'exists:items,id',
             'quantity' => 'integer|min:1',
         ];

@@ -19,6 +19,7 @@ class WarehouseResource extends JsonResource
             'name'      => $this->name,
             'code'      => $this->code,
             'location'  => $this->location,
+            'user_id'   => $this->user_id,
             'branch' => [
                 'id' =>$this->branch_id,
                 'name' =>$this->branch->name ?? null,
@@ -28,6 +29,7 @@ class WarehouseResource extends JsonResource
                 'id' =>$this->parent_id,
                 'name' =>$this->parentWarehouse->name ?? null],
             'keeper'   => $this->user->name ?? null,
+            'is_Distribution_point'=>$this->is_Distribution_point,
 
             'items'=>$this->warehouseItem->map(function ($warehouseItem){
                 return new ItemInWarehouseResource($warehouseItem);

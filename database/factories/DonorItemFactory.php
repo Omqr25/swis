@@ -18,10 +18,11 @@ class DonorItemFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
+    {  
+        $this->faker->unique(true);
         return [
-            'user_id' => User::inRandomOrder()->first()->id ,
-            'item_id' => Item::inRandomOrder()->first()->id ,
+            'user_id' => $this->faker->unique()->randomElement(item::pluck('id')->toArray()),
+            'item_id' => $this->faker->unique()->randomElement(User::pluck('id')->toArray()),
             'quantity' => $this->faker->numberBetween(1, 100),
         ];
     }

@@ -11,8 +11,8 @@ class WarehouseItem extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable=[
-        'Warehouse_id',
-        'Item_id',
+        'warehouse_id',
+        'item_id',
         'quantity',
     ];
     public function item():BelongsTo

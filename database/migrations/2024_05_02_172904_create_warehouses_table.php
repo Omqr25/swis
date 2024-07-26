@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(Branch::class)->onDelete('cascade');
             $table->integer('capacity');
             $table->bigInteger('parent_id')->nullable()->onDelete('cascade');
-            $table->foreignIdFor(User::class);
+            $table->foreignId('user_id')->constrained();
             $table->boolean('is_Distribution_point');
             $table->timestamps();
             $table->softDeletes();

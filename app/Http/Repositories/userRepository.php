@@ -35,4 +35,14 @@ class userRepository extends baseRepository
 
     }
 
+    public function indexKeeper(): array
+    {
+        $data = User::where('type', userType::keeper->value)->paginate(10);
+        if ($data->isEmpty()) {
+            $message = "There are no keepers at the moment";
+        } else {
+            $message = "Keepers indexed successfully";
+        }
+        return ['message' => $message, "Keeper" => $data];
+    }
 }

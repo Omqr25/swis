@@ -26,8 +26,8 @@ class updateUserRequests extends FormRequest
     {
         return [
             'password' => [  'min:8'],
-            'email' => [ 'string','email'],
-            'contact_email' => [ 'string','email'],
+            'email' => [ 'string','email',Rule::unique('users', 'email')],
+            'contact_email' => [ 'string','email',Rule::unique('users', 'contact_email')],
             'name' => [ 'string','min:4'],
             'phone' => [ 'string',Rule::unique('Users', 'phone'),'phone:sy,INTERNATIONAL'],
             'photo' => [ 'image'],

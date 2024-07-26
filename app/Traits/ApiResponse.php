@@ -31,6 +31,11 @@ trait ApiResponse
     {
         return $this->response($message, new $resource($instance));
     }
+    protected function showOneCollection($instance, $resource, $message = 'success', $code = 200): JsonResponse
+    {
+        $response = $resource::collection($instance);
+        return $this->response($message, $response);
+    }
 
     protected function showAll($data, $resource, $message = 'success', $code = 200): JsonResponse
     {

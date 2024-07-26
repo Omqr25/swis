@@ -25,6 +25,8 @@ class indexMainWarehouseResource extends JsonResource
             ],
             'Free_capacity'  => $this->capacity,
             'keeper'   => $this->user->name ?? null,
+            'is_Distribution_point'=>$this->is_Distribution_point,
+
 
         ];
     }

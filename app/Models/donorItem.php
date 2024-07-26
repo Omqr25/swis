@@ -17,7 +17,7 @@ class donorItem extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'donor_id',
+        'user_id',
         'item_id',
         'quantity',
     ];
