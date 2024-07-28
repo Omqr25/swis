@@ -24,7 +24,7 @@ class UserResource extends JsonResource
           // 'password' => $this->password,
             'code' => $this->code,
             'contact_email' => $this->contact_email,
-            'photo' => $this->imageUrl('photo'),
+            'photo' => $this->photo,
             'type' => $this->type instanceof userType ? $this->type->name : null, // Convert enum to integer value
 
         ];
