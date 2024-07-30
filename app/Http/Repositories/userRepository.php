@@ -13,6 +13,8 @@ class userRepository extends baseRepository
         parent::__construct($model);
     }
 
+   
+
     public function create($request):array
     {
         $request['password'] = Hash::make($request['password']);

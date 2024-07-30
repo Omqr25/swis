@@ -72,8 +72,7 @@ class User extends Authenticatable
         if(str_starts_with($this->$fieldName,'http')) {
             return $this->$fieldName;
         }else{
-
-            return $this->$fieldName ? self::getDisk()->url($this->$fieldName) : null;
+            return $this->$fieldName ? app('pathUrl') . 'users/' . $this->$fieldName : null;
         }
     }
 }
