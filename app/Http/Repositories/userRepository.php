@@ -13,19 +13,6 @@ class userRepository extends baseRepository
         parent::__construct($model);
     }
 
-    public function indexKeeper()
-    {
-        $data = User::where('type',userType::keeper)->paginate(10);
-        if ($data->isEmpty()){
-            $message="There are no keepers at the moment";
-        }else
-        {
-            $message="Keepers indexed successfully";
-        }
-        return ['message'=>$message,"User"=>$data];
-
-    }
-
     public function create($request):array
     {
         $request['password'] = Hash::make($request['password']);

@@ -11,7 +11,8 @@ class BranchObserver
      */
     public function created(Branch $branch): void
     {
-        $code = substr($branch->name,0,4).(3000000 + $branch->id);
+        $var = $branch->getTranslation('name', 'en');
+        $code = substr($var, 0, 4) . (3000000 + $branch->id);
         $branch->code = $code;
         $branch->save();
     }

@@ -7,14 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use Spatie\Translatable\HasTranslations;
 
 class Warehouse extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory,SoftDeletes,HasTranslations;
 
+    public $translatable = ['name'];
     protected $fillable = [
         'name',
-        'name_ar',
         'code',
         'location',
         'branch_id',

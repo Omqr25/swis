@@ -22,11 +22,12 @@ class StoreBranchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => 'required|string|min:4',
-            'name_ar'      => 'string|min:4',
+            'name.en'      => 'required|string|min:4',
+            'name.ar'      => 'string|min:4',
             'parent_id' => 'nullable|integer|exists:branches,id',
             'phone'     => 'required|unique:branches,phone',
-            'address'   => 'required|string',
+            'address.en'   => 'required_without:address.ar|string',
+            'address.ar'   => 'required_without:address.en|string',
         ];
     }
 }

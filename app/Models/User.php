@@ -14,19 +14,20 @@ use Laravel\Sanctum\HasApiTokens;
 use PhpParser\Node\Scalar\String_;
 use PHPUnit\Util\Filesystem;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Translatable\HasTranslations;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, hasRoles, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, hasRoles, SoftDeletes, HasTranslations;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+    public $translatable = ['name'];
     protected $fillable = [
         'name',
-        'name_ar',
         'email',
         'password',
         'phone',

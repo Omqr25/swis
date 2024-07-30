@@ -35,9 +35,10 @@ class branchRepository extends baseRepository
             $message="Sub branch indexed successfully";
         }
         return ['message'=>$message,"Branch"=>$data];
-    }public function indexMainBranch():array
+    }
+    public function indexMainBranch():array
     {
-        $data =Branch::where('parent_id',0)
+        $data =Branch::where('parent_id',null)
        ->paginate(10);
         if ($data->isEmpty()){
             $message="There are no main branch at the moment";

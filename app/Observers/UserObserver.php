@@ -11,7 +11,8 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        $code = substr($user->name,0,4).(1000000 + $user->id);
+        $var = $user->getTranslation('name', 'en');
+        $code = substr($var, 0, 4) . (1000000 + $user->id);
         $user->code = $code;
         $user->save();
     }

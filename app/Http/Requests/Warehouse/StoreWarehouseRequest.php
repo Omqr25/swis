@@ -23,7 +23,8 @@ class StoreWarehouseRequest extends FormRequest
     {
 
         return [
-            'name' => 'required|string|min:4',
+            'name.en' => 'required|string|min:4',
+            'name.ar' => 'string|min:4',
             'branch_id' => 'required|integer|exists:branches,id',
             'capacity' => 'required|integer|min:0',
             'parent_id' => 'nullable|integer|exists:warehouses,id',

@@ -25,7 +25,8 @@ class UpdateTransactionRequest extends FormRequest
     {
         return [
             'is_convoy' => 'sometimes|boolean',
-            'notes' => 'nullable|string',
+            'notes.en' => 'nullable|string',
+            'notes.ar' => 'nullable|string',
             'status' => ['sometimes', new Enum(TransactionStatusType::class)],
             'date' => 'sometimes|date|after:yesterday',
             'waybill_num' => 'sometimes|integer',
@@ -40,9 +41,7 @@ class UpdateTransactionRequest extends FormRequest
             'items.*.type' => 'sometimes|string',
             'drivers' => 'sometimes|array',
             'drivers.*.driver_id' => 'sometimes|exists:drivers,id',
-            'notes_ar' => 'nullable|string',
           //  'status' => new Enum(transactionStatusType::class),
-            'status_ar' => new Enum(transactionStatusType::class),
          //   'date' => 'date',
           //  'waybill_num' => 'integer',
            // 'waybill_img' => [ 'image'],

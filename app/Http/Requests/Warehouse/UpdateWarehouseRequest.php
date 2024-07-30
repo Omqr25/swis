@@ -22,7 +22,8 @@ class UpdateWarehouseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => 'string|min:4',
+            'name.en'      => 'string|min:4',
+            'name.ar'      => 'string|min:4',
             // 'location'  => '',
             'branch_id' => 'integer|exists:branches,id',
             'capacity'  => 'integer|min:0',

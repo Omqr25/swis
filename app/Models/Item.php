@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Item extends Model
 {
-    use HasFactory,SoftDeletes;
-    protected $fillable =[
+    use HasFactory, SoftDeletes, HasTranslations;
+
+    public $translatable = ['name'];
+    protected $fillable = [
         'name',
-        'name_ar',
         'code',
         'sectorType',
-        'sectorType_ar',
         'unitType',
-        'unitType_ar',
         'size',
         'weight',
         'quantity',

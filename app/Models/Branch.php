@@ -6,20 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Branch extends Model
 {
-    use HasFactory,SoftDeletes;
-
+    use HasFactory, SoftDeletes, HasTranslations;
+    public $translatable = ['name', 'address'];
     protected $fillable = [
         'id',
         'name',
-        'name_ar',
         'code',
         'parent_id',
         'phone',
         'address',
-        'address_ar',
     ];
 
     public function warehouse(){

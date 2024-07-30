@@ -11,7 +11,8 @@ class ItemObserver
      */
     public function created(Item $item): void
     {
-        $code = substr($item->name,0,4).(4000000 + $item->id);
+        $var = $item->getTranslation('name', 'en');
+        $code = substr($var, 0, 4) . (4000000 + $item->id);
         $item->code = $code;
         $item->save();
     }

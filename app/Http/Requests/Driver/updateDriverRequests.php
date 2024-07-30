@@ -25,11 +25,11 @@ class updateDriverRequests extends FormRequest
         return [
             'vehicle_number' => ['string'],
             'national_id' => [ 'string'],
-            'name' => [ 'string'],
-            'name_ar' => [ 'string'],
+            'name.en' => [ 'string'],
+            'name.ar' => [ 'string'],
             'phone' => [ 'string', 'regex:/(09)[0-9]{8}/',Rule::unique('drivers', 'phone')],
-            'transportation_company_name' => [ 'string'],
-            'transportation_company_name_ar' => [ 'string'],
+            'transportation_company_name.en' => [ 'string'],
+            'transportation_company_name.ar' => [ 'string'],
         ];
     }
 }

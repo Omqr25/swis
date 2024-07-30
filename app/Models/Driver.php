@@ -5,20 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Driver extends Model
 {
-    use HasFactory,SoftDeletes;
+  use HasFactory, SoftDeletes, HasTranslations;
 
-  protected $fillable= [
-      'id',
-      'name',
-      'name_ar',
-      'vehicle_number',
-      'national_id',
-      'transportation_company_name',
-      'transportation_company_name_ar',
-      'phone',
+  public $translatable = ['name', 'transportation_company_name'];
+
+  protected $fillable = [
+    'id',
+    'name',
+    'vehicle_number',
+    'national_id',
+    'transportation_company_name',
+    'phone',
   ];
 
   public function transactions()

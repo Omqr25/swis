@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Transaction extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes, HasTranslations;
+
+    public $translatable = ['notes'];
     protected $fillable = [
         'user_id',
         'is_convoy',
         'notes',
-        'notes_ar',
         'code',
         'status',
-        'status_ar',
         'date',
         'waybill_num',
         'waybill_img',
