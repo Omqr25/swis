@@ -4,11 +4,10 @@ namespace Database\Factories;
 
 use App\Enums\transactionStatusType;
 use App\Http\services\QRCodeService;
-use App\Models\Donor;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Warehouse;
-use App\Traits\QrCodeHelper;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,10 +23,15 @@ class TransactionFactory extends Factory
      */
     public function definition(): array
     {
+        $fakerArabic = \Faker\Factory::create('ar_SA');
+
         return [
             'user_id' => User::inRandomOrder()->first()->id,
             'is_convoy' => $this->faker->boolean(),
-            'notes' => $this->faker->optional()->sentence,
+            'notes' => [
+                'en' => fake()->optional()->sentence,
+                'ar' => $fakerArabic->optional()->sentence,
+            ],
             'code' => $this->faker->word,
             'status' => $this->faker->randomElement(transactionStatusType::class),
             'date' => $this->faker->date(),
@@ -37,14 +41,14 @@ class TransactionFactory extends Factory
             'CTN'=>$this->faker->numberBetween(1000, 9999),
         ];
     }
-    // public function configure()
-    // {
-    //     return $this->afterCreating(function (Transaction $transaction) {
-    //         $qrCodeService = app(QRCodeService::class);
-    //         $qrCodePath = $qrCodeService->generateQRCode( $transaction);
+     public function configure()
+     {
+         return $this->afterCreating(function (Transaction $transaction) {
+             $qrCodeService = app(QRCodeService::class);
+             $qrCodePath = $qrCodeService->generateQRCode( $transaction);
 
-    //         $transaction->qr_code = $qrCodePath;
-    //         $transaction->save();
-    //     });
-    // }
+             $transaction->qr_code = $qrCodePath;
+             $transaction->save();
+         });
+     }
 }
