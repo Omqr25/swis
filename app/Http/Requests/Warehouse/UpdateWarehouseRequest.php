@@ -24,7 +24,8 @@ class UpdateWarehouseRequest extends FormRequest
         return [
             'name.en'      => 'string|min:4',
             'name.ar'      => 'string|min:4',
-            // 'location'  => '',
+            'location.latitude' => 'numeric|between:-90,90',
+            'location.longitude' => 'numeric|between:-180,180',
             'branch_id' => 'integer|exists:branches,id',
             'capacity'  => 'integer|min:0',
             'parent_id' => 'integer|exists:warehouses,id',

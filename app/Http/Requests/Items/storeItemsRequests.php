@@ -28,7 +28,6 @@ class storeItemsRequests extends FormRequest
     public function rules(): array
     {
         return [
-            //'code' => [ 'string'],
             'sectorType' => ['required', new Enum(sectorType::class)],
             'unitType' => ['required', new Enum(unitType::class)],
             'name.en' => ['required', 'string','min:4'],

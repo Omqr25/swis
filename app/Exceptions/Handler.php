@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Http\Responses\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -48,6 +49,15 @@ class Handler extends ExceptionHandler
                 'you do not have the required authorization.',
                 403);
 
+        });
+        // Handle Not Found Exception
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => __('Record not found.'),
+                    'status_code' => 404,
+                ], 404);
+            }
         });
     }
 }

@@ -26,12 +26,10 @@ class donorItemRepository extends baseRepository
     public function show(donorItem $donorItem)
     {
         $data =$donorItem->with('user','item')->first();
-        if ($data->isEmpty()){
-            $message="There are no donors item at the moment";
-        }else
-        {
+
+
             $message="Donor item showed successfully";
-        }
+
         return ['message'=>$message,"Donor"=>$data];
     }
 
@@ -54,12 +52,9 @@ class donorItemRepository extends baseRepository
         $data =donorItem::where('user_id', $donor_id)
             ->where('item_id',$item_id)
             ->with('user','item')->first();
-//        if ($data->isEmpty()){
-//            $message="There are no donors at the moment";
-//        }else
-//        {
+
             $message="Donor indexed successfully";
-//        }
+
         return ['message'=>$message,"donorItem"=>$data];
     }
 }

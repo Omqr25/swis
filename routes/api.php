@@ -3,20 +3,18 @@
 use App\Http\Controllers\Api\Admin\DonorController;
 use App\Http\Controllers\Api\Admin\DonorItemController;
 use App\Http\Controllers\Api\Admin\DriverController;
-use App\Http\Controllers\Api\Admin\itemController;
+use App\Http\Controllers\Api\Admin\ItemController;
 use App\Http\Controllers\Api\Admin\BranchController;
 use App\Http\Controllers\Api\Admin\WarehouseItemController;
 use App\Http\Controllers\Api\Admin\TransactionController;
-use App\Http\Controllers\Api\Admin\TransactionItemController;
 use App\Http\Controllers\Api\Admin\TransactionWarehouseItemController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WarehouseController;
-use App\Http\Controllers\Api\keeper\WarehouseController as keeperWarehouseController;
-use App\Http\Controllers\Api\keeper\itemController as keeperItemController;
-use App\Http\Controllers\Api\keeper\transactionController as keeperTransactionController;
-use App\Http\Controllers\Api\Donor\transactionController as DonorTransactionController;
+use App\Http\Controllers\Api\Keeper\WarehouseController as KeeperWarehouseController;
+use App\Http\Controllers\Api\Keeper\ItemController as KeeperItemController;
+use App\Http\Controllers\Api\Keeper\TransactionController as KeeperTransactionController;
+use App\Http\Controllers\Api\Donor\TransactionController as DonorTransactionController;
 use App\Http\Controllers\Api\Donor\DonorItemController as DonorItemForDonorController;
-use App\Http\Controllers\Api\LanguageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,119 +31,97 @@ use Illuminate\Support\Facades\Route;
 
 require_once __DIR__ . '/Api/Auth.php';
 
-Route::middleware(['auth:sanctum','Localization'])->get('/user', function (Request $request) {
+Route::middleware(['auth:sanctum', 'Localization'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('language/{locale}', [LanguageController::class,'switch']);
 
 Route::middleware('Localization')->group(function () {
 
-Route::controller(BranchController::class)->group(function () {
-    Route::post('branches/restore', 'restore');
-    Route::get('branches/showDeleted', 'showDeleted');
-    Route::get('branches/indexSubBranch/{branch_id}', 'indexSubBranch');
-    Route::get('branches/indexMainBranch', 'indexMainBranch');
+    // Admin Routes
+    Route::controller(BranchController::class)->group(function () {
+        Route::post('branches/restore', 'restore');
+        Route::get('branches/showDeleted', 'showDeleted');
+        Route::get('branches/indexSubBranch/{branch_id}', 'indexSubBranch');
+        Route::get('branches/indexMainBranch', 'indexMainBranch');
+    });
+
+    Route::controller(DriverController::class)->group(function () {
+        Route::post('drivers/restore', 'restore');
+        Route::get('drivers/showDeleted', 'showDeleted');
+    });
+
+    Route::controller(DonorController::class)->group(function () {
+        Route::post('donors/restore', 'restore');
+        Route::get('donors/showDeleted', 'showDeleted');
+    });
+
+    Route::controller(ItemController::class)->group(function () {
+        Route::post('items/restore', 'restore');
+        Route::get('items/showDeleted', 'showDeleted');
+    });
+
+    Route::controller(WarehouseController::class)->group(function () {
+        Route::post('warehouses/restore', 'restore');
+        Route::get('warehouses/showDeleted', 'showDeleted');
+        Route::get('warehouses/indexSubWarehouse/{warehouse_id}', 'indexSubWarehouse');
+        Route::get('warehouses/indexMainWarehouse', 'indexMainWarehouse');
+        Route::get('warehouses/indexDistributionPoint', 'indexDistributionPoint');
+    });
+
+    Route::controller(TransactionController::class)->group(function () {
+        Route::post('transactions/restore', 'restore');
+        Route::get('transactions/showDeleted', 'showDeleted');
+    });
+
+    Route::controller(UserController::class)->group(function () {
+        Route::post('users/restore', 'restore');
+        Route::get('users/showDeleted', 'showDeleted');
+        Route::get('users/indexKeeper', 'indexKeeper');
+    });
+
+    Route::controller(WarehouseItemController::class)->group(function () {
+        Route::post('warehouseItems/restore', 'restore');
+        Route::get('warehouseItems/showDeleted', 'showDeleted');
+    });
+
+    Route::controller(TransactionWarehouseItemController::class)->group(function () {
+        Route::post('transactionWarehouseItems/restore', 'restore');
+        Route::get('transactionWarehouseItems/showDeleted', 'showDeleted');
+        Route::get('transactionWarehouseItems/inventoryForWarehouse', 'inventoryForWarehouse');
+        Route::get('transactionWarehouseItems/calculateInventory', 'calculateInventory');
+    });
+
+    Route::controller(DonorItemController::class)->group(function () {
+        Route::post('donorItems/restore', 'restore');
+        Route::get('donorItems/showDeleted', 'showDeleted');
+    });
+
+    // Keeper Routes
+    Route::get('showWarehouseForKeeper', [KeeperWarehouseController::class, 'show']);
+    Route::get('inventoryForKeeper', [KeeperWarehouseController::class, 'inventory']);
+    Route::get('indexItemForKeeper', [KeeperItemController::class, 'index']);
+    Route::get('showItemForKeeper/{item_id}/{warehouse_id}', [KeeperItemController::class, 'show']);
+    Route::get('indexTransactionForKeeper', [KeeperTransactionController::class, 'index']);
+    Route::get('showTransactionForKeeper/{transaction_id}', [KeeperTransactionController::class, 'show']);
+
+    // Donor Routes
+    Route::get('indexTransactionForDonor', [DonorTransactionController::class, 'index']);
+    Route::get('showTransactionForDonor/{transaction_id}', [DonorTransactionController::class, 'show']);
+    Route::get('indexItemForDonor', [DonorItemForDonorController::class, 'index']);
+    Route::get('showItemForDonor/{item_id}', [DonorItemForDonorController::class, 'show']);
+
+    // API Resource Routes
+    Route::apiResources([
+        'drivers' => DriverController::class,
+        'branches' => BranchController::class,
+        'warehouses' => WarehouseController::class,
+        'users' => UserController::class,
+        'donors' => DonorController::class,
+        'items' => ItemController::class,
+        'warehouseItems' => WarehouseItemController::class,
+        'transactions' => TransactionController::class,
+        'transactionWarehouseItems' => TransactionWarehouseItemController::class,
+        'donorItems' => DonorItemController::class,
+    ]);
 });
-
-Route::controller(DriverController::class)->group(function () {
-    Route::post('drivers/restore', 'restore');
-    Route::get('drivers/showDeleted', 'showDeleted');
-});
-
-Route::controller(DonorController::class)->group(function () {
-    Route::post('donors/restore', 'restore');
-    Route::get('donors/showDeleted', 'showDeleted');
-});
-
-Route::controller(itemController::class)->group(function () {
-    Route::post('items/restore', 'restore');
-    Route::get('items/showDeleted', 'showDeleted');
-});
-
-Route::controller(WarehouseController::class)->group(function () {
-    Route::post('warehouses/restore', 'restore');
-    Route::get('warehouses/showDeleted', 'showDeleted');
-    Route::get('warehouses/indexSubWarehouse/{warehouse_id}', 'indexSubWarehouse');
-    Route::get('warehouses/indexMainWarehouse', 'indexMainWarehouse');
-    Route::get('warehouses/indexDistributionPoint', 'indexDistributionPoint');
-});
-
-
-Route::controller(TransactionController::class)->group(function () {
-    Route::post('transactions/restore', 'restore');
-    Route::get('transactions/showDeleted', 'showDeleted');
-});
-
-Route::controller(UserController::class)->group(function () {
-    Route::get('users/indexKeeper', 'indexKeeper');
-    Route::post('users/restore', 'restore');
-    Route::get('users/showDeleted', 'showDeleted');
-    Route::get('users/indexKeeper', 'indexKeeper');
-});
-
-Route::controller(WarehouseItemController::class)->group(function () {
-    Route::post('warehouseItems/restore', 'restore');
-    Route::get('warehouseItems/showDeleted', 'showDeleted');
-});
-
-
-Route::controller(TransactionWarehouseItemController::class)->group(function () {
-    Route::post('TransactionWarehouseItem/restore', 'restore');
-    Route::get('TransactionWarehouseItem/showDeleted', 'showDeleted');
-    Route::get('TransactionWarehouseItem/calculateInventory', 'calculateInventory');
-});
-Route::controller(DonorItemController::class)->group(function () {
-    Route::post('donorItems/restore', 'restore');
-    Route::get('donorItems/showDeleted', 'showDeleted');
-});
-
-Route::get('showWarehouseForKeeper', [keeperWarehouseController::class, 'show']);
-Route::get('indexItemForKeeper', [keeperItemController::class, 'index']);
-Route::get('showItemForKeeper/{item_id}/{warehouse_id}', [keeperItemController::class, 'show']);
-Route::get('indexTransactionForKeeper', [keeperTransactionController::class, 'index']);
-Route::get('showTransactionForKeeper/{transaction_id}', [keeperTransactionController::class, 'show']);
-
-Route::get('indexTransactionForDonor', [DonorTransactionController::class, 'index']);
-Route::get('showTransactionForDonor/{transaction_id}', [DonorTransactionController::class, 'show']);
-Route::get('indexItemForDonor', [DonorItemForDonorController::class, 'index']);
-Route::get('showItemForDonor/{item_id}', [DonorItemForDonorController::class, 'show']);
-
-Route::apiResources([
-    'drivers'               => DriverController::class,
-    'branches'              => BranchController::class,
-    'warehouses'            => WarehouseController::class,
-    'users'                 => UserController::class,
-    'donors'                => DonorController::class,
-    'items'                 => itemController::class,
-    'warehouseItems'        => WarehouseItemController::class,
-    'transactions'          => TransactionController::class,
-    'transactionWarehousesItems' => TransactionWarehouseItemController::class,
-    'donorItems'            => DonorItemController::class,
-]);
-});
-
-//Route::prefix('item')
-//    ->controller(itemController::class)
-//    ->group(function (){
-//
-//        Route::get('/','index')
-//            ->name('item.index')
-//            ->middleware('can:item.index');
-//
-//        Route::get('/{id}','show')
-//            ->name('item.show')
-//            ->middleware('can:item.show');
-//
-//        Route::post('/','create')
-//            ->name('item.create')
-//            ->middleware('can:item.create');
-//
-//        Route::post('/{id}','update')
-//            ->name('item.update')
-//            ->middleware('can:item.update');
-//
-//        Route::delete('/{id}','destroy')
-//            ->name('item.destroy')
-//            ->middleware('can:item.destroy');
-//    });

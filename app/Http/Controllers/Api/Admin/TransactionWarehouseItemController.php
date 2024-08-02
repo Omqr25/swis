@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Enums\transactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\transactionWarehousesItemRepository;
+use App\Http\Requests\inventory\inventoryRequest;
 use App\Http\Requests\Transaction\storeTransactionWarehouseRequest;
 use App\Http\Requests\Transaction\UpdateTransactionWarehouseRequest;
+use App\Http\Resources\InventoryResource;
 use App\Http\Resources\transactionWarehouseItemResource;
 use App\Http\Resources\TransactionWarehouseResource;
 use App\Models\transactionWarehouseItem;
@@ -77,38 +79,21 @@ class TransactionWarehouseItemController extends Controller
         $data = $this->transactionWarehousesRepository->restore($request);
         return [$data['message'],$data['code']];
     }
-    public function calculateInventory(Request $request)
+    public function InventoryForWarehouse(Request $request): JsonResponse
     {
-        // Validate the request parameters
         $request->validate([
             'warehouse_id' => 'required|integer',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
+        $data = [
+            'warehouse_id' => $request->input('warehouse_id'),
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date')
+        ];
+        $inventory=$this->transactionWarehousesRepository->inventory($data);
 
-        $warehouseId = $request->input('warehouse_id');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
-
-        // Query to get all transactions of type 'IN' for the specified warehouse and date range
-        $inventory = TransactionWarehouseItem::select('item_id', DB::raw('SUM(quantity) as total_quantity'))
-            ->where('transaction_type', transactionType::transactionIn)
-            ->where('warehouse_id', $warehouseId)
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('item_id')
-            ->with('item')
-            ->get();
-
-        // Format the results
-        $results = $inventory->map(function($transaction) {
-            return [
-                'item_id' => $transaction->item_id,
-                'item_name' => $transaction->item->name,
-                'total_quantity' => $transaction->total_quantity,
-            ];
-        });
-
-        return response()->json($results);
+        return $this->showOneCollection($inventory, InventoryResource::class);
     }
 
 }

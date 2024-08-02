@@ -17,8 +17,12 @@ class Localization
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Cache::get('locale') == null) Cache::put('locale', 'en');
-        App::setLocale(Cache::get('locale'));
+        $lang = $request->header('accept-language');
+        if ($lang != null) {
+            App::setLocale($lang);
+        }
+
+
         return $next($request);
     }
 }
