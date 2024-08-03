@@ -85,10 +85,18 @@ class UserController extends Controller
         return [$data['message'],$data['code']];
     }
 
-//    public function indexKeeper(): JsonResponse
-//    {
-//        $data = $this->userRepository->indexKeeper();
-//        return $this->showAll($data['Keeper'], UserResource::class, $data['message']);
-//    }
+    public function indexKeeper(): JsonResponse
+    {
+        $data = $this->userRepository->indexKeeper();
+        return $this->showAll($data['Keeper'], UserResource::class, $data['message']);
+    }
+
+    public function indexDonor(): JsonResponse
+    {
+
+        $data = $this->userRepository->indexDonor();
+        return $this->showAll($data['Donor'], UserResource::class, $data['message']);
+
+    }
 
 }
