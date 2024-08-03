@@ -20,7 +20,6 @@ class transactionController extends Controller
      }
      public function index(): JsonResponse
      {
-         var_dump(Auth::user()->id);
          $data=$this->transactionRepository->indexTransactionForKeeper(Auth::user()->id);
          return $this->showAll($data['Transaction'],indexTransactionForKeeperResource::class,$data['message']);
      }
@@ -28,7 +27,7 @@ class transactionController extends Controller
     public function show($transaction_id): JsonResponse
     {
         $data=$this->transactionRepository->showTransactionForKeeper($transaction_id);
-        return $this->showOne($data,showTransactionForKeeperResource::class,'Item showed successfully');
+        return $this->showOne($data['Transaction'],showTransactionForKeeperResource::class,$data['message']);
 
     }
 }

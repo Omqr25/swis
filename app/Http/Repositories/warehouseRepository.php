@@ -59,16 +59,11 @@ class warehouseRepository extends baseRepository
     }
     public function show($warehouse):array
     {
-        $data =$warehouse::where('id',$warehouse->id)
-            ->with('user','branch','parentWarehouse','warehouseItem.item')
-            ->get();
+        $data =$warehouse::with('user','branch','parentWarehouse','warehouseItem.item')
+            ->first();
 
-        if ($data->isEmpty()){
-            $message="There are no Warehouse at the moment";
-        }else
-        {
-            $message="Warehouse indexed successfully";
-        }
+         $message="Warehouse indexed successfully";
+
         return ['message'=>$message,"Warehouse"=>$data];
 
     }
@@ -83,14 +78,9 @@ class warehouseRepository extends baseRepository
 
         $data = Warehouse::where('user_id',$user_id)
             ->with('WarehouseItem.item','parentWarehouse')
-            ->get();
-        if ($data->isEmpty()){
-            $message="There are no Warehouse at the moment";
-        }
-        else
-        {
+            ->first();
             $message="Warehouse indexed successfully";
-        }
+
         return ['message'=>$message,"Warehouse"=>$data];
     }
 

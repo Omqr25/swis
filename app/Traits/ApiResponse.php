@@ -40,7 +40,6 @@ trait ApiResponse
     protected function showAll($data, $resource, $message = 'success', $code = 200): JsonResponse
     {
         $paginationMeta = $this->getPaginationMeta($data);
-
         $response = $resource::collection($data);
         return $this->response($message, $response, $paginationMeta, $code);
     }

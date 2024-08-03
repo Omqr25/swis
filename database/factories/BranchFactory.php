@@ -16,6 +16,7 @@ class BranchFactory extends Factory
      */
     public function definition(): array
     {
+        $fakerArabic = \Faker\Factory::create('ar_SA');
 
             $parentId = $this->faker->numberBetween(0, 10);
         if ($parentId === 0) {
@@ -23,11 +24,17 @@ class BranchFactory extends Factory
         }
 
         return [
-            'name' => $this->faker->company,
+            'name' => [
+                'en' => fake()->company(),
+                'ar' => $fakerArabic->company(),
+            ],
             'code' => $this->faker->unique()->word,
             'parent_id' => $parentId,
             'phone' => $this->faker->unique()->phoneNumber,
-            'address' => $this->faker->address,
+            'address' => [
+                'en' => fake()->address(),
+                'ar' => $fakerArabic->address(),
+            ],
         ];
     }
 }

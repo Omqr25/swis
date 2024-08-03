@@ -28,7 +28,6 @@ class updateItemsRequests extends FormRequest
     public function rules(): array
     {
         return [
-           // 'code' => [ 'string'],
             'sectorType' => [new Enum(sectorType::class)],
             'unitType' => [new Enum(unitType::class)],
             'name.en' => ['string','min:4'],

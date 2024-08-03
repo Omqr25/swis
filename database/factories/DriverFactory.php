@@ -16,11 +16,19 @@ class DriverFactory extends Factory
      */
     public function definition(): array
     {
+        $fakerArabic = \Faker\Factory::create('ar_SA');
+
         return [
-            'name'=>fake()->text(20),
+            'name' => [
+                'en' => fake()->name(),
+                'ar' => $fakerArabic->name(),
+            ],
             'vehicle_number'=>fake()->text(20),
             'national_id'=>fake()->unique()->text(20),
-            'transportation_company_name'=>fake()->text(20),
+            'transportation_company_name' => [
+                'en' => fake()->company(),
+                'ar' => $fakerArabic->company(),
+            ],
             'phone'=>fake()->text(20),
         ];
     }

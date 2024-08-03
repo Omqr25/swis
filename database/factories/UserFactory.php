@@ -18,8 +18,13 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $fakerArabic = \Faker\Factory::create('ar_SA');
+
         return [
-            'name' => fake()->name(),
+            'name' => [
+                'en' => fake()->name(),
+                'ar' => $fakerArabic->name(),
+            ],
             'email' => fake()->unique()->safeEmail(),
             'photo' => fake()->imageUrl(),
             'code' => fake()->word(),

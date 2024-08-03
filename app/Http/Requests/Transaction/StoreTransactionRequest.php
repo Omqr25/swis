@@ -28,7 +28,6 @@ class StoreTransactionRequest extends FormRequest
             'is_convoy' => 'required|boolean',
             'notes.en' => 'nullable|string',
             'notes.ar' => 'nullable|string',
-           // 'status' => ['required', new Enum(TransactionStatusType::class)],
             'status' => 'required',new Enum(transactionStatusType::class),
             'date' => 'required|date|after:yesterday',
             'waybill_num' => 'required|integer',

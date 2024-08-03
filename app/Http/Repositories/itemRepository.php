@@ -16,7 +16,7 @@ class itemRepository extends baseRepository
 
         $data = Warehouse::where('user_id',$user_id)
             ->with('WarehouseItem.item')
-            ->get();
+            ->paginate(10);
         if ($data->isEmpty()){
             $message="There are no item at the moment";
         }
@@ -31,14 +31,10 @@ class itemRepository extends baseRepository
         $data = WarehouseItem::where('item_id', $item_id)
             ->where('warehouse_id', $warehouse_id)
             ->with('item')
-            ->get();
-//        if ($data->isEmpty()){
-//            $message="There are no item at the moment";
-//        }
-//        else
-//        {
+            ->first();
+
             $message="Item showed successfully";
-//        }
+
         return ['message'=>$message,"WarehouseItem"=>$data];
     }
 }

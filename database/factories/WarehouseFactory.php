@@ -19,6 +19,7 @@ class WarehouseFactory extends Factory
      */
     public function definition(): array
     {
+        $fakerArabic = \Faker\Factory::create('ar_SA');
 
         $parentId = $this->faker->numberBetween(0, 10);
         if ($parentId === 0) {
@@ -27,7 +28,11 @@ class WarehouseFactory extends Factory
 
 
         return [
-            'name' => $this->faker->company,
+//            'name' => $this->faker->company,
+            'name' => [
+                'en' => fake()->company(),
+                'ar' => $fakerArabic->company(),
+            ],
             'code' => $this->faker->unique()->word,
             'branch_id' => Branch::inRandomOrder()->first()->id,
             'capacity' => $this->faker->numberBetween(100, 1000),

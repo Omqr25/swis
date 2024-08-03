@@ -154,15 +154,11 @@ class transactionRepository extends baseRepository
                 'transactionWarehouseItem.warehouse',
                 'user','driverTransaction.driver')
             ->first();
-        return $data;
-//        if (!$data){
-//            $message="There are no item at the moment";
-//        }
-//        else
-//        {
-//            $message="Item showed successfully";
-//        }
-//        return ['message'=>$message,"transactionWarehouseItem"=>$data];
+//        return $data;
+
+            $message="Transaction showed successfully";
+
+        return ['message'=>$message,"Transaction"=>$data];
     }
 
     public function indexTransactionForDonor($donor_id){
@@ -184,13 +180,9 @@ class transactionRepository extends baseRepository
             ->where('id',$transactuon_id)
             ->with('transactionWarehouseItem.item','driverTransaction.driver')
             ->get();
-//        if ($data->isEmpty()){
-//            $message="There are no transactions at the moment";
-//        }
-//        else
-//        {
+
             $message="Transactions indexed successfully";
-//        }
+
         return ['message'=>$message,"Transaction"=>$data];
     }
 
@@ -273,7 +265,7 @@ class transactionRepository extends baseRepository
             if (!empty($invalidQuantities)) {
                 $message = 'The warehouse has insufficient quantity of the following items :';
                 throw new InvalidQuantitiesException($invalidQuantities,$message);
-            } 
+            }
 
             foreach ($updatedQuantities as $updatedQuantity) {
                 $warehouseId = $updatedQuantity['warehouse_id'];
@@ -284,7 +276,7 @@ class transactionRepository extends baseRepository
                     'warehouse_id' => $warehouseId,
                     'item_id' => $itemId,
                 ]);
-            
+
                 $existingRecord->quantity = $quantity;
                 $existingRecord->save();
             }
@@ -360,17 +352,17 @@ class transactionRepository extends baseRepository
             if (!empty($invalidQuantities)) {
                 throw new InvalidQuantitiesException($invalidQuantities);
             }
-            
+
             foreach ($updatedQuantities as $updatedQuantity) {
                 $warehouseId = $updatedQuantity['warehouse_id'];
                 $itemId = $updatedQuantity['item_id'];
                 $quantity = $updatedQuantity['quantity'];
-            
+
                 $existingRecord = WarehouseItem::firstOrNew([
                     'warehouse_id' => $warehouseId,
                     'item_id' => $itemId,
                 ]);
-            
+
                 $existingRecord->quantity = $quantity;
                 $existingRecord->save();
             }
@@ -383,17 +375,17 @@ class transactionRepository extends baseRepository
         if ($keeper->isNotEmpty()) {
             return;
         }
-        
+
         foreach ($transaction['items'] as $donated_item) {
             $donorItem = donorItem::where('user_id', Auth::id())
                 ->where('item_id', $donated_item['item_id'])
                 ->first();
-                
+
             if ($donated_item['transaction_type'] == 1) {
                 if ($donorItem != null) {
                     $donorItem->quantity += $donated_item['quantity'];
                     $donorItem->save();
-                } 
+                }
                 else {
                     donorItem::create([
                         'user_id' => Auth::id(),
