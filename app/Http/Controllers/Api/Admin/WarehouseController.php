@@ -42,8 +42,7 @@ class WarehouseController extends Controller
     public function show(Warehouse $warehouse): JsonResponse
     {
 
-            $data = $this->warehouseRepository->show($warehouse);
-        return $this->showOneCollection($data['Warehouse'],WarehouseResource::class,$data['message']);
+        return $this->showOne($warehouse , warehouseResource::class);
     }
 
 
