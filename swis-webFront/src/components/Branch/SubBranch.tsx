@@ -52,6 +52,7 @@ export const SubBranch = () => {
   const handleSubBranch = (SubBranch: Branches) => {
     if (onOpen && SubBranch.name) {
       setShowForm(false);
+      if(SubBranch.name)
       setButtonLabel(SubBranch.name);
       setSubBranchInfo(SubBranch);
       onOpen();

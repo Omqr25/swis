@@ -21,6 +21,7 @@ export const WarehouseBox = ({ warehouse }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure(); 
 
   const handleEditWarehouse = (id : number | undefined) => {
+    
     if(onOpen && id){
       setWarehouse_Id(id);
       onOpen();

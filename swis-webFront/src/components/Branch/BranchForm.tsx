@@ -9,7 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AiOutlineEllipsis, AiOutlinePhone } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
@@ -31,9 +31,11 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
 
   const branches = useGetAll<Branches>("branches/indexMainBranch");
 
-  const [selectedMainBranch, setSelectedMainBranch] = useState<number>(0);
+  const [selectedMainBranch, setSelectedMainBranch] = useState<number | null>(
+    null
+  );
 
-  const [branch_id, setBranch_Id] = useState<number>(0);
+  const [branch_id, setBranch_Id] = useState<number | null>(null);
 
   const subBranches = useSub<Branches>(
     Number(selectedMainBranch),
@@ -43,17 +45,16 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
   const validationsEditBranch = yup
     .object()
     .shape({
-      name: yup.string(),
+      name: yup.object().shape({en : yup.string().min(4)}),
       phone: yup.string(),
-      address: yup.string(),
+      address: yup.object().shape({en : yup.string()})
     })
     .test(
       "at-least-one-required",
       "At least one field is required",
       function (value) {
         const { name, phone, address } = value;
-        const atLeastOneFieldHasValue =
-          !!name || !!phone || !!address;
+        const atLeastOneFieldHasValue = !!name || !!phone || !!address;
 
         if (!atLeastOneFieldHasValue) {
           return this.createError({
@@ -66,55 +67,60 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
       }
     );
   const validationsAddBranch = yup.object().shape({
-    name: yup.string().required("Name is required"),
+    name: yup.object().shape({en : yup.string().required("Name is required").min(4)}),
     phone: yup.string().required("Phone is required"),
-    address: yup.string().required("address is required"),
+    address: yup.object().shape({en : yup.string().required("Name is required")}),
   });
 
-  const Edit = useEdit<Branches,Branches2>(ID , "branches");
+  const Edit = useEdit<Branches, Branches2>(ID, "branches");
   const Create = useCreate<Branches, Branches2>("branches");
   const branch = useGetOne<Branches>(ID, "branches");
+  useEffect(() => {
+    if (isEdit && branch.data?.data.main_branch?.id)
+      setBranch_Id(branch.data?.data.main_branch?.id);
+  }, [branch.data?.data.main_branch?.id]);
   const handleEditBranch = (values: Branches2) => {
     if (values.phone)
       Edit.mutate({
-        name: values.name,
+        name: {en:values.name?.en},
+        address: {en:values.address?.en},
         phone: values.phone,
-        address: values.address,
         parent_id: branch_id,
         _method: "PUT",
       });
     else
       Edit.mutate({
-        name: values.name,
-        address: values.address,
-        parent_id:branch_id,
+        name: {en:values.name?.en},
+        address: {en:values.address?.en},
+        parent_id: branch_id,
         _method: "PUT",
       });
   };
   const handleAddBranch = (values: Branches2) => {
     console.log(values.name);
     Create.mutate({
-      name: values.name,
+      name: {en:values.name?.en},
       phone: values.phone,
-      address: values.address,
-      parent_id: selectedMainBranch,
+      address: {en:values.address?.en},
+      parent_id: branch_id,
     });
   };
 
   const handleMainBranchChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
+    if(!event.target.value){
+    setBranch_Id(null);
+    }else{
     setSelectedMainBranch(Number(event.target.value));
     setBranch_Id(Number(event.target.value));
-
-   
+  }
   };
 
   const handleSubBranchChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setBranch_Id(Number(event.target.value));
-    
   };
 
   if (isEdit && branch.isLoading)
@@ -122,10 +128,11 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
   return (
     <Formik
       initialValues={{
-        name: isEdit ? branch.data?.data.name : "",
+        name: {en : isEdit ? branch.data?.data.name : ""
+        },
         code: isEdit ? branch.data?.data.code : "",
         phone: "",
-        address: isEdit ? branch.data?.data.address : "",
+        address: {en : isEdit ? branch.data?.data.address : ""}
       }}
       validationSchema={isEdit ? validationsEditBranch : validationsAddBranch}
       onSubmit={isEdit ? handleEditBranch : handleAddBranch}
@@ -149,14 +156,14 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
               children={<AiOutlineEllipsis color="white" />}
             />
             <Field
-              name="name"
+              name="name.en"
               color="white"
               as={Input}
               type="name"
               placeholder="name"
               _placeholder={{ color: "white" }}
               borderRadius={"20"}
-              width={{ base: "100px", lg: "400px" }}
+              width={"full"}
               pl={"30px"}
             />
           </InputGroup>
@@ -181,7 +188,7 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
               placeholder="0000000000"
               _placeholder={{ color: "white" }}
               borderRadius={"20"}
-              width={{ base: "100px", lg: "400px" }}
+              width={"full"}
               pl={"30px"}
             />
           </InputGroup>
@@ -199,14 +206,14 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
               children={<BiMap color="white" />}
             />
             <Field
-              name="address"
+              name="address.en"
               color="white"
               as={Input}
-              type="address"
+              type="text"
               placeholder="address"
               _placeholder={{ color: "white" }}
               borderRadius={"20"}
-              width={{ base: "100px", lg: "400px" }}
+              width={"full"}
               pl={"30px"}
             />
           </InputGroup>
@@ -226,6 +233,7 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
             width={"full"}
             color="gray.400"
           >
+            <option value={"self"}></option>
             {branches.data?.pages.map((page, index) => (
               <React.Fragment key={index}>
                 {page.data.map((br) => (

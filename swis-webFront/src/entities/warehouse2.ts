@@ -1,14 +1,16 @@
+import lng from "./lng";
+
 export interface location{
   longitude?: number;
   latitude?: number;
 }
 export default interface Warehouse2 {
     id?: number;
-    name?: string;
+    name?: lng;
     capacity?: number;
     branch_id?: number;
     location?: location;
-    parent_id?: number;
+    parent_id?: number | null;
     user_id?: number;
     is_Distribution_point?: boolean;
     _method? : string;

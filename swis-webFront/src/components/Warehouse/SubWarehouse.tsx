@@ -1,12 +1,27 @@
-import { Box, Heading, IconButton, Spinner } from "@chakra-ui/react";
+import { Box, Heading, IconButton, Spinner, useDisclosure } from "@chakra-ui/react";
 import { CiEdit } from "react-icons/ci";
 import Warehouse from "../../entities/warehouse";
 import useSub from "../../hooks/useSub";
 import useWarehouse from "../../stores/warehouses";
 import { Error } from "../Error";
+import CustomModal from "../Modal";
+import { WarehouseForm } from "./WarehouseForm";
+import { useState } from "react";
 
 const SubWarehouse = () => {
   const warehouse = useWarehouse((s) => s.warehouse);
+
+  const { isOpen, onOpen, onClose } = useDisclosure(); 
+
+  const [warehouse_id , setWarehouse_Id] = useState(0);
+
+  const handleEditWarehouse = (id : number | undefined) => {
+    if(onOpen && id){
+      setWarehouse_Id(id);
+      onOpen();
+    }
+  }
+
   const { data, error, isLoading } = useSub<Warehouse>(
     warehouse.id,
     "warehouses/indexSubWarehouse"
@@ -34,10 +49,17 @@ const SubWarehouse = () => {
        <IconButton
           aria-label="editing the warehouse"
           icon={<CiEdit />}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleEditWarehouse(warehouse.id);
+          }}
           size={"20px"}
         />{" "} {index + 1}-{" "}{w.name}
       </Box>
       ))}
+       <CustomModal buttonLabel={"Edit"} isOpen={isOpen} onClose={onClose}>
+        <WarehouseForm isEdit={true} ID={warehouse_id} />
+      </CustomModal>
     </Box>
   );
 };
