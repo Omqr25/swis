@@ -78,6 +78,7 @@ Route::middleware('Localization')->group(function () {
         Route::post('users/restore', 'restore');
         Route::get('users/showDeleted', 'showDeleted');
         Route::get('users/indexKeeper', 'indexKeeper');
+        Route::get('users/indexDonor', 'indexDonor');
     });
 
     Route::controller(WarehouseItemController::class)->group(function () {
@@ -117,7 +118,6 @@ Route::middleware('Localization')->group(function () {
         'branches' => BranchController::class,
         'warehouses' => WarehouseController::class,
         'users' => UserController::class,
-        'donors' => DonorController::class,
         'items' => ItemController::class,
         'warehouseItems' => WarehouseItemController::class,
         'transactions' => TransactionController::class,
