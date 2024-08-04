@@ -16,10 +16,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  AiOutlineEllipsis,
-  AiOutlinePhone,
-} from "react-icons/ai";
+import { AiOutlineEllipsis, AiOutlinePhone } from "react-icons/ai";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { MyDarkColor } from "../../constants";
 import Branches from "../../entities/Branches";
@@ -29,7 +26,7 @@ import DeleteC from "../Delete";
 import { Error } from "../Error";
 import CustomModal from "../Modal";
 import { BranchForm } from "./BranchForm";
-import { BranchTableSkeleton } from "./BranchTableSkeleton";
+import { TableSkeleton } from "../Skeleton/TableSkeleton";
 import { FaEdit } from "react-icons/fa";
 import resizeWindow from "../../resizeWindow";
 
@@ -51,12 +48,12 @@ export const BranchTable = () => {
   const { colorMode } = useColorMode();
   const { t } = useTranslation();
 
-  const {width} = resizeWindow();
+  const { width } = resizeWindow();
   const fetchedBranchesCount =
     data?.pages.reduce((total, page) => total + page.data.length, 0) || 0;
 
   if (isLoading) {
-    return <BranchTableSkeleton />;
+    return <TableSkeleton />;
   }
   if (error) {
     return <Error message={error.message} />;
@@ -66,7 +63,7 @@ export const BranchTable = () => {
       m={4}
       bg={"gray.100"}
       borderRadius={20}
-      w={{ base: "380px", lg: width * (1.8)/3 }}
+      w={{ base: "380px", lg: (width * 1.8) / 3 }}
     >
       <TableContainer
         borderRadius={20}
@@ -81,9 +78,7 @@ export const BranchTable = () => {
           next={() => fetchNextPage()}
           loader={<Spinner />}
         >
-          <Table variant={"simple"} size={{ lg: "lg", base: "sm" }}
-           w={"100%"}
-          >
+          <Table variant={"simple"} size={{ lg: "lg", base: "sm" }} w={"100%"}>
             <Thead>
               <Tr>
                 <Th></Th>
@@ -92,10 +87,10 @@ export const BranchTable = () => {
                   {t("Name")}
                 </Th>
                 <Show above="lg">
-                <Th>
-                  <Icon as={AiOutlinePhone} pr={1} />
-                  {t("Phone")}
-                </Th>
+                  <Th>
+                    <Icon as={AiOutlinePhone} pr={1} />
+                    {t("Phone")}
+                  </Th>
                 </Show>
               </Tr>
             </Thead>
@@ -114,7 +109,7 @@ export const BranchTable = () => {
                       <Td>{index + 1}</Td>
                       <Td>{Br.name}</Td>
                       <Show above="lg">
-                      <Td>{Br.phone}</Td>
+                        <Td>{Br.phone}</Td>
                       </Show>
                       <Td>
                         <Button

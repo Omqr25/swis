@@ -4,7 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import useGetAll from "../../hooks/useGetAll";
 import User from "../../entities/User";
 import { Error } from "../Error";
-import { UserCardSkeleton } from "./UserCardSkeleton";
+import { CardSkeleton } from "../Skeleton/CardSkeleton";
 import { UserCard } from "./UserCard";
 
 interface Props {
@@ -20,7 +20,7 @@ export const UserGrid = ({ target }: Props) => {
     data?.pages.reduce((total, page) => total + page.data.length, 0) || 0;
   return (
     <InfiniteScroll
-      dataLength={fecthedGamesCount} 
+      dataLength={fecthedGamesCount}
       next={() => fetchNextPage()}
       hasMore={!!hasNextPage}
       loader={<Spinner></Spinner>}
@@ -33,11 +33,15 @@ export const UserGrid = ({ target }: Props) => {
         overflowY={"auto"}
       >
         {isLoading &&
-          skeleton.map((s) => <UserCardSkeleton key={s}></UserCardSkeleton>)}
+          skeleton.map((s) => <CardSkeleton key={s}></CardSkeleton>)}
         {data?.pages.map((page, index) => (
           <React.Fragment key={index}>
             {page.data.map((user) => (
-              <UserCard type={target === "users/indexDonor" ? "3" : "2"} key={user.id} user={user}></UserCard>
+              <UserCard
+                type={target === "users/indexDonor" ? "3" : "2"}
+                key={user.id}
+                user={user}
+              ></UserCard>
             ))}
           </React.Fragment>
         ))}
