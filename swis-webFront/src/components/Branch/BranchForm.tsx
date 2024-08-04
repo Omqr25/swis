@@ -15,7 +15,7 @@ import { AiOutlineEllipsis, AiOutlinePhone } from "react-icons/ai";
 import { BiMap } from "react-icons/bi";
 import * as yup from "yup";
 import Branches from "../../entities/Branches";
-import Branches2 from "../../entities/Branches2";
+import BranchesRequest from "../../entities/BranchesRequest";
 import useCreate from "../../hooks/useCreate";
 import useEdit from "../../hooks/useEdit";
 import useGetAll from "../../hooks/useGetAll";
@@ -45,9 +45,9 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
   const validationsEditBranch = yup
     .object()
     .shape({
-      name: yup.object().shape({en : yup.string().min(4)}),
+      name: yup.object().shape({ en: yup.string().min(4) }),
       phone: yup.string(),
-      address: yup.object().shape({en : yup.string()})
+      address: yup.object().shape({ en: yup.string() }),
     })
     .test(
       "at-least-one-required",
@@ -67,41 +67,45 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
       }
     );
   const validationsAddBranch = yup.object().shape({
-    name: yup.object().shape({en : yup.string().required("Name is required").min(4)}),
+    name: yup
+      .object()
+      .shape({ en: yup.string().required("Name is required").min(4) }),
     phone: yup.string().required("Phone is required"),
-    address: yup.object().shape({en : yup.string().required("Name is required")}),
+    address: yup
+      .object()
+      .shape({ en: yup.string().required("Name is required") }),
   });
 
-  const Edit = useEdit<Branches, Branches2>(ID, "branches");
-  const Create = useCreate<Branches, Branches2>("branches");
+  const Edit = useEdit<Branches, BranchesRequest>(ID, "branches");
+  const Create = useCreate<Branches, BranchesRequest>("branches");
   const branch = useGetOne<Branches>(ID, "branches");
   useEffect(() => {
     if (isEdit && branch.data?.data.main_branch?.id)
       setBranch_Id(branch.data?.data.main_branch?.id);
   }, [branch.data?.data.main_branch?.id]);
-  const handleEditBranch = (values: Branches2) => {
+  const handleEditBranch = (values: BranchesRequest) => {
     if (values.phone)
       Edit.mutate({
-        name: {en:values.name?.en},
-        address: {en:values.address?.en},
+        name: { en: values.name?.en },
+        address: { en: values.address?.en },
         phone: values.phone,
         parent_id: branch_id,
         _method: "PUT",
       });
     else
       Edit.mutate({
-        name: {en:values.name?.en},
-        address: {en:values.address?.en},
+        name: { en: values.name?.en },
+        address: { en: values.address?.en },
         parent_id: branch_id,
         _method: "PUT",
       });
   };
-  const handleAddBranch = (values: Branches2) => {
+  const handleAddBranch = (values: BranchesRequest) => {
     console.log(values.name);
     Create.mutate({
-      name: {en:values.name?.en},
+      name: { en: values.name?.en },
       phone: values.phone,
-      address: {en:values.address?.en},
+      address: { en: values.address?.en },
       parent_id: branch_id,
     });
   };
@@ -109,12 +113,12 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
   const handleMainBranchChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    if(!event.target.value){
-    setBranch_Id(null);
-    }else{
-    setSelectedMainBranch(Number(event.target.value));
-    setBranch_Id(Number(event.target.value));
-  }
+    if (!event.target.value) {
+      setBranch_Id(null);
+    } else {
+      setSelectedMainBranch(Number(event.target.value));
+      setBranch_Id(Number(event.target.value));
+    }
   };
 
   const handleSubBranchChange = (
@@ -128,11 +132,10 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
   return (
     <Formik
       initialValues={{
-        name: {en : isEdit ? branch.data?.data.name : ""
-        },
+        name: { en: isEdit ? branch.data?.data.name : "" },
         code: isEdit ? branch.data?.data.code : "",
         phone: "",
-        address: {en : isEdit ? branch.data?.data.address : ""}
+        address: { en: isEdit ? branch.data?.data.address : "" },
       }}
       validationSchema={isEdit ? validationsEditBranch : validationsAddBranch}
       onSubmit={isEdit ? handleEditBranch : handleAddBranch}

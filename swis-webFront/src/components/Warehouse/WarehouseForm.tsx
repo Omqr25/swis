@@ -19,7 +19,7 @@ import * as yup from "yup";
 import Branches from "../../entities/Branches";
 import User from "../../entities/User";
 import Warehouse from "../../entities/warehouse";
-import Warehouse2 from "../../entities/warehouse2";
+import WarehouseRequest from "../../entities/warehouseRequest";
 import useCreate from "../../hooks/useCreate";
 import useEdit from "../../hooks/useEdit";
 import useGetAll from "../../hooks/useGetAll";
@@ -32,13 +32,12 @@ interface Props {
 }
 
 export const WarehouseForm = ({ isEdit, ID }: Props) => {
-  
-  const Edit = useEdit<Warehouse, Warehouse2>(ID, "warehouses");
+  const Edit = useEdit<Warehouse, WarehouseRequest>(ID, "warehouses");
 
-  const Create = useCreate<Warehouse, Warehouse2>("warehouses");
+  const Create = useCreate<Warehouse, WarehouseRequest>("warehouses");
 
   const warehouse = useGetOne<Warehouse>(ID, "warehouses");
-  
+
   const warehouses = useGetAll<Warehouse>("warehouses");
 
   const branches = useGetAll<Branches>("branches/indexMainBranch");
@@ -57,25 +56,23 @@ export const WarehouseForm = ({ isEdit, ID }: Props) => {
 
   const [is_Distribution_point, setis_Distribution_point] = useState(false);
 
-
-  useEffect(() =>{
+  useEffect(() => {
     if (isEdit) {
-        if (warehouse.data?.data.branch?.id)
-          setBranch_Id(warehouse.data?.data.branch?.id);
-        if (warehouse.data?.data.main_Warehouse?.id) {
-          setWarehouse_Id(warehouse.data?.data.main_Warehouse?.id);
-        }
-        keepers.data?.pages.map((page) =>
-          page.data.map((ke) =>
-            ke.name === warehouse.data?.data.keeper && ke.id
-              ? setUser_Id(ke.id)
-              : ""
-          )
-        );
+      if (warehouse.data?.data.branch?.id)
+        setBranch_Id(warehouse.data?.data.branch?.id);
+      if (warehouse.data?.data.main_Warehouse?.id) {
+        setWarehouse_Id(warehouse.data?.data.main_Warehouse?.id);
       }
-  },[ID]);
-  
-  
+      keepers.data?.pages.map((page) =>
+        page.data.map((ke) =>
+          ke.name === warehouse.data?.data.keeper && ke.id
+            ? setUser_Id(ke.id)
+            : ""
+        )
+      );
+    }
+  }, [ID]);
+
   const subBranches = useSub<Branches>(
     Number(selectedMainBranch),
     "branches/indexSubBranch"
@@ -86,7 +83,7 @@ export const WarehouseForm = ({ isEdit, ID }: Props) => {
   const validationsEditWarehouse = yup
     .object()
     .shape({
-      name: yup.object().shape({en : yup.string().min(4)}),
+      name: yup.object().shape({ en: yup.string().min(4) }),
       capacity: yup.number(),
       location: yup.object().shape({
         latitude: yup.number(),
@@ -110,17 +107,19 @@ export const WarehouseForm = ({ isEdit, ID }: Props) => {
       }
     );
   const validationsAddWarehouse = yup.object().shape({
-    name: yup.object().shape({en : yup.string().required("Name is required").min(4)}),
+    name: yup
+      .object()
+      .shape({ en: yup.string().required("Name is required").min(4) }),
     capacity: yup.number().required("Capacity is required").min(0),
     location: yup.object().shape({
       latitude: yup.number().required("Latitude is required"),
-      longitude: yup.number().required("Longitude is required"),  
+      longitude: yup.number().required("Longitude is required"),
     }),
   });
 
-  const handleEditWarehouse = (values: Warehouse2) => {
+  const handleEditWarehouse = (values: WarehouseRequest) => {
     Edit.mutate({
-      name: {en:values.name?.en},
+      name: { en: values.name?.en },
       branch_id: branch_id,
       capacity: values.capacity,
       parent_id: warehouse_id,
@@ -130,10 +129,10 @@ export const WarehouseForm = ({ isEdit, ID }: Props) => {
     });
   };
 
-  const handleAddWarehouse = (values: Warehouse2) => {
+  const handleAddWarehouse = (values: WarehouseRequest) => {
     console.log(branch_id);
     Create.mutate({
-      name:  {en:values.name?.en},
+      name: { en: values.name?.en },
       branch_id: branch_id,
       capacity: values.capacity,
       parent_id: warehouse_id,
@@ -162,8 +161,7 @@ export const WarehouseForm = ({ isEdit, ID }: Props) => {
   const handleMainWarehouseChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    if(event.target.value)
-    setWarehouse_Id(Number(event.target.value));
+    if (event.target.value) setWarehouse_Id(Number(event.target.value));
     else setWarehouse_Id(null);
   };
 
@@ -176,7 +174,7 @@ export const WarehouseForm = ({ isEdit, ID }: Props) => {
   return (
     <Formik
       initialValues={{
-        name: {en:isEdit ? warehouse.data?.data.name : ""},
+        name: { en: isEdit ? warehouse.data?.data.name : "" },
         branch: 1,
         capacity: isEdit ? warehouse.data?.data.Free_capacity : 0,
         parent_id: 1,
