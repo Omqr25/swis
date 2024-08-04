@@ -37,7 +37,7 @@ export const UserGrid = ({ target }: Props) => {
         {data?.pages.map((page, index) => (
           <React.Fragment key={index}>
             {page.data.map((user) => (
-              <UserCard key={user.id} user={user}></UserCard>
+              <UserCard type={target === "users/indexDonor" ? "3" : "2"} key={user.id} user={user}></UserCard>
             ))}
           </React.Fragment>
         ))}

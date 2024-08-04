@@ -1,44 +1,60 @@
 import {
+  Box,
+  Button,
   Card,
   CardBody,
-  Image,
   Heading,
-  VStack,
   HStack,
   Icon,
-  Text,
+  Image,
   Menu,
   MenuButton,
   MenuList,
-  MenuItem,
+  Text,
   useDisclosure,
-  Box,
+  VStack
 } from "@chakra-ui/react";
-import { FaUser, FaCode, FaEllipsisH, FaTrash, FaEdit } from "react-icons/fa";
-import User from "../../entities/User";
 import { useState } from "react";
+import { FaCode, FaEdit, FaEllipsisH, FaUser } from "react-icons/fa";
+import User from "../../entities/User";
 import CustomModal from "../Modal";
 
-import { UserForm } from "./KeeperForm";
+import { useTranslation } from "react-i18next";
+import DeleteC from "../Delete";
+import { UserForm } from "./UserForm";
+import { UserInfo } from "./UserInfo";
 interface Props {
   user: User;
+  type: string;
 }
 
-export const UserCard = ({ user }: Props) => {
+export const UserCard = ({ user , type }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSubmit = () => {
+  const [userId, setUserId] = useState<number>(1);
+
+  const [label, setLabel] = useState<string>("");
+  const handleSubmit = (id: number) => {
     if (onOpen) {
       onOpen();
+      setLabel("Edit");
+      setUserId(id);
     }
   };
 
+  const handleCradClick = () => {
+    if (onOpen) {
+      onOpen();
+      setLabel("User Info");
+    }
+  };
   return (
     <Box>
       <Card
@@ -50,13 +66,14 @@ export const UserCard = ({ user }: Props) => {
           transform: "scale(1.1)",
           transition: "transform .15s ease-in",
         }}
+        onClick={handleCradClick}
       >
         <CardBody>
           <Image
             src={user.photo}
             alt={"User Photo"}
             borderRadius={"10%"}
-            boxSize={'250px'}
+            boxSize={"250px"}
             fallbackSrc="https://via.placeholder.com/200"
           />
           <Heading fontSize="md">
@@ -80,23 +97,37 @@ export const UserCard = ({ user }: Props) => {
               top={2}
               right={2}
               cursor="pointer"
-              onClick={handleMenuToggle}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMenuToggle();
+              }}
             >
               <FaEllipsisH />
             </MenuButton>
-            <MenuList>
-              <MenuItem icon={<FaEdit />} onClick={() => handleSubmit()}>
-                Edit
-              </MenuItem>
-              <MenuItem icon={<FaTrash />} onClick={() => {}}>
-                Delete
-              </MenuItem>
+            <MenuList p={2}>
+              <VStack alignItems={'flex-start'}>
+              <Button
+                leftIcon={<FaEdit />}
+                colorScheme="blue"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  user.id ? handleSubmit(user.id) : "";
+                }}
+              >
+                {t("Edit")}
+              </Button>
+              {user.id && <DeleteC ID={user.id} target="users" type="Button" target2={type === "2" ? "users/indexKeeper" : "users/indexDonor"}/>}
+              </VStack>
             </MenuList>
           </Menu>
         </CardBody>
       </Card>
-      <CustomModal buttonLabel={"Add"} isOpen={isOpen} onClose={onClose}>
-        <UserForm />
+      <CustomModal buttonLabel={label} isOpen={isOpen} onClose={onClose}>
+        {label === "Edit" ? (
+          <UserForm type={type} isEdit={true} ID={userId} />
+        ) : (
+          <UserInfo User={user} />
+        )}
       </CustomModal>
     </Box>
   );

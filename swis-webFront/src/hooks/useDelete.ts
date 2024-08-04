@@ -5,7 +5,7 @@ interface Response{
  message : string;
  status : string;
 }
-const useDelete = (id : number , target : string) => {
+const useDelete = (id : number , target : string , target2? : string) => {
   const queryClient = useQueryClient();
     const apiClient = new APIClient<Response>(`/${target}/${id}`);
      setAuthToken();
@@ -14,7 +14,9 @@ const useDelete = (id : number , target : string) => {
       mutationFn: (branch) => apiClient.post(branch),
       onSuccess : (vlaues , variables) => {
         console.log(vlaues , variables);
-        queryClient.invalidateQueries([target]);
+        if(target === 'users'){
+        queryClient.invalidateQueries([target2]);
+        }else queryClient.invalidateQueries([target]);
       },
       
      })

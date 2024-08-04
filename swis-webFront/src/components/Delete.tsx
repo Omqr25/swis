@@ -18,13 +18,14 @@ interface Props {
   ID: number;
   target: string;
   type: string;
+  target2? : string;
 }
 
-function DeleteC({ ID, target , type }: Props) {
+function DeleteC({ ID, target , type , target2 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = useRef(null);
-  const Delete = useDelete(ID, target);
+  const Delete = useDelete(ID, target , target2);
   const handleDelete = () => {
     Delete.mutate({
       _method: "DELETE",
