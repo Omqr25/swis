@@ -79,12 +79,12 @@ class TransactionWarehouseItemController extends Controller
         $data = $this->transactionWarehousesRepository->restore($request);
         return [$data['message'],$data['code']];
     }
-    public function InventoryForWarehouse(Request $request): JsonResponse
+    public function inventoryForWarehouse(Request $request): JsonResponse
     {
         $request->validate([
             'warehouse_id' => 'required|integer',
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'end_date' => 'required|date|after:start_date',
         ]);
         $data = [
             'warehouse_id' => $request->input('warehouse_id'),

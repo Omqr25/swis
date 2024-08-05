@@ -4,6 +4,7 @@ namespace App\Http\Repositories;
 
 use App\Enums\transactionType;
 use App\Models\transactionWarehouseItem;
+use App\Models\WarehouseItem;
 use Illuminate\Support\Facades\DB;
 
 class transactionWarehousesItemRepository extends baseRepository
@@ -27,57 +28,41 @@ class transactionWarehousesItemRepository extends baseRepository
 
     public function inventory($data)
     {
+        $warehouseId = $data['warehouse_id'];
         $startDate = $data['start_date'];
         $endDate = $data['end_date'];
-        // Query to get all transactions of type 'IN' for the specified warehouse and date range
-        $inventoryIN = TransactionWarehouseItem::select('item_id', DB::raw('SUM(quantity) as total_quantity_in'))
-            ->where('transaction_type', transactionType::transactionIn->value)
-            ->where('warehouse_id',$data['warehouse_id'])
-            ->where(function ($query) use ($startDate, $endDate) {
-                $query->whereDate('created_at', $startDate)
-                    ->orWhereBetween('created_at', [$startDate, $endDate]);
-            })
+
+        // Query to get all transactions of type 'IN' and 'OUT' for the specified warehouse and date range
+        $inventory = TransactionWarehouseItem::select(
+            'item_id',
+            DB::raw('SUM(CASE WHEN transaction_type = '.transactionType::transactionIn->value.' THEN quantity ELSE 0 END) as total_quantity_in'),
+            DB::raw('SUM(CASE WHEN transaction_type = '.transactionType::transactionOut->value.' THEN quantity ELSE 0 END) as total_quantity_out')
+        )
+            ->where('warehouse_id', $warehouseId)
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('item_id')
             ->with('item')
-            ->orderby('item_id')
-            ->get();
-        $inventoryOut = TransactionWarehouseItem::select('item_id', DB::raw('SUM(quantity) as total_quantity_out'))
-            ->where('transaction_type', transactionType::transactionOut->value)
-            ->where('warehouse_id', $data['warehouse_id'])
-            ->where(function ($query) use ($startDate, $endDate) {
-                $query->whereDate('created_at', $startDate)
-                    ->orWhereBetween('created_at', [$startDate, $endDate]);
-            })
-            ->groupBy('item_id')
-            ->with('item')
-            ->orderby('item_id')
             ->get();
 
-        $combinedInventory = [];
+        // Get the current quantity of each item in the warehouse
+        $warehouseItems = WarehouseItem::select('item_id', 'quantity')
+            ->where('warehouse_id', $warehouseId)
+            ->get()
+            ->keyBy('item_id');
 
-        foreach ($inventoryIN as $inTransaction) {
-            $combinedInventory[$inTransaction->item_id] = [
-                'item_id' => $inTransaction->item_id,
-                'item_name' => $inTransaction->item,
-                'total_quantity_in' => $inTransaction->total_quantity_in,
-                'total_quantity_out' => 0,
+        // Merge the inventory data with the warehouse quantities
+        $mergedInventory = $inventory->map(function ($item) use ($warehouseItems) {
+            $itemQuantityInWarehouse = $warehouseItems->has($item->item_id) ? $warehouseItems[$item->item_id]->quantity : 0;
+            return [
+                'item_id' => $item->item_id,
+                'item_name' => $item->item->name,
+                'total_quantity_in' => (string)$item->total_quantity_in,
+                'total_quantity_out' => (string)$item->total_quantity_out,
+                'quantity_in_warehouse' => (string)$itemQuantityInWarehouse,
             ];
-        }
-        foreach ($inventoryOut as $outTransaction) {
-            if (isset($combinedInventory[$outTransaction->item_id])) {
-                $combinedInventory[$outTransaction->item_id]['total_quantity_out'] = $outTransaction->total_quantity_out;
-            } else {
-                $combinedInventory[$outTransaction->item_id] = [
-                    'item_id' => $outTransaction->item_id,
-                    'item_name' => $outTransaction->item,
-                    'total_quantity_in' => 0,
-                    'total_quantity_out' => $outTransaction->total_quantity_out,
-                ];
-            }
-        }
-        $combinedInventory = collect($combinedInventory)->values();
-        return ($combinedInventory);
+        });
 
+        return $mergedInventory;
     }
 
 

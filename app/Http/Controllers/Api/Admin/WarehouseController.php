@@ -8,6 +8,7 @@ use App\Http\Requests\Warehouse\StoreWarehouseRequest;
 use App\Http\Requests\Warehouse\UpdateWarehouseRequest;
 use App\Http\Resources\indexMainWarehouseResource;
 use App\Http\Resources\indexWarehouseResource;
+use App\Http\Resources\WarehouseItemResource;
 use App\Http\Resources\WarehouseResource;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ class WarehouseController extends Controller
     {
         $this->warehouseRepository=$warehouseRepository;
         $this->middleware(['auth:sanctum']);
+        $this->middleware(['permission']);
     }
 
 
@@ -114,6 +116,23 @@ class WarehouseController extends Controller
     {
         $data=$this->warehouseRepository->indexDistributionPoint();
         return $this->showAll($data['Warehouse'],indexMainWarehouseResource::class,$data['message']);
+
+    }
+    public function indexWarehouseWithItems(): JsonResponse
+    {
+
+        $data = $this->warehouseRepository->indexWarehouseWithItems();
+        return $this->showAll($data['Warehouse'], WarehouseItemResource::class, $data['message']);
+
+    }
+
+
+    public function showWarehouseWithItems(Warehouse $warehouse): JsonResponse
+    {
+//        dd($warehouse);
+        $data = $this->warehouseRepository->showWarehouseWithItems($warehouse);
+
+        return $this->showOne($data['Warehouse'], WarehouseItemResource::class, $data['message']);
 
     }
 

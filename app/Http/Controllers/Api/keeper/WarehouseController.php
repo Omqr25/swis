@@ -13,6 +13,7 @@ use App\Models\Warehouse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class WarehouseController extends Controller
 {
@@ -23,16 +24,20 @@ class WarehouseController extends Controller
         $this->warehouseRepository=$warehouseRepository;
         $this->transactionWarehousesRepository=$transactionWarehousesRepository;
         $this->middleware(['auth:sanctum']);
+        $this->middleware(['permission:warehouse']);
     }
     public function show()
     {
+        $user = Auth::user();
+        Log::info('User Roles: ', $user->getRoleNames()->toArray());
+        Log::info('User Permissions: ', $user->getAllPermissions()->pluck('name')->toArray());
+
         $data = $this->warehouseRepository->showWarehouseForKeeper(Auth::user()->id);
         return $this->showOne($data['Warehouse'],WarehouseResource::class,$data['message']);
     }
     public function Inventory(Request $request): JsonResponse
     {
         $request->validate([
-            //'warehouse_id' => 'required|integer',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after:start_date',
         ]);

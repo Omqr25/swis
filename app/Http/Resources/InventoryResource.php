@@ -14,21 +14,14 @@ class InventoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $result = [
+        return [
             'item_id' => $this['item_id'],
-            'item_name' => $this['item_name']->name,
+            'item_name' => $this['item_name'],
+            'total_quantity_in' => $this->when($this['total_quantity_in'] > 0, $this['total_quantity_in']),
+            'total_quantity_out' => $this->when($this['total_quantity_out'] > 0, $this['total_quantity_out']),
+            'quantity_in_warehouse' => $this['quantity_in_warehouse'],
+
         ];
 
-        // Only include 'total_quantity_in' if it's not zero
-        if ($this['total_quantity_in'] > 0) {
-            $result['total_quantity_in'] = $this['total_quantity_in'];
-        }
-
-        // Only include 'total_quantity_out' if it's not zero
-        if ($this['total_quantity_out'] > 0) {
-            $result['total_quantity_out'] = $this['total_quantity_out'];
-        }
-
-        return $result;
     }
 }

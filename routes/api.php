@@ -51,10 +51,10 @@ Route::middleware('Localization')->group(function () {
         Route::get('drivers/showDeleted', 'showDeleted');
     });
 
-    Route::controller(DonorController::class)->group(function () {
-        Route::post('donors/restore', 'restore');
-        Route::get('donors/showDeleted', 'showDeleted');
-    });
+//    Route::controller(DonorController::class)->group(function () {
+//        Route::post('donors/restore', 'restore');
+//        Route::get('donors/showDeleted', 'showDeleted');
+//    });
 
     Route::controller(ItemController::class)->group(function () {
         Route::post('items/restore', 'restore');
@@ -67,6 +67,8 @@ Route::middleware('Localization')->group(function () {
         Route::get('warehouses/indexSubWarehouse/{warehouse_id}', 'indexSubWarehouse');
         Route::get('warehouses/indexMainWarehouse', 'indexMainWarehouse');
         Route::get('warehouses/indexDistributionPoint', 'indexDistributionPoint');
+        Route::get('warehouses/indexWarehouseWithItems', 'indexWarehouseWithItems');
+        Route::get('warehouses/showWarehouseWithItems/{warehouse}', 'showWarehouseWithItems');
     });
 
     Route::controller(TransactionController::class)->group(function () {
@@ -90,7 +92,7 @@ Route::middleware('Localization')->group(function () {
         Route::post('transactionWarehouseItems/restore', 'restore');
         Route::get('transactionWarehouseItems/showDeleted', 'showDeleted');
         Route::get('transactionWarehouseItems/inventoryForWarehouse', 'inventoryForWarehouse');
-        Route::get('transactionWarehouseItems/calculateInventory', 'calculateInventory');
+        //Route::get('transactionWarehouseItems/calculateInventory', 'calculateInventory');
     });
 
     Route::controller(DonorItemController::class)->group(function () {
@@ -102,7 +104,7 @@ Route::middleware('Localization')->group(function () {
     Route::get('showWarehouseForKeeper', [KeeperWarehouseController::class, 'show']);
     Route::get('inventoryForKeeper', [KeeperWarehouseController::class, 'inventory']);
     Route::get('indexItemForKeeper', [KeeperItemController::class, 'index']);
-    Route::get('showItemForKeeper/{item_id}/{warehouse_id}', [KeeperItemController::class, 'show']);
+    Route::get('showItemForKeeper/{item_id}', [KeeperItemController::class, 'show']);
     Route::get('indexTransactionForKeeper', [KeeperTransactionController::class, 'index']);
     Route::get('showTransactionForKeeper/{transaction_id}', [KeeperTransactionController::class, 'show']);
 

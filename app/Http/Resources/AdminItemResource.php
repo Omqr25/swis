@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class WarehouseItemResource extends JsonResource
+class AdminItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,9 @@ class WarehouseItemResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'warehouse id'=>$this->id,
-            'name'=>$this->name,
-            'items'=>$this->warehouseItem->map(function ($warehouseItem){
-                return new AdminItemResource($warehouseItem);
-            }),
-
-        ];
+            'id' => $this->item->id,
+            'name' => $this->item->name,
+            'code' => $this->item->code,
+            'quantity ' => $this->quantity,];
     }
 }

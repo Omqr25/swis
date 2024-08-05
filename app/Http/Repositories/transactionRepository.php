@@ -135,8 +135,7 @@ class transactionRepository extends baseRepository
     {
         $data = Warehouse::where('user_id',$user_id)
             ->with('transactionWarehouseItem.transaction')
-            ->get();
-//        var_dump($data);
+            ->paginate(10);
         if ($data->isEmpty()){
             $message="There are no transactions at the moment";
         }
@@ -164,7 +163,7 @@ class transactionRepository extends baseRepository
     public function indexTransactionForDonor($donor_id){
         $data = Transaction::where('user_id',$donor_id)
             ->with('transactionWarehouseItem.item','driverTransaction.driver')
-            ->get();
+            ->paginate(10);
         if ($data->isEmpty()){
             $message="There are no transactions at the moment";
         }
@@ -179,7 +178,7 @@ class transactionRepository extends baseRepository
         $data = Transaction::where('user_id',$donor_id)
             ->where('id',$transactuon_id)
             ->with('transactionWarehouseItem.item','driverTransaction.driver')
-            ->get();
+            ->first();
 
             $message="Transactions indexed successfully";
 

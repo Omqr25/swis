@@ -21,8 +21,6 @@ class Localization
         if ($lang != null) {
             App::setLocale($lang);
         }
-
-
         return $next($request);
     }
 }

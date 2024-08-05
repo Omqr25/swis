@@ -83,5 +83,26 @@ class warehouseRepository extends baseRepository
 
         return ['message'=>$message,"Warehouse"=>$data];
     }
+    public function indexWarehouseWithItems():array
+    {
+
+        $data = Warehouse::with('warehouseItem.item')
+            ->paginate(10);
+        if ($data->isEmpty()){
+            $message="There are no item at the moment";
+        }else
+        {
+            $message="Warehouse indexed successfully";
+        }
+        return ['message'=>$message,"Warehouse"=>$data];
+    }
+
+    public function showWarehouseWithItems(Warehouse $warehouse):array
+    {
+        $data =$warehouse->load('warehouseItem.item');
+        $message="Warehouse indexed successfully";
+
+        return ['message'=>$message,"Warehouse"=>$data];
+    }
 
 }

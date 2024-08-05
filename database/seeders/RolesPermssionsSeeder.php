@@ -15,32 +15,43 @@ class RolesPermssionsSeeder extends Seeder
      */
     public function run(): void
     {
-        $adminRole=Role::create(['name'=>'admin']);
-        $keeperRole=Role::create(['name'=>'keeper']);
-        $donorRole=Role::create(['name'=>'donor']);
-        $spAdRole=Role::create(['name'=>'spAd']);
+        // Create roles
+        $adminRole = Role::create(['name' => 'admin']);
+        $keeperRole = Role::create(['name' => 'keeper']);
+        $donorRole = Role::create(['name' => 'donor']);
 
-        $permissions =[
-            'All_permission'
+        // Define permissions
+        $permissions = [
+            'Ali',
+            'warehouse'
         ];
 
-        foreach ($permissions as $permission){
-            permission::findOrCreate($permission,'web');
+        // Create permissions
+        foreach ($permissions as $permission) {
+            Permission::findOrCreate($permission, 'web');
         }
-        $adminRole->syncPermissions($permissions);
-        $keeperRole->givePermissionTo($permissions);
-        $donorRole->givePermissionTo($permissions);
-        $spAdRole->givePermissionTo($permissions);
 
-        $adminUser =User::factory()->create([
-            'name'=>'Admin name',
-            'email'=>'AdminName@Admin.com',
-            'password'=>bcrypt('password'),
+        // Assign permissions to roles
+        $adminRole->syncPermissions(['Ali']);
+        $keeperRole->givePermissionTo('warehouse');
+        $donorRole->givePermissionTo($permissions);
+
+        // Create users and assign roles
+        $adminUser = User::factory()->create([
+            'name' => 'Admin name',
+            'email' => 'AdminName@Admin.com',
+            'password' => bcrypt('password'),
         ]);
         $adminUser->assignRole($adminRole);
-        $permissions=$adminRole->permissions()->pluck('name')->toArray();
         $adminUser->givePermissionTo($permissions);
 
+        $keeperUser = User::factory()->create([
+            'name' => 'Keeper name',
+            'email' => 'KeeperName@Keeper.com',
+            'password' => bcrypt('password'),
+        ]);
+        $keeperUser->assignRole($keeperRole);
+        $keeperUser->givePermissionTo('warehouse');
 
     }
 }
