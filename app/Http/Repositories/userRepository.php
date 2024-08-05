@@ -23,16 +23,6 @@ class userRepository extends baseRepository
         return ['message'=>$message,"User"=>$data];
 
     }
-    public function indexKeeper(): array
-    {
-        $data = User::where('type', userType::keeper->value)->paginate(10);
-        if ($data->isEmpty()) {
-            $message = "There are no keepers at the moment";
-        } else {
-            $message = "Keepers indexed successfully";
-        }
-        return ['message' => $message, "Keeper" => $data];
-    }
     public function indexDonor():array
     {
 
@@ -45,5 +35,17 @@ class userRepository extends baseRepository
         }
         return ['message'=>$message,"Donor"=>$data];
     }
+
+    public function indexKeeper(): array
+    {
+        $data = User::where('type', userType::keeper->value)->paginate(10);
+        if ($data->isEmpty()) {
+            $message = "There are no keepers at the moment";
+        } else {
+            $message = "Keepers indexed successfully";
+        }
+        return ['message' => $message, "Keeper" => $data];
+    }
+
 
 }
