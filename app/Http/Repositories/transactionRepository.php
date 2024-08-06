@@ -326,7 +326,7 @@ class transactionRepository extends baseRepository
                         ];
                     }
                 }
-                else if ($transactionType== 2) {
+                else if ($item_in_transaction['transaction_type'] == 2) {
                     if($destination == null){
                         $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
                     } else {

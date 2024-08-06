@@ -26,8 +26,8 @@ class StoreBranchRequest extends FormRequest
             'name.ar'      => 'string|min:4',
             'parent_id' => 'nullable|integer|exists:branches,id',
             'phone'     => 'required|unique:branches,phone',
-            'address.en'   => 'required_without:address|string',
-            'address.ar'   => 'required_without:address|string',
+            'address.en'   => 'required_without:address.ar|string',
+            'address.ar'   => 'required_without:address.en|string',
         ];
     }
 }

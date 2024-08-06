@@ -40,8 +40,8 @@ class StoreTransactionRequest extends FormRequest
             'items.*.warehouse_id' => 'required|exists:warehouses,id',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
-           // 'items.*.transaction_type' => 'required|string',
-           // 'items.*.type' => 'required|string',
+            'items.*.transaction_type' => 'required|string',
+            'items.*.type' => 'required|string',
             'drivers' => 'required|array',
             'drivers.*driver_id' => 'required|exists:drivers,id',
         ];
