@@ -25,13 +25,13 @@ class storeUserRequests extends FormRequest
     public function rules(): array
     {
         return [
-            'password' => ['required', 'min:8'],
-            'email' => ['required', 'string', 'email', Rule::unique('users', 'email')],
+            //'password' => ['required', 'min:8'],
+            //'email' => ['required', 'string', 'email', Rule::unique('users', 'email')],
             'contact_email' =>['required', 'string', 'email', Rule::unique('users', 'contact_email')],
             'name.en' => ['required', 'string','min:4'],
             'name.ar' => ['string','min:4'],
             'phone' => ['required',Rule::unique('Users', 'phone'),'phone:sy,INTERNATIONAL'],
-            'photo' => [ 'required', 'image'],
+//              'photo' => [ 'required', 'image'],
             'type' => ['required', new Enum(userType::class)],
         ];
     }

@@ -54,10 +54,12 @@ class TransactionController extends Controller
     public function store(StoreTransactionRequest $request): JsonResponse
     {
         $dataItem=$request->validated();
+//        dd($dataItem);
+
         $transaction=null;
         $this->transactionRepository->UpdateSystemItemsQuantity($dataItem);
         $this->transactionRepository->UpdateWarehouseItemsQuantity($dataItem);
-        $this->transactionRepository->UpdateDonorItemsQuantity($dataItem);    
+        $this->transactionRepository->UpdateDonorItemsQuantity($dataItem);
         if ($request->hasFile('waybill_img')) {
             $file = $request->file('waybill_img');
             $fileName ='Transaction/'.'waybill_Images/' . $file->hashName() ;

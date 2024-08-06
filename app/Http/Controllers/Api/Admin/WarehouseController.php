@@ -28,7 +28,7 @@ class WarehouseController extends Controller
     {
         $this->warehouseRepository=$warehouseRepository;
         $this->middleware(['auth:sanctum']);
-        $this->middleware(['permission']);
+       // $this->middleware(['permission']);
     }
 
 

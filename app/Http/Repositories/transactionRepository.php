@@ -47,8 +47,10 @@ class transactionRepository extends baseRepository
             'status' => $dataItem['status'],
             'date' => $dataItem['date'],
             'CTN' => $dataItem['CTN'] ?? null,
-            'qr_code' => $dataItem['qr_code'] ?? null,]);
-
+            'qr_code' => $dataItem['qr_code'] ?? null,
+            'transaction_type' => $dataItem['transaction_type'], // Using the value directly
+            'transaction_mode_type' => $dataItem['type'], // Using the value directly
+        ]);
         if (isset($dataItem['items']) && is_array($dataItem['items'])) {
             foreach ($dataItem['items'] as $itemData) {
                 $transactionItem = TransactionWarehouseItem::create([
@@ -56,8 +58,8 @@ class transactionRepository extends baseRepository
                     'warehouse_id' => $itemData['warehouse_id'],
                     'item_id' => $itemData['item_id'],
                     'quantity' => $itemData['quantity'],
-                    'transaction_type' => $itemData['transaction_type'],
-                    'transaction_mode_type' => $itemData['type'],
+                    'transaction_type' => $dataItem['transaction_type'],
+                    'transaction_mode_type' => $dataItem['type'],
                 ]);
             }
         }
@@ -194,11 +196,12 @@ class transactionRepository extends baseRepository
         }
         $updatedQuantities = [];
         $invalidQuantities = [];
+        $transactionType = $transaction['transaction_type'];
         foreach ($transaction['items'] as $item_in_transaction) {
             $item = Item::find($item_in_transaction['item_id']);
-            if ($item_in_transaction['transaction_type'] == 1) {
+            if ($transactionType == 1) {
                 $updatedQuantities[$item->id] = $item->quantity + $item_in_transaction['quantity'];
-            } else if ($item_in_transaction['transaction_type'] == 2) {
+            } else if ($transactionType == 2) {
                 if ($item_in_transaction['quantity'] > $item->quantity) {
                     $invalidQuantities[$item->id] = $item_in_transaction['quantity'];
                 } else {
@@ -220,16 +223,19 @@ class transactionRepository extends baseRepository
 
     public function UpdateWarehouseItemsQuantity($transaction){
 
+        $transactionType = $transaction['transaction_type'];
         $keeper = Warehouse::where('user_id', 1)->first();
         if ($keeper == null) {
             $i=0;
+
+
             $updatedQuantities = [];
             $invalidQuantities = [];
             foreach ($transaction['items'] as $item_in_transaction) {
                 $item_in_warehouse = WarehouseItem::where('warehouse_id', $item_in_transaction['warehouse_id'])
                     ->where('item_id', $item_in_transaction['item_id'])
                     ->first();
-                if ($item_in_transaction['transaction_type'] == 1) {
+                if ($transactionType == 1) {
                     if ($item_in_warehouse != null) {
                         $updatedQuantities[$i++] = [
                             'warehouse_id' => $item_in_warehouse->warehouse_id,
@@ -243,7 +249,7 @@ class transactionRepository extends baseRepository
                             'quantity' => $item_in_transaction['quantity'],
                         ];
                     }
-                } else if ($item_in_transaction['transaction_type'] == 2) {
+                } else if ($transactionType == 2) {
                     if ($item_in_warehouse == null) {
                         $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
                     } else {
@@ -280,6 +286,7 @@ class transactionRepository extends baseRepository
                 $existingRecord->save();
             }
         }
+
         else if($keeper != null){
             $i=0;
             $updatedQuantities = [];
@@ -291,7 +298,7 @@ class transactionRepository extends baseRepository
                 $destination = WarehouseItem::where('warehouse_id', $item_in_transaction['warehouse_id'])
                     ->where('item_id', $item_in_transaction['item_id'])
                     ->first();
-                if ($item_in_transaction['transaction_type'] == 1) {
+                if ($transactionType == 1) {
                     if($source == null){
                         $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
                     } else {
@@ -319,7 +326,7 @@ class transactionRepository extends baseRepository
                         ];
                     }
                 }
-                else if ($item_in_transaction['transaction_type'] == 2) {
+                else if ($transactionType== 2) {
                     if($destination == null){
                         $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
                     } else {
@@ -370,6 +377,7 @@ class transactionRepository extends baseRepository
 
     public function UpdateDonorItemsQuantity($transaction)
     {
+        $transactionType = $transaction['transaction_type'];
         $keeper = Warehouse::where('user_id', Auth::id())->get();
         if ($keeper->isNotEmpty()) {
             return;
@@ -380,7 +388,7 @@ class transactionRepository extends baseRepository
                 ->where('item_id', $donated_item['item_id'])
                 ->first();
 
-            if ($donated_item['transaction_type'] == 1) {
+            if ($transactionType == 1) {
                 if ($donorItem != null) {
                     $donorItem->quantity += $donated_item['quantity'];
                     $donorItem->save();

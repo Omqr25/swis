@@ -23,7 +23,7 @@ class DriverController extends Controller
     {
         $this-> driverRepository =$driverRepository;
         $this->middleware(['auth:sanctum']);
-        $this->middleware(['permission:Ali']);
+//        $this->middleware(['permission:Ali']);
 
     }
     public function index(): JsonResponse
