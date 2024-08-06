@@ -10,6 +10,7 @@ import { WarehousePage } from "./pages/WarehousePage";
 import { KeeperPage } from "./pages/KeeperPage";
 import { DonorPage } from "./pages/DonorPage";
 import { DriverPage } from "./pages/DriverPage";
+import { ProductPage } from "./pages/ProductPage";
 
 const isAuthenticated = () => {
   return localStorage.getItem("token") !== null;
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "Drivers",
         element: isAuthenticated() ? <DriverPage /> : <Navigate to="/login" />,
+      },
+      {
+        path: "Products",
+        element: isAuthenticated() ? <ProductPage /> : <Navigate to="/login" />,
       },
       {
         path: "Settings",

@@ -7,7 +7,7 @@ export default interface User {
   password?: string;
   email?: string;
   code?: string;
-  type?: number;
+  type?: string;
   access_token?: string;
   contact_email?: string;
   photo?: string;

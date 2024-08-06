@@ -19,9 +19,10 @@ interface Props {
   target: string;
   type: string;
   target2? : string;
+  showText? : boolean;
 }
 
-function DeleteC({ ID, target , type , target2 }: Props) {
+function DeleteC({ ID, target , type , target2 , showText = true}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = useRef(null);
@@ -39,6 +40,7 @@ function DeleteC({ ID, target , type , target2 }: Props) {
   return (
     <>
       {type === "Button" && (
+    
         <Button
         leftIcon={<FaTrash/>} 
           colorScheme="red"
@@ -47,7 +49,7 @@ function DeleteC({ ID, target , type , target2 }: Props) {
             setIsOpen(true);
           }}
         >
-          {t("Delete")}
+          {showText ? t("Delete") : ""}
         </Button>
       )}
       {type != "Button" && (

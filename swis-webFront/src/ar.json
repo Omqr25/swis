@@ -5,7 +5,7 @@
     "Branches": "اقسام",
     "Warehouses": "مستودعات",
     "Drivers": "سائقين",
-    "Donor": "موردين",
+    "Donors": "موردين",
     "Products": "منتجات",
     "Transactions": "معاملات",
     "Reports": "تقارير",
@@ -24,5 +24,17 @@
     "DMess": "هل انت متاكد من حذف هذا العنصر؟",
     "Cancel":"الغاء",
     "Profile": "الملف الشخصي",
-    "Notifications": "الاشعارات"
+    "Notifications": "الاشعارات",
+    "vehicle_number": "رقم المركبة",
+    "national_id": "الرقم الوطني",
+    "transportation_company_name": "اسم شركة النقل",
+    "quantity" : "الكمية",
+    "sectorType" : "القطاع",
+    "unitType" : "الواحدة",
+    "Size": "الحجم",
+    "Weight": "الوزن",
+    "Email": "البريد الالكتروني",
+    "Contact_Email": "بريد التواصل",
+    "Password": "كلمة المرور",
+    "Image": "الصورة"
 }

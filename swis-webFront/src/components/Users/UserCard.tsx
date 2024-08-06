@@ -80,12 +80,10 @@ export const UserCard = ({ user , type }: Props) => {
             <VStack m={1}>
               <HStack>
                 <Icon as={FaUser} mr={1} />
-                <Text>Name :</Text>
                 <Text color={"gray.600"}> {user.name}</Text>
               </HStack>
               <HStack>
                 <Icon as={FaCode} mr={1} />
-                <Text>Code :</Text>
                 <Text color={"gray.600"}> {user.code}</Text>
               </HStack>
             </VStack>
