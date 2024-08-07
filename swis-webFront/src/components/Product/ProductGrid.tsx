@@ -27,7 +27,7 @@ export const ProductGrid = () => {
     >
       <SimpleGrid
         spacing={6}
-        columns={{ sm: 1, md: 2, lg: 3 }}
+        columns={{md: 1, lg: 2 , xl: 3 }}
         padding={"10px"}
         maxHeight={"600px"}
         overflowY={"auto"}
