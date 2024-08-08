@@ -99,7 +99,7 @@ class WarehouseController extends Controller
     public function showWarehouseForKeeper($keeper)
     {
         $data = $this->warehouseRepository->showWarehouseForKeeper($keeper);
-        if(isNull($data)) return Response::Error(null,'You are not a Keeper');
+        if($data['Warehouse'] == null) return Response::Error(null,'You are not a Keeper');
         return $this->showOne($data['Warehouse'],WarehouseItemResource::class,$data['message']);
     }
     public function indexSubWarehouse($warehouse_id): JsonResponse
