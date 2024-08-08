@@ -74,9 +74,9 @@ class warehouseRepository extends baseRepository
 //        return ['message'=>$message,"Warehouse"=>$data];
 //    }
 
-    public function showWarehouseForKeeper($user_id){
+    public function showWarehouseForKeeper($keeper){
 
-        $data = Warehouse::where('user_id',$user_id)
+        $data = Warehouse::where('user_id',$keeper)
             ->with('WarehouseItem.item','parentWarehouse')
             ->first();
             $message="Warehouse indexed successfully";

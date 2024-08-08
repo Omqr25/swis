@@ -93,10 +93,10 @@ class WarehouseController extends Controller
         return [$data['message'],$data['code']];
     }
 
-    public function showWarehouseForKeeper()
+    public function showWarehouseForKeeper($keeper)
     {
-        $data = $this->warehouseRepository->showWarehouseForKeeper(Auth::user()->id);
-        return $this->showAll($data['Warehouse'],showKeeperItemResource::class,$data['message']);
+        $data = $this->warehouseRepository->showWarehouseForKeeper($keeper);
+        return $this->showOne($data['Warehouse'],WarehouseItemResource::class,$data['message']);
     }
     public function indexSubWarehouse($warehouse_id): JsonResponse
     {

@@ -67,8 +67,9 @@ Route::middleware('Localization')->group(function () {
         Route::get('warehouses/indexSubWarehouse/{warehouse_id}', 'indexSubWarehouse');
         Route::get('warehouses/indexMainWarehouse', 'indexMainWarehouse');
         Route::get('warehouses/indexDistributionPoint', 'indexDistributionPoint');
-        Route::get('warehouses/indexWarehouseWithItems', 'indexWarehouseWithItems');
-        Route::get('warehouses/showWarehouseWithItems/{warehouse}', 'showWarehouseWithItems');
+        // Route::get('warehouses/indexWarehouseWithItems', 'indexWarehouseWithItems');
+        // Route::get('warehouses/showWarehouseWithItems/{warehouse}', 'showWarehouseWithItems');
+        Route::get('warehouses/showWarehouseForKeeper/{keeper}', 'showWarehouseForKeeper');
     });
 
     Route::controller(TransactionController::class)->group(function () {
