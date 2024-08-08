@@ -15,7 +15,7 @@ public static function Success($data,$message,$code=200):JsonResponse
             'message'=>$message,
         ],$code);
 }
-    public static function Error($data,$message,$code=500):JsonResponse
+    public static function Error($data,$message,$code=200):JsonResponse
     {
         return response()->json(
             [

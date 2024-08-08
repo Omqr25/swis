@@ -19,6 +19,9 @@ use Illuminate\Http\JsonResponse;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
 
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
+
 class WarehouseController extends Controller
 {
 
@@ -96,6 +99,7 @@ class WarehouseController extends Controller
     public function showWarehouseForKeeper($keeper)
     {
         $data = $this->warehouseRepository->showWarehouseForKeeper($keeper);
+        if(isNull($data)) return Response::Error(null,'You are not a Keeper');
         return $this->showOne($data['Warehouse'],WarehouseItemResource::class,$data['message']);
     }
     public function indexSubWarehouse($warehouse_id): JsonResponse
