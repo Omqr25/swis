@@ -33,6 +33,7 @@ class AuthRepository
         return['User'=>$User,'message'=>$message];
 
     }
+//
     public function login($request): array
     {
         $user = User::where('email', $request['email'])->first();
@@ -43,10 +44,17 @@ class AuthRepository
                 $code = 401;
                 $user = null;
             } else {
-                $user = $this->RolesAndPermissions($user);
-                $user['access_token'] = $user->createToken("token")->plainTextToken;
-                $message = 'User logged in successfully.';
-                $code = 200;
+                if ($user->first_login) {
+                    $message = 'First-time login. Please complete your profile.';
+                    $code = 200; // Or another code indicating the need for profile completion
+                    $user['redirect_to'] = route('api.complete-profile'); // Define this route accordingly
+                    $user['access_token'] = $user->createToken("token")->plainTextToken;
+                } else {
+                    $user = $this->RolesAndPermissions($user);
+                    $user['access_token'] = $user->createToken("token")->plainTextToken;
+                    $message = 'User logged in successfully.';
+                    $code = 200;
+                }
             }
         } else {
             $message = 'User not found.';
@@ -54,8 +62,6 @@ class AuthRepository
         }
 
         return ['User' => $user, 'message' => $message, 'code' => $code];
-
-
     }
     public function logout():array
     {
@@ -91,6 +97,29 @@ class AuthRepository
         $user['permissions']=$permissions;
 
         return $user;
+    }
+    public function completeProfile($request): array
+    {
+        $user = Auth::user();
+
+        if ($user->first_login) {
+            $user->update([
+                'name' => $request['name'],
+                'password' => Hash::make($request['password']),
+                'first_login' => false,
+            ]);
+
+            $user = $this->RolesAndPermissions($user);
+            $user['access_token'] = $user->createToken("token")->plainTextToken;
+            $message = 'Profile completed successfully.';
+            $code = 200;
+        } else {
+            $message = 'Profile already completed.';
+            $code = 400;
+            $user = null;
+        }
+
+        return ['User' => $user, 'message' => $message, 'code' => $code];
     }
 
 }

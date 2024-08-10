@@ -29,14 +29,14 @@ class showTransactionForKeeperResource extends JsonResource
             'code' => $this->code,
             'status' => $this->status instanceof transactionStatusType ? $this->status->name : null,
             'date' => $this->date,
-            'transaction_type' => $this->transaction_type instanceof transactionType ? $this->transaction_type->name : null,
-            'transaction_mode_type' => $this->transaction_mode_type instanceof transactionModeType ? $this->transaction_mode_type->name : null,
             'waybill_num' => $this->waybill_num,
             'waybill_img' => $this->imageUrl('waybill_img'),
             'qr_code' => $this->imageUrl('qr_code'),
             'CTN' => $this->CTN,
             'transactionWarehouse'=>$transactionWarehouseItem->map(function ($item){
                 return [
+                    'transaction_type' => $item->transaction_type instanceof transactionType ? $item->transaction_type->name : null,
+                    'transaction_mode_type' => $item->transaction_mode_type instanceof transactionModeType ? $item  ->transaction_mode_type->name : null,
                     'warehouse' => $item->warehouse->id,];
             }),
             'items'=> $this->transactionWarehouseItem->map(function ($item){

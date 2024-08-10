@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->string('contact_email')->unique();
             $table->string('type');
+            $table->boolean('first_login')->default(true);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

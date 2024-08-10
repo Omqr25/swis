@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\transactionModeType;
+use App\Enums\transactionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,8 +14,14 @@ class TransactionWarehouseItem extends Model
     protected $fillable = [
         'transaction_id',
         'warehouse_id',
+        'transaction_type',
+        'transaction_mode_type',
         'item_id',
         'quantity',
+    ];
+    protected $casts=[
+        'transaction_type'=>transactionType::class ,
+        'transaction_mode_type'=>transactionModeType::class ,
     ];
 
     // Define relationships

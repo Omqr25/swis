@@ -96,4 +96,22 @@ class TransactionWarehouseItemController extends Controller
         return $this->showOneCollection($inventory, InventoryResource::class);
     }
 
+    public function inventoryForAllWarehouses(Request $request): JsonResponse
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
+
+        $data = [
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+        ];
+
+        $inventory = $this->transactionWarehousesRepository->inventoryForAllWarehouses($data);
+
+        return $this->showOneCollection($inventory, InventoryResource::class);
+    }
+
+
 }

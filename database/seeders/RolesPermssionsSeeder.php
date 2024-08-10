@@ -43,7 +43,7 @@ class RolesPermssionsSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
         $adminUser->assignRole($adminRole);
-        $adminUser->givePermissionTo($permissions);
+        $adminUser->givePermissionTo('Ali');
 
         $keeperUser = User::factory()->create([
             'name' => 'Keeper name',

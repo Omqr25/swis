@@ -65,5 +65,44 @@ class transactionWarehousesItemRepository extends baseRepository
         return $mergedInventory;
     }
 
+    public function inventoryForAllWarehouses($data)
+    {
+        $startDate = $data['start_date'];
+        $endDate = $data['end_date'];
+
+        // Query to get the total quantities across all warehouses for each item
+        $inventory = TransactionWarehouseItem::select(
+            'item_id',
+            DB::raw('SUM(CASE WHEN transaction_type = '.transactionType::transactionIn->value.' THEN quantity ELSE 0 END) as total_quantity_in'),
+            DB::raw('SUM(CASE WHEN transaction_type = '.transactionType::transactionOut->value.' THEN quantity ELSE 0 END) as total_quantity_out')
+        )
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('item_id')
+            ->with('item')
+            ->get();
+
+        // Get the current total quantity of each item across all warehouses
+        $warehouseItems = WarehouseItem::select('item_id', DB::raw('SUM(quantity) as quantity_in_warehouse'))
+            ->groupBy('item_id')
+            ->get()
+            ->keyBy('item_id');
+
+        // Merge the inventory data with the current quantities
+        $mergedInventory = $inventory->map(function ($item) use ($warehouseItems) {
+            $itemQuantityInWarehouse = $warehouseItems->has($item->item_id) ? $warehouseItems[$item->item_id]->quantity_in_warehouse : 0;
+            return [
+                'item_id' => $item->item_id,
+                'item_name' => $item->item->name,
+                'total_quantity_in' => (string)$item->total_quantity_in,
+                'total_quantity_out' => (string)$item->total_quantity_out,
+                'quantity_in_warehouse' => (string)$itemQuantityInWarehouse,
+            ];
+        });
+
+        return $mergedInventory;
+    }
+
+
+
 
 }

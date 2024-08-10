@@ -35,6 +35,7 @@ class User extends Authenticatable
         'contact_email',
         'photo',
         'type',
+        'first_login',
     ];
 
     /**

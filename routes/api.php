@@ -92,6 +92,7 @@ Route::middleware('Localization')->group(function () {
         Route::post('transactionWarehouseItems/restore', 'restore');
         Route::get('transactionWarehouseItems/showDeleted', 'showDeleted');
         Route::get('transactionWarehouseItems/inventoryForWarehouse', 'inventoryForWarehouse');
+        Route::get('transactionWarehouseItems/inventoryForAllWarehouses', 'inventoryForAllWarehouses');
         //Route::get('transactionWarehouseItems/calculateInventory', 'calculateInventory');
     });
 

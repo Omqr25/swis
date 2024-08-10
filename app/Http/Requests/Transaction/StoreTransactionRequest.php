@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Transaction;
 
+use App\Enums\transactionModeType;
 use App\Enums\transactionStatusType;
+use App\Enums\transactionType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
@@ -34,14 +36,12 @@ class StoreTransactionRequest extends FormRequest
             'waybill_img' => 'required|image',
             'qr_code' => 'nullable|image',
             'CTN' => 'nullable|string',
-            'transaction_type' => 'required|string', // Moved outside the items array
-            'type' => 'required|string',
+            'transaction_type' => 'required',new Enum(transactionType::class),
+            'type' => 'required',new Enum(transactionModeType::class),
             'items' => 'required|array',
             'items.*.warehouse_id' => 'required|exists:warehouses,id',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.transaction_type' => 'required|string',
-            'items.*.type' => 'required|string',
             'drivers' => 'required|array',
             'drivers.*driver_id' => 'required|exists:drivers,id',
         ];
