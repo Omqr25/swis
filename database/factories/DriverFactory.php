@@ -29,7 +29,7 @@ class DriverFactory extends Factory
                 'en' => fake()->company(),
                 'ar' => $fakerArabic->company(),
             ],
-            'phone'=>fake()->text(20),
+            'phone'=>fake()->unique()->text(20),
         ];
     }
 }

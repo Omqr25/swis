@@ -69,6 +69,7 @@ Route::middleware('Localization')->group(function () {
         Route::get('warehouses/indexDistributionPoint', 'indexDistributionPoint');
         Route::get('warehouses/indexWarehouseWithItems', 'indexWarehouseWithItems');
         Route::get('warehouses/showWarehouseWithItems/{warehouse}', 'showWarehouseWithItems');
+        Route::get('warehouses/showWarehouseOfKeeper/{keeper}', 'showWarehouseOfKeeper');
     });
 
     Route::controller(TransactionController::class)->group(function () {

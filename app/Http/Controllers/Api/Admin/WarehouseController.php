@@ -19,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
 
+
 class WarehouseController extends Controller
 {
 
@@ -92,11 +93,18 @@ class WarehouseController extends Controller
         $data = $this->warehouseRepository->restore($request);
         return [$data['message'],$data['code']];
     }
-
+    //FOR KEEPER
     public function showWarehouseForKeeper()
     {
         $data = $this->warehouseRepository->showWarehouseForKeeper(Auth::user()->id);
         return $this->showAll($data['Warehouse'],showKeeperItemResource::class,$data['message']);
+    }
+    //FOR ADMIN
+    public function showWarehouseOfKeeper($keeper)
+    {
+        $data = $this->warehouseRepository->showWarehouseForKeeper($keeper);
+        if($data['Warehouse'] == null) return Response::Error(null,'You are not a Keeper');
+        return $this->showOne($data['Warehouse'],WarehouseItemResource::class,$data['message']);
     }
     public function indexSubWarehouse($warehouse_id): JsonResponse
     {

@@ -18,6 +18,6 @@ class AdminItemResource extends JsonResource
             'id' => $this->item->id,
             'name' => $this->item->name,
             'code' => $this->item->code,
-            'quantity ' => $this->quantity,];
+            'quantity' => $this->quantity,];
     }
 }
