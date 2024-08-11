@@ -20,3 +20,9 @@ export default interface Warehouse {
   keeper?: string;
   items?: item[];
 }
+
+export interface WarehouseForKeeper{
+  "warehouse id"? : number;
+  name?: string;
+  items?: item[];
+}

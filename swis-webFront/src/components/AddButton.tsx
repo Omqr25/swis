@@ -2,7 +2,7 @@ import { AddIcon } from "@chakra-ui/icons"
 import { IconButton } from "@chakra-ui/react"
 
 interface Props{
-    onOpen: () => void;
+    onOpen?: () => void;
 }
 
 export const AddButton = ({onOpen} : Props) => {

@@ -9,7 +9,7 @@ const useCreate = <T, D>(endPoint: string , target2? : string) => {
   return useMutation<Response<T>, Error, D>({
     mutationKey: [`create${endPoint}`],
     mutationFn: (data) => apiClient.post<D>(data),
-    onError(error) {
+    onError(error) {  
       error.message;
     },
     onSuccess : (vlaues , variables) => {

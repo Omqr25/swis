@@ -1,6 +1,16 @@
+import { Link } from "react-router-dom"
+import { AddButton } from "../components/AddButton"
+import { TransactionTable } from "../components/Transaction/TransactionTable"
 
 export const TransactionPage = () => {
+
+  
   return (
-    <div>TransactionPage</div>
+    <>
+   <TransactionTable />
+   <Link to={"Create"}>
+   <AddButton />
+   </Link>
+   </>
   )
 }

@@ -16,6 +16,8 @@
     "Edit": "تعديل",
     "Delete": "حذف",
     "Add": "اضافة",
+    "Submit" : "ارسال",
+    "AddItem" : "اضافة عنصر",
     "SubBranches": "الاقسام التابعة",
     "MainBranch_id":"رقم القسم الرئيسي",
     "Languages": "اللغة",
@@ -36,5 +38,18 @@
     "Email": "البريد الالكتروني",
     "Contact_Email": "بريد التواصل",
     "Password": "كلمة المرور",
-    "Image": "الصورة"
+    "Image": "الصورة",
+    "Transaction Owner": "صاحب العلاقة",
+    "is_convoy": "منقولة",
+    "notes": "ملاحظات",
+    "Status": "حالة المعاملة",
+    "Date": "تاريخ المعاملة",
+    "Transaction_type": "نوع المعاملة",
+    "Waybill_num": "رقم المعاملة",
+    "Waybill_img":"صورة المعاملة",
+    "Items": "السلع",
+    "UserInfo": "معلومات المستخدم",
+    "ChItems": "اختر السلع",
+    "TraInfo": "معلومات المعاملة",
+    "ChDrivers": "اختر السائقين"
 }

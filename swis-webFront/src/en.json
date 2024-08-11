@@ -16,6 +16,8 @@
     "Edit": "EDIT",
     "Delete": "DELETE",
     "Add": "ADD",
+    "Submit" : "SUBMIT",
+    "AddItem": "Add Item",
     "SubBranches": "SubBranchs",
     "MainBranch_id":"MAINBRANCH_ID",
     "Languages": "Languages",
@@ -36,6 +38,18 @@
     "Email": "Email",
     "Contact_Email": "Contact_Email",
     "Password": "Password",
-    "Image": "Image"
-
+    "Image": "Image",
+    "Transaction Owner": "Transaction Owner",
+    "is_convoy": "is_convoy",
+    "notes": "Notes",
+    "Status":"Status",
+    "Date": "Date",
+    "Transaction_type":"Transaction_type",
+    "Waybill_num": "Waybill number",
+    "Waybill_img":"Waybill image",
+    "Items" : "Items",
+    "UserInfo": "User Information",
+    "ChItems": "Choose Items",
+    "TraInfo": "Transaction Information",
+    "ChDrivers": "Choose Drivers"
 }
