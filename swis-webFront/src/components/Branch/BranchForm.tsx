@@ -76,45 +76,32 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
       .shape({ en: yup.string().required("Name is required") }),
   });
 
-  const Edit = useEdit<Branches, BranchesRequest>(ID, "branches");
-  const Create = useCreate<Branches, BranchesRequest>("branches");
+  const Edit = useEdit<Branches, FormData>(ID, "branches");
+  const Create = useCreate<Branches, FormData>("branches");
   const branch = useGetOne<Branches>(ID, "branches");
+ 
   useEffect(() => {
     if (isEdit && branch.data?.data.main_branch?.id)
       setBranch_Id(branch.data?.data.main_branch?.id);
   }, [branch.data?.data.main_branch?.id]);
-  const handleEditBranch = (values: BranchesRequest) => {
-    if (values.phone)
-      Edit.mutate({
-        name: { en: values.name?.en },
-        address: { en: values.address?.en },
-        phone: values.phone,
-        parent_id: branch_id,
-        _method: "PUT",
-      });
-    else
-      Edit.mutate({
-        name: { en: values.name?.en },
-        address: { en: values.address?.en },
-        parent_id: branch_id,
-        _method: "PUT",
-      });
-  };
-  const handleAddBranch = (values: BranchesRequest) => {
-    console.log(values.name);
-    Create.mutate({
-      name: { en: values.name?.en },
-      phone: values.phone,
-      address: { en: values.address?.en },
-      parent_id: branch_id,
-    });
-  };
 
+ 
+  const handleSubmitBranch = (values: BranchesRequest) => {
+    const data = new FormData();
+    values.name?.en ? data.append("name[en]" , values.name.en) : "";
+    values.address?.en ? data.append("address[en]" , values.address.en) : "";
+    values.phone ? data.append("phone" , values.phone) : "";
+    branch_id ? data.append("parent_id" , `${branch_id}`): "";
+    isEdit ? data.append("_method" , "PUT") : "";
+    isEdit ? Edit.mutate(data) : Create.mutate(data);
+  };
+  
   const handleMainBranchChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    if (!event.target.value) {
+    if (!event.target.value || event.target.value === 'self') {
       setBranch_Id(null);
+      console.log(event.target.value);
     } else {
       setSelectedMainBranch(Number(event.target.value));
       setBranch_Id(Number(event.target.value));
@@ -138,7 +125,7 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
         address: { en: isEdit ? branch.data?.data.address : "" },
       }}
       validationSchema={isEdit ? validationsEditBranch : validationsAddBranch}
-      onSubmit={isEdit ? handleEditBranch : handleAddBranch}
+      onSubmit={handleSubmitBranch}
     >
       <Form>
         <Text color={"red"}>
@@ -236,7 +223,7 @@ export const BranchForm = ({ isEdit, ID }: Props) => {
             width={"full"}
             color="gray.400"
           >
-            <option value={"self"}></option>
+            <option value={"self"}>As Main</option>
             {branches.data?.pages.map((page, index) => (
               <React.Fragment key={index}>
                 {page.data.map((br) => (
