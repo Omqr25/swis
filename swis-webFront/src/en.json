@@ -51,5 +51,6 @@
     "UserInfo": "User Information",
     "ChItems": "Choose Items",
     "TraInfo": "Transaction Information",
-    "ChDrivers": "Choose Drivers"
+    "ChDrivers": "Choose Drivers",
+    "SubWarehouses" : "SubWarehouses"
 }
