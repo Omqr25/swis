@@ -19,15 +19,11 @@ import { TransactionItems } from "../components/Transaction/TransactionItems";
 import { TransactionUserInformation } from "../components/Transaction/TransactionUserInformation";
 import useLanguage from "../stores/LanguageStore";
 
-
-
 export const CreateTransactionPage = () => {
   const [counter, setCounter] = useState(1);
-  const  [counterExit, setCounterExit] = useState(1);
-  const  [counterEnter, setCounterEnter] = useState(1);
+  const [counterExit, setCounterExit] = useState(1);
   const [Disabled, setDisabled] = useState([true, true, true, true, true]);
- 
- 
+
   const updateDisabled = (index: number, value: boolean) => {
     setDisabled((prev) => {
       const newDisabled = [...prev];
@@ -36,7 +32,7 @@ export const CreateTransactionPage = () => {
     });
   };
 
-  const  {lng} = useLanguage();
+  const { lng } = useLanguage();
 
   const IsDisabled = () => {
     Disabled[0] = Disabled[counter];
@@ -69,52 +65,80 @@ export const CreateTransactionPage = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-            <Collapse in={counter === 1 &&  counterExit === 1}  animateOpacity transition={{exit : {duration : 1} ,enter : {duration : 1 , delay: 1}}}>
-              <TransactionUserInformation
-                updateDisabled={updateDisabled}
-                setUser={setUser}
-              />
-            </Collapse>
+              <Collapse
+                in={counter === 1 && counterExit === 1}
+                animateOpacity
+                transition={{
+                  exit: { duration: 1 },
+                  enter: { duration: 1, delay: 1 },
+                }}
+              >
+                <TransactionUserInformation
+                  updateDisabled={updateDisabled}
+                  setUser={setUser}
+                />
+              </Collapse>
             </TabPanel>
 
             <TabPanel>
-            <Collapse in={counterExit === 2}  animateOpacity transition={{exit : {duration : 1} ,enter : {duration : 1, delay: 1}}}>
-             <motion.div
-             initial = {false}
-             animate = {{ height : counter === 2 ? "auto" : 0}}
-             transition={{duration : 0.5}}
-             >
-              <TransactionItems
-                updateDisabled={updateDisabled}
-                Disabled={Disabled}
-                User={user}
-              />
-              </motion.div>
-            </Collapse>
+              <Collapse
+                in={counterExit === 2}
+                animateOpacity
+                transition={{
+                  exit: { duration: 1 },
+                  enter: { duration: 1, delay: 1 },
+                }}
+              >
+                <motion.div
+                  initial={false}
+                  animate={{ height: counter === 2 ? "auto" : 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <TransactionItems
+                    updateDisabled={updateDisabled}
+                    Disabled={Disabled}
+                    User={user}
+                  />
+                </motion.div>
+              </Collapse>
             </TabPanel>
             <TabPanel>
-            <Collapse in={ counterExit === 3}  animateOpacity transition={{exit : {duration : 1} ,enter : {duration : 1 , delay: 1}}}>
-            <motion.div
-             initial = {false}
-             animate = {{ height : counter === 3 ? "auto" : 0}}
-             transition={{duration : 0.5}}
-             >
-              <TransactionDrivers
-                updateDisabled={updateDisabled}
-                Disabled={Disabled}
-              />
-              </motion.div>
-            </Collapse>
+              <Collapse
+                in={counterExit === 3}
+                animateOpacity
+                transition={{
+                  exit: { duration: 1 },
+                  enter: { duration: 1, delay: 1 },
+                }}
+              >
+                <motion.div
+                  initial={false}
+                  animate={{ height: counter === 3 ? "auto" : 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <TransactionDrivers
+                    updateDisabled={updateDisabled}
+                    Disabled={Disabled}
+                  />
+                </motion.div>
+              </Collapse>
             </TabPanel>
             <TabPanel>
-            <Collapse in={ counterExit === 4}  animateOpacity transition={{exit : {duration : 1} ,enter : {duration : 1 , delay: 1}}}>
-            <motion.div
-             initial = {false}
-             animate = {{ height : counter === 4 ? "auto" : 0}}
-             transition={{duration : 0.5}}
-             >
-              <TransactionInformationForm />
-              </motion.div>
+              <Collapse
+                in={counterExit === 4}
+                animateOpacity
+                transition={{
+                  exit: { duration: 1 },
+                  enter: { duration: 1, delay: 1 },
+                }}
+              >
+                <motion.div
+                  initial={false}
+                  animate={{ height: counter === 4 ? "auto" : 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <TransactionInformationForm />
+                </motion.div>
               </Collapse>
             </TabPanel>
           </TabPanels>
@@ -122,27 +146,34 @@ export const CreateTransactionPage = () => {
       </Box>
       <HStack justifyContent={"center"} m={1}>
         <IconButton
-          icon={lng === 'en' ? <FaArrowLeft /> : <FaArrowRight />}
+          icon={lng === "en" ? <FaArrowLeft /> : <FaArrowRight />}
           isDisabled={counter === 1}
           colorScheme="blue"
           onClick={() => {
-            setTimeout(() => {setCounter(counter - 1)},2000);
-          setCounterExit(counterExit - 1);}}
+            setTimeout(() => {
+              setCounter(counter - 1);
+            }, 2000);
+            setCounterExit(counterExit - 1);
+          }}
           aria-label="previous"
+          hidden={counter === 1}
         >
           Previous
         </IconButton>
         <IconButton
-          icon={lng === 'en' ? <FaArrowRight /> : <FaArrowLeft />}
+          icon={lng === "en" ? <FaArrowRight /> : <FaArrowLeft />}
           isDisabled={counter === 4 || IsDisabled()}
           colorScheme="blue"
           onClick={() => {
-            setTimeout(() => {setCounter(counter + 1)},2000);
-            setTimeout(() => {setCounterEnter(counterEnter + 1)},3000);
-            setCounterExit(counterExit + 1);       
+            setTimeout(() => {
+              setCounter(counter + 1);
+            }, 2000);
+
+            setCounterExit(counterExit + 1);
             updateDisabled(0, true);
           }}
           aria-label="Next"
+          hidden={counter === 4}
         >
           Next
         </IconButton>

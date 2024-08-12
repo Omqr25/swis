@@ -21,7 +21,7 @@ import Transaction from "../../entities/Transactions";
 import { TableSkeleton } from "../Skeleton/TableSkeleton";
 import { Error } from "../Error";
 import { useTranslation } from "react-i18next";
-import React from "react";
+import React, { useState } from "react";
 import {
   FaArrowRight,
   FaCalendarAlt,
@@ -37,9 +37,10 @@ import {
 } from "react-icons/fa";
 import { ItemsDrawer } from "./ItemsDrawer";
 import InfiniteScroll from "react-infinite-scroll-component";
+import useCreateTransactionStore from "../../stores/createTransactionStroe";
 
 export const TransactionTable = () => {
-  const { data, isLoading, error, fetchNextPage, hasNextPage } =
+  const { data, isLoading, error, fetchNextPage, hasNextPage , isSuccess} =
     useGetAll<Transaction>("transactions");
   const padding = [10, 5];
   const borderEnd = "2px solid gray";
@@ -48,6 +49,13 @@ export const TransactionTable = () => {
   const { t } = useTranslation();
   const fetchedBranchesCount =
     data?.pages.reduce((total, page) => total + page.data.length, 0) || 0;
+
+  const {setItems} = useCreateTransactionStore();
+  const [done , setDone ] = useState(false);
+  if(isSuccess && !done){
+    setDone(true);
+    setItems([]);
+  }
   if (isLoading) {
     return <TableSkeleton />;
   }

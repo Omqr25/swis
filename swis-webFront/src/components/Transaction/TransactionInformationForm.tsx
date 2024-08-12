@@ -39,6 +39,10 @@ export const TransactionInformationForm = () => {
 
   const { Items } = useCreateTransactionStore();
 
+  const {setItems} = useCreateTransactionStore();
+
+  const {setDrivers} = useCreateTransactionStore();
+
   const { Drivers } = useCreateTransactionStore();
 
   const { UserId } = useCreateTransactionStore();
@@ -82,6 +86,8 @@ export const TransactionInformationForm = () => {
   };
 
   if(Create.isSuccess){
+    setItems([]);
+    setDrivers([]);
     navigate('/Transactions');
   }
   return (

@@ -29,12 +29,14 @@ export const TransactionUserInformation = ({
   const { data, isLoading, error, fetchNextPage, hasNextPage } =
     useGetAll<User>(endPoint);
   const [value, setValue] = useState("0");
+  
   const setUserId = useCreateTransactionStore((s) => s.setUserId);
+  
   const fecthedGamesCount =
     data?.pages.reduce((total, page) => total + page.data.length, 0) || 0;
   if (value != "0") {
     checkedItems[0] ? setUser("Keeper") : setUser("Donor");
-    setUserId(Number(value));
+    setUserId(Number(value)); 
   }
   useEffect(() => {
     if (value != "0") updateDisabled(1, false);

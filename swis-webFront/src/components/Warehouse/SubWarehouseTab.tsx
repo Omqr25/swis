@@ -1,4 +1,4 @@
-import { Box, IconButton, Spinner, useDisclosure } from "@chakra-ui/react";
+import { Box, IconButton, Spinner, Text, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import Warehouse from "../../entities/warehouse";
@@ -29,6 +29,7 @@ const SubWarehouseTab = () => {
   if (!warehouse.id) return <></>;
   if (error) return <Error message={error.message} />;
   if (isLoading) return <Spinner />;
+  if(data?.data.length === 0)return <Text textAlign={'center'}>No SubWarehouses</Text>
   return (
     <Box m={4}>
       {data?.data.map((w, index) => (
