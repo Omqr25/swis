@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Keeper\ItemController as KeeperItemController;
 use App\Http\Controllers\Api\Keeper\TransactionController as KeeperTransactionController;
 use App\Http\Controllers\Api\Donor\TransactionController as DonorTransactionController;
 use App\Http\Controllers\Api\Donor\DonorItemController as DonorItemForDonorController;
+use App\Http\Controllers\Api\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,15 @@ Route::middleware(['auth:sanctum', 'Localization'])->get('/user', function (Requ
 
 
 Route::middleware('Localization')->group(function () {
+
+    Route::controller(SearchController::class)->group(function () {
+        Route::get('search/searchitems', 'searchItems')->name('items.search');
+        Route::get('search/searchdrivers', 'searchDrivers')->name('drivers.search');
+        Route::get('search/searchtransactions', 'searchTransactions')->name('transactions.search');
+        Route::get('search/searchwarehouses', 'searchWarehouses')->name('warehouses.search');
+        Route::get('search/searchbranches', 'searchBranches')->name('branches.search');
+        Route::get('search/searchusers', 'searchUsers')->name('users.search');
+    });
 
     // Admin Routes
     Route::controller(BranchController::class)->group(function () {

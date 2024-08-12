@@ -14,9 +14,11 @@ use Laravel\Sanctum\HasApiTokens;
 use PhpParser\Node\Scalar\String_;
 use PHPUnit\Util\Filesystem;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Spatie\Translatable\HasTranslations;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Searchable
 {
     use HasApiTokens, HasFactory, Notifiable, hasRoles, SoftDeletes, HasTranslations;
 
@@ -59,6 +61,11 @@ class User extends Authenticatable
 
     ];
 
+    public function getSearchResult(): SearchResult
+    {
+        $url = route('users.search', $this->slug);
+        return new SearchResult($this, $this->name, $url);
+    }
     public function warehouse()
     {
         return $this->hasOne(Warehouse::class);

@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Spatie\Translatable\HasTranslations;
 
-class Transaction extends Model
+class Transaction extends Model implements Searchable
 {
     use HasFactory, SoftDeletes, HasTranslations;
 
@@ -33,6 +35,11 @@ class Transaction extends Model
         'status'=>transactionStatusType::class,
     ];
 
+    public function getSearchResult(): SearchResult
+    {
+        $url = route('transactions.search', $this->slug);
+        return new SearchResult($this, $this->code, $url);
+    }
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class);

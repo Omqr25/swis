@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Spatie\Translatable\HasTranslations;
 
-class Branch extends Model
+class Branch extends Model implements Searchable
 {
     use HasFactory, SoftDeletes, HasTranslations;
     public $translatable = ['name', 'address'];
@@ -21,6 +23,11 @@ class Branch extends Model
         'address',
     ];
 
+    public function getSearchResult(): SearchResult
+    {
+        $url = route('branches.search', $this->slug);
+        return new SearchResult($this, $this->name, $url);
+    }
     public function warehouse(){
         return $this->hasMany(Warehouse::class);
     }

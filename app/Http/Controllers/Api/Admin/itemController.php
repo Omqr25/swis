@@ -62,6 +62,13 @@ class itemController extends Controller
 
     }
 
+    // public function search(Request $request)
+    // {
+    //     $name = $request->query('name');
+    //     $items = Item::where('name', 'like', "%$name%")->get();
+    //     if ($items->isEmpty()) return response()->json('there is no such items at the moment !!');
+    //     return response()->json($items);
+    // }
     public function showDeleted(): JsonResponse
     {
         $data=$this->itemRepository->showDeleted();

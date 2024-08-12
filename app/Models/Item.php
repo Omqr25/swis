@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Spatie\Translatable\HasTranslations;
 
-class Item extends Model
+class Item extends Model implements Searchable
 {
     use HasFactory, SoftDeletes, HasTranslations;
 
@@ -29,6 +31,11 @@ class Item extends Model
         'sectorType'=>sectorType::class ,
     ];
 
+    public function getSearchResult(): SearchResult
+    {
+        $url = route('items.search', $this->slug);
+        return new SearchResult($this, $this->name, $url);
+    }
     public function warehouseItem()
     {
         return $this->hasMany(WarehouseItem::class);
