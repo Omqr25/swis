@@ -32,7 +32,7 @@ export const Layout = () => {
       >
         <NavBar />
       </GridItem>
-      <Show above="md">
+      <Show above="lg">
       <GridItem
         area={"aside"} 
       >

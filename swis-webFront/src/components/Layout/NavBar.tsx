@@ -21,7 +21,7 @@ const animation = css`
 `;
 export const NavBar = () => {
   const {colorMode} = useColorMode();
-  const showTabs = useBreakpointValue({ base: false, md: true });
+  const showTabs = useBreakpointValue({ md: false, lg: true });
   const colorr = colorMode === "light" ? Mycolor : MyDarkColor;
   const c = localStorage.getItem("currentPage");
   console.log(c);
