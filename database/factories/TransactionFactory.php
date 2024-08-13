@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\transactionModeType;
+use App\Enums\transactionType;
 use App\Enums\transactionStatusType;
 use App\Http\services\QRCodeService;
 use App\Models\Transaction;
@@ -35,6 +37,8 @@ class TransactionFactory extends Factory
             'code' => $this->faker->word,
             'status' => $this->faker->randomElement(transactionStatusType::class),
             'date' => $this->faker->date(),
+            'transaction_type' => $this->faker->randomElement(transactionType::class),
+            'transaction_mode_type' => $this->faker->randomElement(transactionModeType::class),
             'waybill_num' => $this->faker->numberBetween(1000, 9999),
             'waybill_img' => $this->faker->imageUrl(),
             'qr_code' => null,

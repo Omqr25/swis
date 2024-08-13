@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\transactionModeType;
+use App\Enums\transactionType;
 use App\Enums\transactionStatusType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +26,8 @@ class Transaction extends Model implements Searchable
         'code',
         'status',
         'date',
+        'transaction_type',
+        'transaction_mode_type',
         'waybill_num',
         'waybill_img',
         'qr_code',
@@ -31,7 +35,8 @@ class Transaction extends Model implements Searchable
     ];
 
     protected $casts = [
-
+        'transaction_type'=>transactionType::class ,
+        'transaction_mode_type'=>transactionModeType::class ,
         'status'=>transactionStatusType::class,
     ];
 

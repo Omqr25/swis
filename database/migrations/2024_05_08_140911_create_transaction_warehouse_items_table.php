@@ -17,8 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transaction_id')->constrained();
             $table->foreignIdFor(Warehouse::class)->nullable();
-            $table->string('transaction_type');
-            $table->string('transaction_mode_type');
             $table->foreignIdFor(Item::class);
             $table->integer('quantity');
             $table->timestamps();

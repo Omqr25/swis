@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\transactionModeType;
-use App\Enums\transactionType;
 use App\Models\Item;
 use App\Models\Transaction;
 use App\Models\Warehouse;
@@ -26,8 +24,6 @@ class TransactionWarehouseItemFactory extends Factory
             'warehouse_id' => Warehouse::inRandomOrder()->first()->id,
             'item_id' =>Item::inRandomOrder()->first()->id ,
             'quantity' => $this->faker->numberBetween(10, 1000),
-            'transaction_type' => $this->faker->randomElement(transactionType::class),
-            'transaction_mode_type' => $this->faker->randomElement(transactionModeType::class),
         ];
     }
 }
