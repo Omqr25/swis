@@ -44,6 +44,7 @@ class baseRepository
         $modelName = class_basename($this->model);
 
 
+        
             if (Auth::user()->hasRole('admin')) {
                 // Update the model with the request data
                 $model->update($validatedData);
