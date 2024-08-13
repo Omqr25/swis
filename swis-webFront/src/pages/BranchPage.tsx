@@ -4,8 +4,14 @@ import { BranchForm } from "../components/Branch/BranchForm";
 import { BranchTable } from "../components/Branch/BranchTable";
 import { SubBranch } from "../components/Branch/SubBranch";
 import CustomModal from "../components/Modal";
+import { useLocation } from "react-router-dom";
+import BranchSearchTable from "../components/Branch/BranchSearchTable";
 export const BranchPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); 
+  const location = useLocation();
+  const currentPath = location.pathname; 
+
+  const Search = currentPath.includes("Search");
   return (
     <Box>
       <Grid
@@ -13,7 +19,7 @@ export const BranchPage = () => {
         gridTemplateColumns={"2fr 1fr"}
       >
         <GridItem area={"MainBranch"}>
-          <BranchTable />
+          {Search ? <BranchSearchTable />:<BranchTable />}
         </GridItem>
         <GridItem area={"SubBranch"}>
           <SubBranch />

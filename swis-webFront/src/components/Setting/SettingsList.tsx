@@ -4,9 +4,11 @@ import { IconType } from "react-icons/lib";
 import { Link } from "react-router-dom";
 import { Languages } from "./Languages";
 import { useTranslation } from "react-i18next";
+import { FcDeleteDatabase } from "react-icons/fc";
 export const SettingsList = () => {
   const settingsList: Record<string, IconType> = {
     Languages : FaLanguage,
+    DeletedItems : FcDeleteDatabase
   };
   const {t} = useTranslation();
   return (

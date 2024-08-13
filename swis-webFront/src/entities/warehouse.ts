@@ -1,4 +1,5 @@
 import item from "./items";
+import lng from "./lng";
 
 export interface City {
   id: number;
@@ -21,8 +22,20 @@ export default interface Warehouse {
   items?: item[];
 }
 
-export interface WarehouseForKeeper{
-  "warehouse id"? : number;
+export interface WarehouseSearch {
+  id?: number;
+  name: lng;
+  code?: string;
+  branch_id?: number;
+  location?: Location;
+  capacity?: number;
+  parent_id?: number;
+  user_id?: number;
+  items?: item[];
+}
+
+export interface WarehouseForKeeper {
+  "warehouse id"?: number;
   name?: string;
   items?: item[];
 }

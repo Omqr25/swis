@@ -30,7 +30,7 @@ export const Tabs: Record<string, IconType> = {
   Keepers: FaUsers,
   Drivers: FaTruck,
   Donors: FaHandHoldingHeart,
-  Products: FaBoxOpen,
+  Items: FaBoxOpen,
   Transactions: FaExchangeAlt,
   Reports: FaChartLine,
 };
@@ -41,11 +41,10 @@ export const SideBar = () => {
 
   const location = useLocation();
 
-
   const colorr = colorMode === "light" ? Mycolor : MyDarkColor;
-  
+
   const lng = useLanguage((s) => s.lng);
-  
+
   return (
     <List bgColor={colorr} w={"200px"} color={"white"}>
       <Divider />
@@ -72,11 +71,23 @@ export const SideBar = () => {
                 mr={2}
                 ml={lng === "ar" ? 2 : 0}
                 className="icon-hover"
+                onClick={() => {
+                  if (localStorage.getItem("currentPage")) {
+                    localStorage.removeItem("currentPage");
+                    localStorage.setItem("currentPage", name);
+                    window.dispatchEvent(new Event("storage"));
+                  }
+                }}
               />
               <Button
                 fontSize={"large"}
                 variant={"link"}
                 color={"white"}
+                onClick={() => {
+                  localStorage.removeItem("currentPage");
+                  localStorage.setItem("currentPage", name);
+                  window.dispatchEvent(new Event("storage"));
+                }}
               >
                 {t(name)}
               </Button>

@@ -16,7 +16,7 @@ const WarehouseItemsTab = () => {
     <Box m={4}>
      {items?.map((item , index) => (
          <Box
-         key={item.id}
+         key={index}
          borderWidth="1px"
          borderRadius="lg"
          p={4}

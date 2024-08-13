@@ -3,12 +3,18 @@ import { UserGrid } from "../components/Users/UserGrid"
 import { AddButton } from "../components/AddButton";
 import CustomModal from "../components/Modal";
 import { UserForm } from "../components/Users/UserForm";
+import { useLocation } from "react-router-dom";
+import UserSearchGrid from "../components/Users/UserSearchGrid";
 
 export const DonorPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const location = useLocation();
+  const currentPath = location.pathname; 
+
+  const Search = currentPath.includes("Search");
   return (
     <Box>
-      <UserGrid target="users/indexDonor" />
+      {Search ? <UserSearchGrid />:<UserGrid target="users/indexDonor" />}
       <AddButton onOpen={onOpen} />
       <CustomModal buttonLabel={"Add"} isOpen={isOpen} onClose={onClose}>
         <UserForm type="3" isEdit={false} ID={1} />

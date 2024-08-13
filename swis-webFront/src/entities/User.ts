@@ -13,6 +13,19 @@ export default interface User {
   photo?: string;
 }
 
+export interface UserSearch {
+  id?: number;
+  name?: lng;
+  phone?: string;
+  password?: string;
+  email?: string;
+  code?: string;
+  type?: number;
+  access_token?: string;
+  contact_email?: string;
+  photo?: string;
+}
+
 export interface UserRequest {
   name?: lng;
   phone?: string;

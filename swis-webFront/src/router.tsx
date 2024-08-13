@@ -1,6 +1,9 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import { ProductSearch } from "./components/Product/ProductSearch";
 import { Languages } from "./components/Setting/Languages";
+import ListTabs from "./components/Setting/ListTabs";
 import { BranchPage } from "./pages/BranchPage";
+import { CreateTransactionPage } from "./pages/CreateTransactionPage";
 import { DonorPage } from "./pages/DonorPage";
 import { DriverPage } from "./pages/DriverPage";
 import { ErrorPage } from "./pages/ErrorPage";
@@ -10,9 +13,8 @@ import { Layout } from "./pages/Layout";
 import { LoginPage } from "./pages/LoginPage";
 import { ProductPage } from "./pages/ProductPage";
 import { SettingPage } from "./pages/SettingPage";
-import { WarehousePage } from "./pages/WarehousePage";
 import { TransactionPage } from "./pages/TransactionPage";
-import { CreateTransactionPage } from "./pages/CreateTransactionPage";
+import { WarehousePage } from "./pages/WarehousePage";
 
 const isAuthenticated = () => {
   return localStorage.getItem("token") !== null;
@@ -49,15 +51,15 @@ const router = createBrowserRouter([
         element: isAuthenticated() ? <KeeperPage /> : <Navigate to="/login" />,
       },
       {
-        path: "Donors",
-        element: isAuthenticated() ? <DonorPage /> : <Navigate to="/login" />,
-      },
-      {
         path: "Drivers",
         element: isAuthenticated() ? <DriverPage /> : <Navigate to="/login" />,
       },
       {
-        path: "Products",
+        path: "Donors",
+        element: isAuthenticated() ? <DonorPage /> : <Navigate to="/login" />,
+      },
+      {
+        path: "Items",
         element: isAuthenticated() ? <ProductPage /> : <Navigate to="/login" />,
       },
       {
@@ -80,7 +82,51 @@ const router = createBrowserRouter([
               <Navigate to="/login" />
             ),
           },
+          {
+            path:"DeletedItems",
+            element : isAuthenticated() ? (
+              <ListTabs />
+            ) : (
+              <Navigate to="/login" />
+            ),
+          }
         ],
+      },
+      {
+        path: "Search/Branches",
+        element: isAuthenticated() ? <BranchPage /> : <Navigate to="/login" />,
+      },
+      {
+        path: "Search/Warehouses",
+        element: isAuthenticated() ? (
+          <WarehousePage />
+        ) : (
+          <Navigate to="/login" />
+        ),
+      },
+      {
+        path: "Search/Keepers",
+        element: isAuthenticated() ? <KeeperPage /> : <Navigate to="/login" />,
+      },
+      {
+        path: "Search/Drivers",
+        element: isAuthenticated() ? <DriverPage /> : <Navigate to="/login" />,
+      },
+      {
+        path: "Search/Donors",
+        element: isAuthenticated() ? <DonorPage /> : <Navigate to="/login" />,
+      },
+      {
+        path : "Search/Items",
+        element:  isAuthenticated() ? (
+          <ProductSearch />
+        ) : (
+          <Navigate to="/login" />
+        ),
+      },
+      {
+        path: "Search/Transactions",
+        element: isAuthenticated() ? <TransactionPage /> : <Navigate to="/login" />,  
       },
     ],
   },

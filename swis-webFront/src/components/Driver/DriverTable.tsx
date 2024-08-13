@@ -50,7 +50,7 @@ export const DriverTable = () => {
       maxHeight={"625px"}
       overflowY={"auto"}
       bgColor={colorMode === "dark" ? "gray.700" : "white"}
-      w={"100%"}
+      w={'1330px'}
       p={2}
     >
       <InfiniteScroll

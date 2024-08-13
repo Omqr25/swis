@@ -23,6 +23,8 @@ export const NavBar = () => {
   const {colorMode} = useColorMode();
   const showTabs = useBreakpointValue({ base: false, md: true });
   const colorr = colorMode === "light" ? Mycolor : MyDarkColor;
+  const c = localStorage.getItem("currentPage");
+  console.log(c);
   return (
     <HStack
       justifyContent={"space-between"}

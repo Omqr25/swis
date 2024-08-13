@@ -1,19 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import Response from "../entities/GlobalResponse";
+import { GetAllResponse } from "../entities/GlobalResponse";
+import Search from "../entities/Search";
 import APIClient, { setAuthToken } from "../services/APIClient";
 interface CustomError extends Error {
   response?: {
     status: number;
   };
 }
-const useGetOne = <T>(id: number, endPoint: string) => {
-  const apiClient = new APIClient<Response<T>>(`/${endPoint}`);
+
+const useSearch = <T>(
+  endPoint: string,
+  searchData: string,
+ 
+) => {
   const navigate = useNavigate();
+  const apiClient = new APIClient<GetAllResponse<Search<T>>>(`/${endPoint}`);
   setAuthToken();
   return useQuery({
-    queryKey: [`one${endPoint}`, id],
-    queryFn: () => apiClient.getWithId(id),
+    queryKey: [`search${endPoint}`, searchData],
+    queryFn: () => apiClient.get({params:{
+      query : searchData
+    }}),
     onError: (err: CustomError) => {
       console.error("Error fetching branches:", err);
       if (err.response) {
@@ -26,4 +34,5 @@ const useGetOne = <T>(id: number, endPoint: string) => {
     },
   });
 };
-export default useGetOne;
+
+export default useSearch;

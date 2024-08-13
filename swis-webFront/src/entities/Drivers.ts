@@ -10,6 +10,7 @@ transportation_company_name? : string;
 }
 
 export interface DriverRequest{
+    id? : number;
     name? : lng;
     vehicle_number? : string;
     phone?: string;

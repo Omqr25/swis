@@ -22,6 +22,23 @@ CTN? : number;
 details: details[];
 }
 
+export interface TransactionSearch{
+    id? : number;
+    user_id? : string;
+    is_convoy?: boolean;
+    notes? : lng;
+    code? : string;
+    status?: string;
+    date? : string;
+    transaction_type? : string;
+    transaction_mode_type? : string;
+    waybill_num? : number;
+    waybill_img? : string;
+    qr_code? : string;
+    CTN? : number;
+    details: details[];
+    }
+
 export interface TransactionItemRequest{
     warehouse_id? : number;
     item_id? : number;

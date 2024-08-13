@@ -8,7 +8,7 @@ export default interface Response<T> {
 
   export interface GetAllResponse<T>{
     status : string;
-    meta: meta;
+    meta? : meta;
     data : T[];
     message: string;
   }

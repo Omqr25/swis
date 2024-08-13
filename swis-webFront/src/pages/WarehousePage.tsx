@@ -17,9 +17,15 @@ import CustomModal from "../components/Modal";
 import { WarehouseForm } from "../components/Warehouse/WarehouseForm";
 import { t } from "i18next";
 import WarehouseItemsTab from "../components/Warehouse/WarehouseItemsTab";
+import { useLocation } from "react-router-dom";
+import WarehouseSearchGrid from "../components/Warehouse/WarehouseSearchGrid";
 
 export const WarehousePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const location = useLocation();
+  const currentPath = location.pathname; 
+
+  const Search = currentPath.includes("Search"); 
 
   return (
     <Box>
@@ -28,7 +34,7 @@ export const WarehousePage = () => {
         gridTemplateColumns={"2fr 1fr"}
       >
         <GridItem area={"MainWarehouse"}>
-          <WarehouseGrid />
+          {Search ? <WarehouseSearchGrid /> : <WarehouseGrid />}
         </GridItem>
         <GridItem area="SubWarehouse">
           <Tabs justifyContent={"space-between"} p={2}>
