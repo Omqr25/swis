@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Enums\transactionType;
+use App\Exports\InventoryExport;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\transactionWarehousesItemRepository;
 use App\Http\Requests\inventory\inventoryRequest;
@@ -12,10 +13,15 @@ use App\Http\Resources\InventoryResource;
 use App\Http\Resources\transactionWarehouseItemResource;
 use App\Http\Resources\TransactionWarehouseResource;
 use App\Models\transactionWarehouseItem;
+use App\Models\Warehouse;
 use App\Services\TransactionWarehouseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionWarehouseItemController extends Controller
 {
@@ -99,6 +105,7 @@ class TransactionWarehouseItemController extends Controller
     public function inventoryForAllWarehouses(Request $request): JsonResponse
     {
         $request->validate([
+
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
         ]);
@@ -113,5 +120,38 @@ class TransactionWarehouseItemController extends Controller
         return $this->showOneCollection($inventory, InventoryResource::class);
     }
 
+    public function exportInventory(Request $request)
+    {
+        $request->validate([
+            'warehouse_id' => 'required|integer',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after:start_date',
+        ]);
+
+        $keeper = Warehouse::where('id',$request->warehouse_id)->first();
+        $warehouseName = Str::slug($keeper->name); // Convert name to a slug-friendly format
+
+        $data = [
+            'warehouse_id' => $keeper->id,
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date')
+        ];
+
+        $inventory = $this->transactionWarehousesRepository->inventory($data);
+
+        // Generate a unique filename with the current timestamp
+        $fileName = 'inventory_' . $warehouseName . '_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+        $filePath = 'public/exports/inventory/' . $fileName;
+
+        $export=new InventoryExport($inventory);
+        // Store the file
+        Excel::store($export, $filePath);
+
+        return response()->json([
+            'message' => 'File exported and saved successfully!',
+            'file_name' => $fileName,
+            'file_url' => Storage::disk('public')->url($filePath)
+        ]);
+    }
 
 }

@@ -8,12 +8,16 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ItemsExport implements FromCollection, WithHeadings
 {
+ public function __construct($items)
+{
+    $this->items = $items;
+}
     /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
     {
-        return Item::all()->map(function ($item) {
+        return $this->items->map(function ($item) {
             return [
                 'ID' => $item->id,
                 'Name (EN)' => $item->getTranslation('name', 'en'),
@@ -24,7 +28,6 @@ class ItemsExport implements FromCollection, WithHeadings
                 'Size' => $item->size,
                 'Weight' => $item->weight,
                 'Quantity' => $item->quantity,
-                'Created At' => $item->created_at->format('Y-m-d H:i:s'),
             ];
         });
     }
@@ -44,7 +47,6 @@ class ItemsExport implements FromCollection, WithHeadings
             'Size',
             'Weight',
             'Quantity',
-            'Created At',
         ];
     }
 

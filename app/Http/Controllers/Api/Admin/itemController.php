@@ -75,30 +75,25 @@ class itemController extends Controller
 
     }
 
-    public function showDeleted(): JsonResponse
+    public function exportBySector($sector=null)
     {
-        $data=$this->itemRepository->showDeleted();
-        return $this->showAll($data['Item'],itemsResource::class,$data['message']);
-    }
-    public function restore(Request $request){
+        // Validate if the provided sector exists in the enum
+        if ($sector && !sectorType::tryFrom($sector)) {
+            return response()->json(['message' => 'Invalid sector'], 400);
+        }
 
-        $data = $this->itemRepository->restore($request);
-        return [$data['message'],$data['code']];
-    }
 
-    public function exportBySector($sector)
-    {
         if ($sector) {
+            // Filter items by the specified sector
 
+            $items = Item::where('sectorType', $sector)->get();
 
-            // Validate if the provided sector exists in the enum
-            if (!sectorType::tryFrom($sector)) {
-                return response()->json(['message' => 'Invalid sector'], 400);
+            // Check if items are retrieved
+            if ($items->isEmpty()) {
+                return response()->json(['message' => 'No items found for the specified sector'], 404);
             }
 
-            // Filter items by the specified sector
-            $items = Item::where('sectorType', $sector)->get();
-            $fileName = 'items_' . strtolower($sector) . '_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+            $fileName = 'items_' . strtolower(sectorType::tryFrom($sector)->name) . '_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
         } else {
             $items = Item::all();
             $fileName = 'items_all_sectors_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
@@ -115,19 +110,20 @@ class itemController extends Controller
         return response()->json([
             'message' => 'File exported and saved successfully!',
             'file_name' => $fileName,
-            'file_url' =>  Storage::disk('public')->url($filePath)
+            'file_url' => Storage::disk('public')->url($filePath)
         ]);
     }
-    public function downloadFile($fileName)
+
+    public function showDeleted(): JsonResponse
     {
-        $filePath = 'public/exports/Items/' . $fileName;
-
-        if (Storage::exists($filePath)) {
-            return Storage::download($filePath);
-        }
-
-        return response()->json([
-            'message' => 'File not found!'
-        ], 404);
+        $data=$this->itemRepository->showDeleted();
+        return $this->showAll($data['Item'],itemsResource::class,$data['message']);
     }
+
+    public function restore(Request $request){
+
+        $data = $this->itemRepository->restore($request);
+        return [$data['message'],$data['code']];
+    }
+
 }

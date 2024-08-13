@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Traits\FileUpload;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -105,7 +106,7 @@ class UserController extends Controller
     public function keeperExport()
     {
         // Define the file name and path
-        $fileName = 'users_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+        $fileName = 'keepers_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
         $filePath = 'public/exports/users/' . $fileName;
 
         $users = User::where('type', userType::keeper->value)->get();
@@ -117,13 +118,31 @@ class UserController extends Controller
         return response()->json([
             'message' => 'File exported and saved successfully!',
             'file_name' => $fileName,
-            'file_url' => route('users.download', ['fileName' => $fileName])
+            'file_url' =>  Storage::disk('public')->url($filePath)
+        ]);
+    }
+    public function allUsersExport()
+    {
+        // Define the file name and path
+        $fileName = 'users_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+        $filePath = 'public/exports/users/' . $fileName;
+
+        $users = User::all();
+
+        $export = new UsersExport($users);
+
+        Excel::store($export, $filePath);
+
+        return response()->json([
+            'message' => 'File exported and saved successfully!',
+            'file_name' => $fileName,
+            'file_url' =>  Storage::disk('public')->url($filePath)
         ]);
     }
     public function donorExport()
     {
         // Define the file name and path
-        $fileName = 'users_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+        $fileName = 'donors_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
         $filePath = 'public/exports/users/' . $fileName;
 
         $users = User::where('type', userType::donor->value)->get();
@@ -138,23 +157,5 @@ class UserController extends Controller
             'file_url' =>  Storage::disk('public')->url($filePath)
         ]);
     }
-    public function downloadFile($fileName)
-    {
-        $filePath = 'public/exports/users/' . $fileName;
-
-        if (Storage::exists($filePath)) {
-            return Storage::download($filePath);
-        }
-
-        return response()->json([
-            'message' => 'File not found!'
-        ], 404);
-    }
-
-    public function exportPdf()
-    {
-        return Excel::download(new UsersExport(), 'users.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
-    }
-
 
 }

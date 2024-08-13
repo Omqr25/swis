@@ -24,7 +24,6 @@ class WarehousesExport implements FromCollection, WithHeadings
                 'Parent ID' => $warehouse->parent_id,
                 'User ID' => $warehouse->user_id,
                 'Is Distribution Point' => $warehouse->is_Distribution_point ? 'Yes' : 'No',
-                'Created At' => $warehouse->created_at->format('Y-m-d H:i:s'),
             ];
         });
     }
@@ -44,7 +43,6 @@ class WarehousesExport implements FromCollection, WithHeadings
             'Parent ID',
             'User ID',
             'Is Distribution Point',
-            'Created At',
         ];
     }
 }

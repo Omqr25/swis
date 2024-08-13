@@ -38,7 +38,7 @@ Route::middleware(['auth:sanctum', 'Localization'])->get('/user', function (Requ
 });
 
 
-Route::middleware('Localization')->group(function () {
+Route::middleware(['auth:sanctum', 'Localization'])->group(function () {
 
     Route::controller(SearchController::class)->group(function () {
         Route::get('search/searchitems', 'searchItems')->name('items.search');
@@ -62,16 +62,10 @@ Route::middleware('Localization')->group(function () {
         Route::get('drivers/showDeleted', 'showDeleted');
     });
 
-//    Route::controller(DonorController::class)->group(function () {
-//        Route::post('donors/restore', 'restore');
-//        Route::get('donors/showDeleted', 'showDeleted');
-//    });
-
     Route::controller(ItemController::class)->group(function () {
         Route::post('items/restore', 'restore');
         Route::get('items/showDeleted', 'showDeleted');
         Route::get('items/exportBySector/{sector}', 'exportBySector');
-        Route::get('items/download/{fileName}', 'downloadFile')->name('items.download');
     });
 
     Route::controller(WarehouseController::class)->group(function () {
@@ -83,13 +77,15 @@ Route::middleware('Localization')->group(function () {
         Route::get('warehouses/indexWarehouseWithItems', 'indexWarehouseWithItems');
         Route::get('warehouses/showWarehouseWithItems/{warehouse}', 'showWarehouseWithItems');
         Route::get('warehouses/showWarehouseOfKeeper/{keeper}', 'showWarehouseOfKeeper');
-        Route::get('warehouses/export', 'exportAndSave');
-        Route::get('warehouses/download/{fileName}', 'downloadFile')->name('warehouses.download');
+        Route::get('warehouse/Export', 'exportAndSave');
     });
 
     Route::controller(TransactionController::class)->group(function () {
         Route::post('transactions/restore', 'restore');
         Route::get('transactions/showDeleted', 'showDeleted');
+        Route::get('transactions/InDeliveryExport', 'transactionInDeliveryExport');
+        Route::get('transactions/CompletedExport', 'transactionCompletedExport');
+
     });
 
     Route::controller(UserController::class)->group(function () {
@@ -99,8 +95,7 @@ Route::middleware('Localization')->group(function () {
         Route::get('users/indexDonor', 'indexDonor');
         Route::get('users/keeperExport', 'keeperExport');
         Route::get('users/donorExport', 'donorExport');
-        Route::get('users/download/{fileName}', 'downloadFile')->name('users.download');
-        Route::get('/users/export-pdf', 'exportPdf')->name('users.export.pdf');
+        Route::get('users/allUsersExport', 'allUsersExport');
     });
 
     Route::controller(WarehouseItemController::class)->group(function () {
@@ -112,8 +107,8 @@ Route::middleware('Localization')->group(function () {
         Route::post('transactionWarehouseItems/restore', 'restore');
         Route::get('transactionWarehouseItems/showDeleted', 'showDeleted');
         Route::get('transactionWarehouseItems/inventoryForWarehouse', 'inventoryForWarehouse');
+        Route::get('transactionWarehouseItems/exportInventory', 'exportInventory');
         Route::get('transactionWarehouseItems/inventoryForAllWarehouses', 'inventoryForAllWarehouses');
-        //Route::get('transactionWarehouseItems/calculateInventory', 'calculateInventory');
     });
 
     Route::controller(DonorItemController::class)->group(function () {
@@ -124,10 +119,13 @@ Route::middleware('Localization')->group(function () {
     // Keeper Routes
     Route::get('showWarehouseForKeeper', [KeeperWarehouseController::class, 'show']);
     Route::get('inventoryForKeeper', [KeeperWarehouseController::class, 'inventory']);
+    Route::get('exportInventory', [KeeperWarehouseController::class, 'exportInventory']);
     Route::get('indexItemForKeeper', [KeeperItemController::class, 'index']);
     Route::get('showItemForKeeper/{item_id}', [KeeperItemController::class, 'show']);
     Route::get('indexTransactionForKeeper', [KeeperTransactionController::class, 'index']);
     Route::get('showTransactionForKeeper/{transaction_id}', [KeeperTransactionController::class, 'show']);
+    Route::get('keeper/files', [\App\Http\Controllers\Api\keeper\FileController::class, 'index']);
+
 
     // Donor Routes
     Route::get('indexTransactionForDonor', [DonorTransactionController::class, 'index']);
@@ -148,5 +146,9 @@ Route::middleware('Localization')->group(function () {
         'donorItems' => DonorItemController::class,
     ]);
     Route::get('/files', [FileController::class, 'index']);
+    Route::post('/files/downloader', [FileController::class, 'downloadFile']);
+
+
+
 
 });

@@ -1,21 +1,40 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api\keeper;
 
 use App\Http\Controllers\Controller;
+use App\Models\Warehouse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use League\Flysystem\UnableToRetrieveMetadata;
 
 class FileController extends Controller
 {
     public function index()
     {
-        // Get all files in the storage/public/exports directory
-        $files = Storage::disk('public')->allFiles('exports');
+        // Retrieve the warehouse for the currently authenticated user
+        $keeper = Warehouse::where('user_id', Auth::user()->id)->first();
 
-        // Organize the file paths or add more details
+        // Check if the warehouse exists
+        if (!$keeper) {
+            return response()->json(['message' => 'Warehouse not found.'], 404);
+        }
+
+        // Convert the warehouse name to a slug-friendly format
+        $warehouseName = Str::slug($keeper->name);
+
+        // Define the search pattern for file names
+        $pattern = 'inventory_' . $warehouseName . '_*.xlsx';
+
+        // Get all files that match the pattern
+        $files = Storage::disk('public')->allFiles('keeper');
+        $matchedFiles = array_filter($files, function ($file) use ($pattern) {
+            return fnmatch($pattern, basename($file));
+        });
+
         $fileList = array_map(function ($file) {
             try {
                 return [
@@ -34,26 +53,8 @@ class FileController extends Controller
                     'error' => $e->getMessage(),
                 ];
             }
-        }, $files);
-
-        // Return the list of files as a JSON response
+        }, $matchedFiles);
         return response()->json($fileList);
-    }
-
-    public function downloadFile(Request $request)
-    {
-        // Extract the file path from the provided URL
-        $url = $request->input('url');  // The full URL to the file
-        // Extract the relative file path by removing the base URL
-        $filePath = str_replace('/storage/', 'public/', parse_url($url, PHP_URL_PATH));
-        // Ensure the file exists in the public storage disk
-        if (Storage::exists($filePath)) {
-            return Storage::download($filePath);
-        }
-
-        return response()->json([
-            'message' => 'File not found!'
-        ], 404);
     }
 
     /**
