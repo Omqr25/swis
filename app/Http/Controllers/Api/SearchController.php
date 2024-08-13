@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
+use Spatie\Searchable\ModelSearchAspect;
 use Spatie\Searchable\Search;
 use Throwable;
 
@@ -77,7 +78,16 @@ class SearchController extends Controller
 
         try {
             $searchResults = (new Search())
-                ->registerModel(Warehouse::class, ['name->en', 'name->ar' , 'code'])
+                ->registerModel(
+                    Warehouse::class,
+                    function (ModelSearchAspect $modelSearchAspect) {
+                        $modelSearchAspect
+                            ->addSearchableAttribute('name->en')
+                            ->addSearchableAttribute('name->ar')
+                            ->addSearchableAttribute('code')
+                            ->with(['branch', 'parentWarehouse', 'user']);
+                    }
+                )
                 ->search($query);
         } catch (Throwable $th) {
             return Response::Error(null, $th->getMessage());
