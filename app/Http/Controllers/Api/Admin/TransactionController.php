@@ -47,6 +47,7 @@ class TransactionController extends Controller
 
     public function show(Transaction $transaction): JsonResponse
     {
+//        dd($transaction['transaction_type']);
 
         return $this->showOne($transaction,TransactionResource::class);
 

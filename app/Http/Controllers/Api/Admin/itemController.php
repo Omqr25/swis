@@ -38,7 +38,7 @@ class itemController extends Controller
             if ($data->isEmpty()) return Response::Error(null, 'There is no such items');
             return Response::Success($data, 'Items filtered successfully');
         }
-        
+
         $data = $this->itemRepository->index();
         return $this->showAll($data['Item'], itemsResource::class, $data['message']);
     }
@@ -115,7 +115,7 @@ class itemController extends Controller
         return response()->json([
             'message' => 'File exported and saved successfully!',
             'file_name' => $fileName,
-            'file_url' =>  route('users.download', ['fileName' => $fileName])
+            'file_url' =>  Storage::disk('public')->url($filePath)
         ]);
     }
     public function downloadFile($fileName)
