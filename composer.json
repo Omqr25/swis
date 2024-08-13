@@ -17,6 +17,8 @@
         "mpdf/mpdf": "^8.2",
         "propaganistas/laravel-phone": "^5.3",
         "spatie/laravel-permission": "^6.7",
+        "spatie/laravel-query-builder": "^6.0",
+        "spatie/laravel-searchable": "^1.12",
         "spatie/laravel-translatable": "^6.8"
     },
     "require-dev": {

@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Spatie\Translatable\HasTranslations;
 
-class Warehouse extends Model
+class Warehouse extends Model implements Searchable
 {
     use HasFactory,SoftDeletes,HasTranslations;
 
@@ -27,6 +29,11 @@ class Warehouse extends Model
     protected $casts = [
         'location' => Point::class,
     ];
+    public function getSearchResult(): SearchResult
+    {
+        $url = route('warehouses.search', $this->slug);
+        return new SearchResult($this, $this->name, $url);
+    }
     public function branch(){
         return $this->belongsTo(Branch::class);
     }
