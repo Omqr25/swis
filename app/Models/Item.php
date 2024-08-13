@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\sectorType;
 use App\Enums\unitType;
+use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,6 +37,22 @@ class Item extends Model implements Searchable
     {
         $url = route('items.search', $this->slug);
         return new SearchResult($this, $this->name, $url);
+    }
+    public function scopeSize(Builder $query, $less=0 , $great=1e10): Builder
+    {
+        return $query->whereBetween('size',[$less , $great]);
+    }
+    public function scopeWeight(Builder $query, $less=0 , $great=1e10): Builder
+    {
+        return $query->whereBetween('weight',[$less , $great]);
+    }
+    public function scopeQuantity(Builder $query, $less=0 , $great=1e10): Builder
+    {
+        return $query->whereBetween('quantity',[$less , $great]);
+    }
+    public function scopeCreatedBetween(Builder $query, $startDate , $endDate): Builder
+    {
+        return $query->whereBetween('created_at', [Carbon::parse($startDate),Carbon::parse($endDate)->addDay()]);
     }
     public function warehouseItem()
     {
