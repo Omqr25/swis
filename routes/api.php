@@ -59,6 +59,8 @@ Route::middleware('Localization')->group(function () {
     Route::controller(ItemController::class)->group(function () {
         Route::post('items/restore', 'restore');
         Route::get('items/showDeleted', 'showDeleted');
+        Route::get('items/exportBySector/{sector}', 'exportBySector');
+        Route::get('items/download/{fileName}', 'downloadFile')->name('items.download');
     });
 
     Route::controller(WarehouseController::class)->group(function () {
@@ -70,6 +72,8 @@ Route::middleware('Localization')->group(function () {
         Route::get('warehouses/indexWarehouseWithItems', 'indexWarehouseWithItems');
         Route::get('warehouses/showWarehouseWithItems/{warehouse}', 'showWarehouseWithItems');
         Route::get('warehouses/showWarehouseOfKeeper/{keeper}', 'showWarehouseOfKeeper');
+        Route::get('warehouses/export', 'exportAndSave');
+        Route::get('warehouses/download/{fileName}', 'downloadFile')->name('warehouses.download');
     });
 
     Route::controller(TransactionController::class)->group(function () {
@@ -82,6 +86,10 @@ Route::middleware('Localization')->group(function () {
         Route::get('users/showDeleted', 'showDeleted');
         Route::get('users/indexKeeper', 'indexKeeper');
         Route::get('users/indexDonor', 'indexDonor');
+        Route::get('users/keeperExport', 'keeperExport');
+        Route::get('users/donorExport', 'donorExport');
+        Route::get('users/download/{fileName}', 'downloadFile')->name('users.download');
+        Route::get('/users/export-pdf', 'exportPdf')->name('users.export.pdf');
     });
 
     Route::controller(WarehouseItemController::class)->group(function () {
@@ -116,7 +124,7 @@ Route::middleware('Localization')->group(function () {
     Route::get('indexItemForDonor', [DonorItemForDonorController::class, 'index']);
     Route::get('showItemForDonor/{item_id}', [DonorItemForDonorController::class, 'show']);
 
-    // API Resource Routes
+ // API Resource Routes
     Route::apiResources([
         'drivers' => DriverController::class,
         'branches' => BranchController::class,

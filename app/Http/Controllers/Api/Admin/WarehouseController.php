@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Exports\WarehouseExport;
+use App\Exports\WarehousesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\warehouseRepository;
 use App\Http\Requests\Warehouse\StoreWarehouseRequest;
@@ -16,6 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\showKeeperItemResource;
 use App\Http\Responses\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
 
@@ -142,6 +146,33 @@ class WarehouseController extends Controller
 
         return $this->showOne($data['Warehouse'], WarehouseItemResource::class, $data['message']);
 
+    }
+    public function exportAndSave()
+    {
+        // Define the file name and path
+        $fileName = 'warehouse' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+        $filePath = 'public/exports/Warehouse' . $fileName;
+
+        // Store the Excel file in the storage/app/exports directory
+        Excel::store(new WarehousesExport(), $filePath);
+
+        return response()->json([
+            'message' => 'File exported and saved successfully!',
+            'file_name' => $fileName,
+            'file_url' => route('warehouses.download', ['fileName' => $fileName])
+        ]);
+    }
+    public function downloadFile($fileName)
+    {
+        $filePath = 'public/exports/Warehouse/' . $fileName;
+
+        if (Storage::exists($filePath)) {
+            return Storage::download($filePath);
+        }
+
+        return response()->json([
+            'message' => 'File not found!'
+        ], 404);
     }
 
 }
