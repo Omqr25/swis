@@ -135,7 +135,7 @@ class UserController extends Controller
         return response()->json([
             'message' => 'File exported and saved successfully!',
             'file_name' => $fileName,
-            'file_url' => route('users.download', ['fileName' => $fileName])
+            'file_url' =>  Storage::disk('public')->url($filePath)
         ]);
     }
     public function downloadFile($fileName)

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\DonorController;
 use App\Http\Controllers\Api\Admin\DonorItemController;
 use App\Http\Controllers\Api\Admin\DriverController;
+use App\Http\Controllers\Api\Admin\FileController;
 use App\Http\Controllers\Api\Admin\ItemController;
 use App\Http\Controllers\Api\Admin\BranchController;
 use App\Http\Controllers\Api\Admin\WarehouseItemController;
@@ -146,4 +147,6 @@ Route::middleware('Localization')->group(function () {
         'transactionWarehouseItems' => TransactionWarehouseItemController::class,
         'donorItems' => DonorItemController::class,
     ]);
+    Route::get('/files', [FileController::class, 'index']);
+
 });
