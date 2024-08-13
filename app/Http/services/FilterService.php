@@ -26,7 +26,7 @@ class FilterService
                 'size',
                 'weight',
                 'quantity',
-                'created_between'
+                'created_at'
             ])
             ->get();
         return $data;
