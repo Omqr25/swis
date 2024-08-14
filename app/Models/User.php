@@ -71,6 +71,11 @@ class User extends Authenticatable implements Searchable
         return $this->hasOne(Warehouse::class);
     }
 
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public static function getDisk()
     {
         return Storage::disk('users');

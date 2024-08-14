@@ -132,9 +132,13 @@ class transactionRepository extends baseRepository
 
     public function UpdateSystemItemsQuantity($transaction)
     {
-        $user = User::find(Auth::id());
-        if ($user->type->value == 2) {
+        $user = User::where('id',$transaction['user_id'])->first();
+        if ($user['type']->value == 2) { //if the user is keeper
+            $this->UpdateWarehouseItemsQuantity($transaction);
             return;
+        }
+        if($user['type']->value == 3 && $transaction['transaction_type'] == 2){ //if the user is donor
+            throw new InvalidQuantitiesException(null,'User type is DONOR, transaction type cannot be OUT');
         }
         $updatedQuantities = [];
         $invalidQuantities = [];
@@ -158,6 +162,7 @@ class transactionRepository extends baseRepository
         if (!empty($invalidQuantities)) {
             throw new InvalidQuantitiesException($invalidQuantities);
         }
+        $this->UpdateWarehouseItemsQuantity($transaction);
 
         DB::transaction(function () use ($updatedQuantities) {
             foreach ($updatedQuantities as $itemId => $newQuantity) {
@@ -168,13 +173,17 @@ class transactionRepository extends baseRepository
 
     public function UpdateWarehouseItemsQuantity($transaction)
     {
-        $keeper = Warehouse::where('user_id', Auth::user()->id)->first();
-        if ($keeper == null) {
+        $user = User::where('id',$transaction['user_id'])->first();
+        $keeper = Warehouse::where('user_id', $transaction['user_id'])->first();
+        
+        if ($user['type']->value != 2) { // if the user is not a keeper
             $i = 0;
             $updatedQuantities = [];
             $invalidQuantities = [];
             if ($transaction['transaction_type'] == 1) {
                 foreach ($transaction['items'] as $item_in_transaction) {
+                    $warehouse=Warehouse::where('id',$item_in_transaction['warehouse_id'])->first();
+                    if($warehouse == null) throw new InvalidQuantitiesException(null,"Warehouse: ".$item_in_transaction['warehouse_id']." does not exist");
                     $item_in_warehouse = WarehouseItem::where('warehouse_id', $item_in_transaction['warehouse_id'])
                     ->where('item_id', $item_in_transaction['item_id'])
                     ->first();
@@ -195,6 +204,8 @@ class transactionRepository extends baseRepository
                 }
             } else if ($transaction['transaction_type'] == 2) {
                 foreach ($transaction['items'] as $item_in_transaction) {
+                    $warehouse=Warehouse::where('id',$item_in_transaction['warehouse_id'])->first();
+                    if($warehouse == null) throw new InvalidQuantitiesException(null,"Warehouse: ".$item_in_transaction['warehouse_id']." does not exist");
                     $item_in_warehouse = WarehouseItem::where('warehouse_id', $item_in_transaction['warehouse_id'])
                     ->where('item_id', $item_in_transaction['item_id'])
                     ->first();
@@ -232,21 +243,27 @@ class transactionRepository extends baseRepository
                 $existingRecord->quantity = $quantity;
                 $existingRecord->save();
             }
-        } else if ($keeper != null) {
+        } else if($user['type']->value == 2){ //the user is keeper
+            if ($keeper == null) throw new InvalidQuantitiesException(null,"This KEEPER: ".$user['id']." does not have a Warehouse");
+
             $i = 0;
             $updatedQuantities = [];
             $invalidQuantities = [];
-            if ($transaction['transaction_type'] == 1) {
-                foreach ($transaction['items'] as $item_in_transaction) {
-                    $source = WarehouseItem::where('warehouse_id', $keeper->id)
-                        ->where('item_id', $item_in_transaction['item_id'])
-                        ->first();
-                    $destination = WarehouseItem::where('warehouse_id', $item_in_transaction['warehouse_id'])
+
+            foreach ($transaction['items'] as $item_in_transaction) {
+                $warehouse=Warehouse::where('id',$item_in_transaction['warehouse_id'])->first();
+                if($warehouse == null) throw new InvalidQuantitiesException(null,"Warehouse: ".$item_in_transaction['warehouse_id']." does not exist");
+                
+                $source = WarehouseItem::where('warehouse_id', $keeper->id)
                     ->where('item_id', $item_in_transaction['item_id'])
                     ->first();
-
+                $destination = WarehouseItem::where('warehouse_id', $item_in_transaction['warehouse_id'])
+                ->where('item_id', $item_in_transaction['item_id'])
+                ->first();
+                if ($transaction['transaction_type'] == 1) {
                     if ($source == null) {
-                        $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
+                        // $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
+                        throw new InvalidQuantitiesException(null,"Warehouse $source->warehouse_id does not have the following item $item_in_transaction->item_id");
                     } else {
                         if ($item_in_transaction['quantity'] > $source->quantity) {
                             $invalidQuantities[$source->item_id] = $item_in_transaction['quantity'];
@@ -271,17 +288,10 @@ class transactionRepository extends baseRepository
                             'quantity' => $item_in_transaction['quantity'],
                         ];
                     }
-                }
-            } else if ($transaction['transaction_type'] == 2) {
-                foreach ($transaction['items'] as $item_in_transaction) {
-                    $source = WarehouseItem::where('warehouse_id', $keeper->id)
-                        ->where('item_id', $item_in_transaction['item_id'])
-                        ->first();
-                    $destination = WarehouseItem::where('warehouse_id', $item_in_transaction['warehouse_id'])
-                    ->where('item_id', $item_in_transaction['item_id'])
-                    ->first();
+                } else if ($transaction['transaction_type'] == 2) {
                     if ($destination == null) {
-                        $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
+                        // $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
+                        throw new InvalidQuantitiesException(null,"Warehouse $destination->warehouse_id does not exist OR does not have the following item $item_in_transaction->item_id");
                     } else {
                         if ($item_in_transaction['quantity'] > $destination->quantity) {
                             $invalidQuantities[$destination->item_id] = $item_in_transaction['quantity'];
@@ -330,14 +340,14 @@ class transactionRepository extends baseRepository
 
     public function UpdateDonorItemsQuantity($transaction)
     {
-        $keeper = Warehouse::where('user_id', Auth::id())->get();
-        if ($keeper->isNotEmpty()) {
+        $donor = User::where('id', $transaction['user_id'])->first();
+        if ($donor['type']->value != 3) {
             return;
         }
 
         if ($transaction['transaction_type'] == 1) {
             foreach ($transaction['items'] as $donated_item) {
-                $donorItem = donorItem::where('user_id', Auth::id())
+                $donorItem = donorItem::where('user_id', $donor['id'])
                     ->where('item_id', $donated_item['item_id'])
                     ->first();
 
@@ -352,6 +362,9 @@ class transactionRepository extends baseRepository
                     ]);
                 }
             }
+        }
+        else{
+            throw new InvalidQuantitiesException(null,'User type is DONOR, transaction cannot be OUT');
         }
     }
 }
