@@ -146,9 +146,7 @@ Route::middleware(['auth:sanctum', 'Localization'])->group(function () {
         'donorItems' => DonorItemController::class,
     ]);
     Route::get('/files', [FileController::class, 'index']);
-    Route::post('/files/downloader', [FileController::class, 'downloadFile']);
-
-
-
 
 });
+Route::post('/files/downloader', [FileController::class, 'downloadFile']);
+

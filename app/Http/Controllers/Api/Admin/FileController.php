@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\UnableToRetrieveMetadata;
 
@@ -44,6 +45,10 @@ class FileController extends Controller
     {
         // Extract the file path from the provided URL
         $url = $request->input('url');  // The full URL to the file
+        if (!preg_match('/^https?:\/\//', $url)) {
+            $url = url($url);  // Convert relative path to full URL
+        }
+
         // Extract the relative file path by removing the base URL
         $filePath = str_replace('/storage/', 'public/', parse_url($url, PHP_URL_PATH));
         // Ensure the file exists in the public storage disk
