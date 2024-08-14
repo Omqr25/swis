@@ -10,7 +10,6 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import Home from "../../entities/Home";
-import { background } from "@chakra-ui/react";
 
 ChartJS.register(
   CategoryScale,

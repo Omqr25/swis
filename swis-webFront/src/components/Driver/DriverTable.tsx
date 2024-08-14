@@ -107,7 +107,7 @@ export const DriverTable = () => {
                         {t("Edit")}
                       </Button>
                       {Driver.id && (
-                        <DeleteC ID={Driver.id} target="donors" type="Button" />
+                        <DeleteC ID={Driver.id} target="drivers" type="Button" />
                       )}
                     </Td>
                   </Tr>
