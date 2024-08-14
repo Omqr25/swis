@@ -47,7 +47,7 @@ class Transaction extends Model implements Searchable
     }
     public function user():BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function driverTransaction()

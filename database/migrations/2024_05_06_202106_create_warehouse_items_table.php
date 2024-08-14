@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('warehouse_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
+            $table->unique(['item_id','warehouse_id']);
             $table->timestamps();
             $table->softDeletes();
         });

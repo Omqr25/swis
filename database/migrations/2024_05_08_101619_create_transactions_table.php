@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('transactions',
             function (Blueprint $table) {
                 $table->id();
-                $table->foreignIdFor(User::class);
+                $table->foreignId('user_id')->constrained();
                 $table->boolean('is_convoy');
                 $table->json('notes')->nullable();
                 $table->string('code')->nullable();

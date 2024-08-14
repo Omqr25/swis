@@ -23,6 +23,7 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -59,10 +60,11 @@ class TransactionController extends Controller
     {
         $dataItem=$request->validated();
 //        dd($dataItem);
-
+        if(Auth::user()->type->value != 1){
+            $dataItem['user_id']=Auth::user()->id;
+        }
         $transaction=null;
         $this->transactionRepository->UpdateSystemItemsQuantity($dataItem);
-        $this->transactionRepository->UpdateWarehouseItemsQuantity($dataItem);
         $this->transactionRepository->UpdateDonorItemsQuantity($dataItem);
         if ($request->hasFile('waybill_img')) {
             $file = $request->file('waybill_img');

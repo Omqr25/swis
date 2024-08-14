@@ -7,6 +7,7 @@ use App\Enums\transactionStatusType;
 use App\Enums\transactionType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class StoreTransactionRequest extends FormRequest
@@ -27,6 +28,7 @@ class StoreTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_id' => Rule::requiredIf(Auth::user()->type->value == 1),
             'is_convoy' => 'required|boolean',
             'notes.en' => 'nullable|string',
             'notes.ar' => 'nullable|string',

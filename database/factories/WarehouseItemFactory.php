@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Item;
 use App\Models\Warehouse;
+use App\Models\WarehouseItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,13 +17,9 @@ class WarehouseItemFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    protected $model = WarehouseItem::class;
     public function definition(): array
     {
-        $this->faker->unique(true);
-        return [
-            'warehouse_id' =>Warehouse::inRandomOrder()->value('id'),
-            'item_id' => Item::inRandomOrder()->value('id'),
-            'quantity' => $this->faker->numberBetween(1, 1000),
-        ];
+        return [];
     }
 }
