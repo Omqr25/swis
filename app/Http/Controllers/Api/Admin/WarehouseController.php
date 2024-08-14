@@ -151,7 +151,7 @@ class WarehouseController extends Controller
     {
         // Define the file name and path
         $fileName = 'warehouse' . now()->format('Y_m_d_H_i_s') . '.xlsx';
-        $filePath = 'public/exports/Warehouse' . $fileName;
+        $filePath = 'public/exports/Warehouse/' . $fileName;
 
         // Store the Excel file in the storage/app/exports directory
         Excel::store(new WarehousesExport(), $filePath);
@@ -161,18 +161,6 @@ class WarehouseController extends Controller
             'file_name' => $fileName,
             'file_url' =>  Storage::disk('public')->url($filePath)
         ]);
-    }
-    public function downloadFile($fileName)
-    {
-        $filePath = 'public/exports/Warehouse/' . $fileName;
-
-        if (Storage::exists($filePath)) {
-            return Storage::download($filePath);
-        }
-
-        return response()->json([
-            'message' => 'File not found!'
-        ], 404);
     }
 
 }

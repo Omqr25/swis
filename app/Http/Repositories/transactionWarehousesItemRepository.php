@@ -32,25 +32,29 @@ class transactionWarehousesItemRepository extends baseRepository
         $startDate = $data['start_date'];
         $endDate = $data['end_date'];
 
-        // Query to get all transactions of type 'IN' and 'OUT' for the specified warehouse and date range
         $inventory = TransactionWarehouseItem::select(
-            'item_id',
-            DB::raw('SUM(CASE WHEN transaction_type = '.transactionType::transactionIn->value.' THEN quantity ELSE 0 END) as total_quantity_in'),
-            DB::raw('SUM(CASE WHEN transaction_type = '.transactionType::transactionOut->value.' THEN quantity ELSE 0 END) as total_quantity_out')
+            'transaction_warehouse_items.item_id',
+            DB::raw('SUM(CASE WHEN transactions.transaction_type = '.transactionType::transactionIn->value.' THEN transaction_warehouse_items.quantity ELSE 0 END) as total_quantity_in'),
+            DB::raw('SUM(CASE WHEN transactions.transaction_type = '.transactionType::transactionOut->value.' THEN transaction_warehouse_items.quantity ELSE 0 END) as total_quantity_out')
         )
-            ->where('warehouse_id', $warehouseId)
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('item_id')
+            ->join('transactions', 'transactions.id', '=', 'transaction_warehouse_items.transaction_id')
+            ->where('transaction_warehouse_items.warehouse_id', $warehouseId)
+            ->whereBetween('transactions.created_at', [$startDate, $endDate])
+            ->groupBy('transaction_warehouse_items.item_id')
             ->with('item')
             ->get();
 
-        // Get the current quantity of each item in the warehouse
+        if ($inventory->isEmpty()) {
+            // Return an empty collection or handle as needed
+            return collect([]);
+        }
+
+        // Process the inventory data
         $warehouseItems = WarehouseItem::select('item_id', 'quantity')
             ->where('warehouse_id', $warehouseId)
             ->get()
             ->keyBy('item_id');
 
-        // Merge the inventory data with the warehouse quantities
         $mergedInventory = $inventory->map(function ($item) use ($warehouseItems) {
             $itemQuantityInWarehouse = $warehouseItems->has($item->item_id) ? $warehouseItems[$item->item_id]->quantity : 0;
             return [
@@ -65,6 +69,9 @@ class transactionWarehousesItemRepository extends baseRepository
         return $mergedInventory;
     }
 
+
+
+
     public function inventoryForAllWarehouses($data)
     {
         $startDate = $data['start_date'];
@@ -72,12 +79,14 @@ class transactionWarehousesItemRepository extends baseRepository
 
         // Query to get the total quantities across all warehouses for each item
         $inventory = TransactionWarehouseItem::select(
-            'item_id',
-            DB::raw('SUM(CASE WHEN transaction_type = '.transactionType::transactionIn->value.' THEN quantity ELSE 0 END) as total_quantity_in'),
-            DB::raw('SUM(CASE WHEN transaction_type = '.transactionType::transactionOut->value.' THEN quantity ELSE 0 END) as total_quantity_out')
+            'transaction_warehouse_items.item_id',
+            DB::raw('SUM(CASE WHEN transactions.transaction_type = ' . transactionType::transactionIn->value . ' THEN transaction_warehouse_items.quantity ELSE 0 END) as total_quantity_in'),
+            DB::raw('SUM(CASE WHEN transactions.transaction_type = ' . transactionType::transactionOut->value . ' THEN transaction_warehouse_items.quantity ELSE 0 END) as total_quantity_out')
         )
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('item_id')
+            ->join('transactions', 'transactions.id', '=', 'transaction_warehouse_items.transaction_id')
+            ->whereBetween('transactions.created_at', [$startDate, $endDate])
+            ->groupBy('transaction_warehouse_items.item_id')
+            ->orderBy('transaction_warehouse_items.item_id')  // Sorting by item_id
             ->with('item')
             ->get();
 
@@ -101,6 +110,7 @@ class transactionWarehousesItemRepository extends baseRepository
 
         return $mergedInventory;
     }
+
 
 
 

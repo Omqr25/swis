@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Enums\transactionStatusType;
+use App\Exports\TransactionsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\QRImageWithLogo;
 use App\Http\Repositories\transactionRepository;
@@ -24,9 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Exists;
+use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class TransactionController extends Controller
@@ -111,6 +111,42 @@ class TransactionController extends Controller
 
         $data = $this->transactionRepository->restore($request);
         return [$data['message'],$data['code']];
+    }
+    public function transactionCompletedExport()
+    {
+        // Define the file name and path
+        $fileName = 'Completed_transaction_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+        $filePath = 'public/exports/transactions/' . $fileName;
+
+        $users = Transaction::where('status', transactionStatusType::COMPLETED->value)->get();
+
+        $export = new TransactionsExport($users);
+
+        Excel::store($export, $filePath);
+
+        return response()->json([
+            'message' => 'File exported and saved successfully!',
+            'file_name' => $fileName,
+            'file_url' =>  Storage::disk('public')->url($filePath)
+        ]);
+    }
+    public function transactionInDeliveryExport()
+    {
+        // Define the file name and path
+        $fileName = 'InDelivery_transaction_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+        $filePath = 'public/exports/transactions/' . $fileName;
+
+        $users = Transaction::where('status', transactionStatusType::InDelivery->value)->get();
+
+        $export = new TransactionsExport($users);
+
+        Excel::store($export, $filePath);
+
+        return response()->json([
+            'message' => 'File exported and saved successfully!',
+            'file_name' => $fileName,
+            'file_url' =>  Storage::disk('public')->url($filePath)
+        ]);
     }
 
 
