@@ -21,6 +21,7 @@ const useGetAll = <T>(endPoint : string) => {
       }
     }),
     getNextPageParam : (lastPage , allPages) =>{
+      if(lastPage.meta)
     return lastPage.meta.links.next ? allPages.length + 1 : undefined;
     },
     onError: (err: CustomError) => {

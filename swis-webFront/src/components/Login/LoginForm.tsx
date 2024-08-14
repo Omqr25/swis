@@ -112,7 +112,7 @@ export const LoginForm = ({width} : Props) => {
             marginTop={5}
             borderRadius={"20"}
           >
-            Login
+            {Login.isLoading ? "Loading..." : "Login"}
           </Button>
         </Box>
       </Form>

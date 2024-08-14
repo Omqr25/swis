@@ -15,6 +15,7 @@ import { ProductPage } from "./pages/ProductPage";
 import { SettingPage } from "./pages/SettingPage";
 import { TransactionPage } from "./pages/TransactionPage";
 import { WarehousePage } from "./pages/WarehousePage";
+import ReportsPage from "./pages/ReportsPage";
 
 const isAuthenticated = () => {
   return localStorage.getItem("token") !== null;
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "Transactions",
         element: isAuthenticated() ? <TransactionPage /> : <Navigate to="/login" />,  
+      },
+      {
+        path: "Reports",
+        element: isAuthenticated() ? <ReportsPage /> : <Navigate to="/login" />,  
       },
       {
         path : "Transactions/Create",

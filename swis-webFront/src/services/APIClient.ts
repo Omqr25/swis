@@ -23,6 +23,9 @@ class APIClient<T> {
   post = <D>(data: D) => {
     return axiosInstance.post<T>(this.endPoint, data).then((res) => res.data);
   };
+  download = <D>(data : D , config: AxiosRequestConfig) => {
+    return axiosInstance.post<T>(this.endPoint , data , config).then((res) => res.data);
+  }
   getWithId = (id: number | undefined) => {
     return axiosInstance
       .get<T>(this.endPoint + "/" + id)
