@@ -1,15 +1,20 @@
 import { useBreakpointValue } from "@chakra-ui/react";
 import Home from "../entities/Home";
 import useGetHome from "./useGetHome";
+import useGetWarehouseReport from "./useGetWarehouseReport";
 
 interface Copy {
   HomeArray: Home[];
 }
-const useHome = () => {
-  const { data } = useGetHome<Home>(
+const useHome = (warehouse_id? : number) => {
+  const { data , isLoading } = useGetHome<Home>(
     "transactionWarehouseItems/inventoryForAllWarehouses"
   );
-  const dataArray = data?.data || [];
+ const {data : WarehouseData  , isLoading : WarehouseDataLoading} = useGetWarehouseReport<Home>("transactionWarehouseItems/inventoryForWarehouse" , Number(warehouse_id));
+ const { refetch} = useGetWarehouseReport<Home>("transactionWarehouseItems/exportInventory" , Number(warehouse_id)); 
+ let dataArray = data?.data || [];
+  console.log(warehouse_id);
+  if(WarehouseData && warehouse_id != 0)dataArray = WarehouseData.data;
   let idx = 0;
   let DataArrayCopy: Copy[] = [];
   const showTabs = useBreakpointValue({ md: false, lg: true });
@@ -44,6 +49,6 @@ const useHome = () => {
     }
   }
 
-  return DataArrayCopy;
+  return {DataArrayCopy , isLoading , WarehouseDataLoading , refetch};
 };
 export default useHome;

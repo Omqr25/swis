@@ -14,7 +14,7 @@ const ReportsList = () => {
     return <Error message={error.message} />
  }
   return (
-    <List m={10}>
+    <List m={10} maxH={'540px'} overflowY={'auto'}>
         {data.map((file , index) => (
             <Box p={2} m={2} h={'60px'} key={index} borderRadius={20}  borderWidth="1px">
             <ListItem >

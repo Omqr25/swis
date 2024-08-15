@@ -14,7 +14,7 @@ import useCreateTransactionStore from "../../stores/createTransactionStroe";
 import AddedItemsList from "./AddedItemsList";
 import { DonorItemsSelector } from "./DonorItemsSelector";
 import { KeeperItemsSelector } from "./KeeperItemsSelector";
-import { WarehousesSelector } from "./WarehousesSelector";
+import { WarehousesSelector } from "../WarehousesSelector";
 
 interface Props {
   updateDisabled: (index: number, Disabled: boolean) => void;
@@ -36,9 +36,8 @@ export const TransactionItems = ({ updateDisabled, Disabled, User }: Props) => {
   const [SelectedQuantity, setSelectedQuantity] = useState<number>(1);
 
   const { t } = useTranslation();
-  
-  const {Items} = useCreateTransactionStore() || [];
 
+  const { Items } = useCreateTransactionStore() || [];
 
   const setItems = useCreateTransactionStore((s) => s.setItems);
 

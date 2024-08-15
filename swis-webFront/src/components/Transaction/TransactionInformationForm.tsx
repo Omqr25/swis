@@ -23,7 +23,7 @@ import useCreate from "../../hooks/useCreate";
 import useCreateTransactionStore from "../../stores/createTransactionStroe";
 
 export const TransactionInformationForm = () => {
-  const Create = useCreate<Transaction, FormData>("transactions");
+  const Create = useCreate<Transaction, TransactionRequest>("transactions");
 
   const navigate = useNavigate();
 
@@ -33,15 +33,15 @@ export const TransactionInformationForm = () => {
 
   const [Isconvoy, setIsconvoy] = useState("");
 
-  const [Transaction_type, setTransaction_type] = useState("");
+  const [Transaction_type, setTransaction_type] = useState("1");
 
   const [Type, setType] = useState("");
 
   const { Items } = useCreateTransactionStore();
 
-  const {setItems} = useCreateTransactionStore();
+  const { setItems } = useCreateTransactionStore();
 
-  const {setDrivers} = useCreateTransactionStore();
+  const { setDrivers } = useCreateTransactionStore();
 
   const { Drivers } = useCreateTransactionStore();
 
@@ -59,36 +59,26 @@ export const TransactionInformationForm = () => {
 
   const handleSubmit = (values: TransactionRequest) => {
     const data = new FormData();
-    values.notes?.en ? data.append("notes[en]", values.notes?.en) : "";
-    data.append("status", "2");
-    if (Items) {  
-      Items.forEach((item,index) => {  
-          data.append(`items[${index}][item_id]`, JSON.stringify(item.item_id));
-          data.append(`items[${index}][warehouse_id]`, JSON.stringify(item.warehouse_id));
-          data.append(`items[${index}][quantity]`, JSON.stringify(item.quantity));
-      });  
-  }
-    if (Drivers) Drivers.forEach(driver => {  
-      data.append("drivers[]", JSON.stringify(driver));
-  }); 
-    values.date ? data.append("date", values.date) : "";
-    values.waybill_num
-      ? data.append("waybill_num", `${values.waybill_num}`)
-      : "";
-    values.CTN ? data.append("CTN", `${values.CTN}`) : "";
     Waybill_img ? data.append("waybill_img", Waybill_img) : "";
-    UserId ? data.append("user_id", `${UserId}`) : "";
-    Transaction_type ? data.append("transaction_type", Transaction_type) : "";
-    Type ? data.append("type", Type) : "";
-    Isconvoy ? data.append("is_convoy", Isconvoy) : "";
-    console.log(UserId);
-    Create.mutate(data);
+
+    Create.mutate({
+      is_convoy: Isconvoy,
+      notes: { en: values.notes?.en },
+      user_id: UserId,
+      status: 1,
+      date: values.date,
+      waybill_num: values.waybill_num,
+      transaction_type: Transaction_type,
+      type: Type,
+      items: Items,
+      drivers: Drivers,
+    });
   };
 
-  if(Create.isSuccess){
+  if (Create.isSuccess) {
     setItems([]);
     setDrivers([]);
-    navigate('/Transactions');
+    navigate("/Transactions");
   }
   return (
     <Formik
@@ -251,14 +241,37 @@ export const TransactionInformationForm = () => {
               {t("type")}{" "}
             </FormLabel>
             <InputGroup>
+            {
+              Transaction_type === '1' &&
               <RadioGroup onChange={setType} w={"full"} color={Color}>
                 <Radio size={{ lg: "lg", md: "md" }} value={"1"} p={2}>
-                  IN
+                  Received_from_Partners
                 </Radio>
                 <Radio size={{ lg: "lg", md: "md" }} value={"2"} p={2}>
-                  OUT
+                Received_from_warehouses
+                </Radio>
+                <Radio size={{ lg: "lg", md: "md" }} value={"3"} p={2}>
+                Received_from_Distribution
                 </Radio>
               </RadioGroup>
+              }
+              {
+                Transaction_type === '2' && 
+                <RadioGroup onChange={setType} w={"full"} color={Color}>
+                <Radio size={{ lg: "lg", md: "md" }} value={"4"} p={2}>
+                out_for_Distribution
+                </Radio>
+                <Radio size={{ lg: "lg", md: "md" }} value={"5"} p={2}>
+                out_for_warehouses
+                </Radio>
+                <Radio size={{ lg: "lg", md: "md" }} value={"6"} p={2}>
+                loss
+                </Radio>
+                <Radio size={{ lg: "lg", md: "md" }} value={"7"} p={2}>
+                damage
+                </Radio>
+              </RadioGroup>
+              }
             </InputGroup>
             <ErrorMessage name="type">
               {(msg) => <Text color="red.500">{msg}</Text>}

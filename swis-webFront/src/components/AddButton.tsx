@@ -14,7 +14,7 @@ export const AddButton = ({onOpen} : Props) => {
   return (
     <IconButton
         colorScheme="green"
-        aria-label="Add Branch"
+        aria-label="Add"
         icon={<AddIcon />}
         isRound
         position={"fixed"}

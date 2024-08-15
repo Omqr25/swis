@@ -7,7 +7,7 @@ interface CustomError extends Error {
     status: number;
   };
 }
-const useGetHome = <T>(endPoint: string) => {
+const useGetWarehouseReport = <T>(endPoint: string , warehouseId : number) => {
   const apiClient = new APIClient<GetAllResponse<T>>(`/${endPoint}`);
   const navigate = useNavigate();
 
@@ -26,12 +26,13 @@ const useGetHome = <T>(endPoint: string) => {
   const monthAgoFormatted = formatDate(monthAgo);
   setAuthToken();
   return useQuery({
-    queryKey: [`getall${endPoint}`],
+    queryKey: [`getall${endPoint}` , warehouseId],
     queryFn: () =>
       apiClient.get({
         params: {
-          start_date : monthAgoFormatted,
-          end_date : "2024-08-17"
+            warehouse_id: warehouseId,
+            start_date : monthAgoFormatted,
+            end_date : "2024-08-17"
         },
       }),
     onError: (err: CustomError) => {
@@ -46,4 +47,4 @@ const useGetHome = <T>(endPoint: string) => {
     },
   });
 };
-export default useGetHome;
+export default useGetWarehouseReport;

@@ -35,7 +35,13 @@ export const TransactionUserInformation = ({
   const fecthedGamesCount =
     data?.pages.reduce((total, page) => total + page.data.length, 0) || 0;
   if (value != "0") {
-    checkedItems[0] ? setUser("Keeper") : setUser("Donor");
+    if(checkedItems[0]){
+      setUser("Keeper");
+      
+    }else{
+      setUser("Donor");
+     
+    } 
     setUserId(Number(value)); 
   }
   useEffect(() => {

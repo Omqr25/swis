@@ -40,7 +40,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import useCreateTransactionStore from "../../stores/createTransactionStroe";
 
 export const TransactionTable = () => {
-  const { data, isLoading, error, fetchNextPage, hasNextPage , isSuccess} =
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isSuccess } =
     useGetAll<Transaction>("transactions");
   const padding = [10, 5];
   const borderEnd = "2px solid gray";
@@ -50,9 +50,9 @@ export const TransactionTable = () => {
   const fetchedBranchesCount =
     data?.pages.reduce((total, page) => total + page.data.length, 0) || 0;
 
-  const {setItems} = useCreateTransactionStore();
-  const [done , setDone ] = useState(false);
-  if(isSuccess && !done){
+  const { setItems } = useCreateTransactionStore();
+  const [done, setDone] = useState(false);
+  if (isSuccess && !done) {
     setDone(true);
     setItems([]);
   }
@@ -155,7 +155,7 @@ export const TransactionTable = () => {
                       py={padding[1]}
                       textAlign={"center"}
                     >
-                      {Tra.user_id}
+                      {Tra.user}
                     </Td>
                     <Td
                       borderEnd={borderEnd}
