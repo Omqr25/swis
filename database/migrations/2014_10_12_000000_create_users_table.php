@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('contact_email')->unique();
             $table->string('type');
             $table->boolean('first_login')->default(true);
+            $table->string('password_reset_code')->nullable();
+            $table->timestamp('password_reset_expires_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

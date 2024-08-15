@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Enums\transactionStatusType;
+use App\Enums\userType;
 use App\Exports\TransactionsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\QRImageWithLogo;
@@ -15,6 +16,8 @@ use App\Http\Responses\Response;
 use App\Http\services\FilterService;
 use App\Http\services\QRCodeService;
 use App\Models\Transaction;
+use App\Models\User;
+use App\Notifications\TransactionCreated;
 use App\Services\TransactionService;
 use App\Traits\FileUpload;
 use App\Traits\QrCodeHelper;
@@ -67,26 +70,40 @@ class TransactionController extends Controller
     }
     public function store(StoreTransactionRequest $request): JsonResponse
     {
-        $dataItem=$request->validated();
-//        dd($dataItem);
-        if(Auth::user()->type->value != 1){
-            $dataItem['user_id']=Auth::user()->id;
+        $dataItem = $request->validated();
+
+        if (Auth::user()->type->value != userType::admin->value) { // Not an admin
+            $dataItem['user_id'] = Auth::user()->id;
         }
-        $transaction=null;
+
+        $transaction = null;
+
+        // Update system and donor item quantities
         $this->transactionRepository->UpdateSystemItemsQuantity($dataItem);
         $this->transactionRepository->UpdateDonorItemsQuantity($dataItem);
-        if ($request->hasFile('waybill_img')) {
-            $file = $request->file('waybill_img');
-            $fileName ='Transaction/'.'waybill_Images/' . $file->hashName() ;
-            $imagePath = $this->createFile($request->file('waybill_img'), Transaction::getDisk(),filename:  $fileName);
-            $dataItem['waybill_img'] = $imagePath;
-            $transaction=$this->transactionRepository->create($dataItem);
-        }
-        // $imagePath=$this->qrCodeService->generateQRCode( $transaction['Transaction']);
-        // $dataItem['qr_code'] = $imagePath;
-        // $transaction =$this->transactionRepository->update($dataItem,$transaction['Transaction']);
-        return $this->showOne($transaction['Transaction'],TransactionResource::class,$transaction['message']);
 
+        // Handle waybill image upload
+        // if ($request->hasFile('waybill_img')) {
+        //     $file = $request->file('waybill_img');
+        //     $fileName = 'Transaction/' . 'waybill_Images/' . $file->hashName();
+        //     $imagePath = $this->createFile($request->file('waybill_img'), Transaction::getDisk(), filename: $fileName);
+        //     $dataItem['waybill_img'] = $imagePath;
+        // }
+            $transaction = $this->transactionRepository->create($dataItem);
+        
+
+        // Generate QR code
+        $imagePath = $this->qrCodeService->generateQRCode($transaction['Transaction']);
+        $dataItem['qr_code'] = $imagePath;
+        $transaction = $this->transactionRepository->update($dataItem, $transaction['Transaction']);
+
+        // Send notification to admins
+        $admin = User::where('type', userType::admin->value)->first();
+        if (!$admin) {
+            $admin->notify(new TransactionCreated($transaction['Transaction'], Auth::user()));
+        }
+
+        return $this->showOne($transaction['Transaction'], TransactionResource::class, $transaction['message']);
     }
 
     public function update(UpdateTransactionRequest $request,Transaction $transaction): JsonResponse

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Enums\userType;
+use App\Notifications\JobCompletedNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -14,7 +16,9 @@ use App\Observers\BranchObserver;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
 use App\Observers\WarehouseObserver;
+use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -38,6 +42,13 @@ class EventServiceProvider extends ServiceProvider
         Warehouse::observe(WarehouseObserver::class);
         Branch::observe(BranchObserver::class);
         Item::observe(ItemObserver::class);
+        Event::listen(JobProcessed::class, function (JobProcessed $event) {
+            $admin = User::where('type', userType::admin->value)->first();
+            if ($admin) {
+                Notification::send($admin, new JobCompletedNotification($event->job->resolveName()));
+            }
+        });
+
     }
 
     /**

@@ -15,6 +15,7 @@ use App\Traits\FileUpload;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -141,6 +142,7 @@ class UserController extends Controller
     }
     public function donorExport()
     {
+        Log::error('sss');
         // Define the file name and path
         $fileName = 'donors_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
         $filePath = 'public/exports/users/' . $fileName;

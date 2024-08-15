@@ -45,14 +45,14 @@ class TransactionFactory extends Factory
             'CTN'=>$this->faker->numberBetween(1000, 9999),
         ];
     }
-    //   public function configure()
-    //   {
-    //       return $this->afterCreating(function (Transaction $transaction) {
-    //           $qrCodeService = app(QRCodeService::class);
-    //           $qrCodePath = $qrCodeService->generateQRCode( $transaction);
+       public function configure()
+       {
+           return $this->afterCreating(function (Transaction $transaction) {
+               $qrCodeService = app(QRCodeService::class);
+               $qrCodePath = $qrCodeService->generateQRCode( $transaction);
 
-    //           $transaction->qr_code = $qrCodePath;
-    //           $transaction->save();
-    //       });
-    //   }
+               $transaction->qr_code = $qrCodePath;
+               $transaction->save();
+           });
+       }
 }
