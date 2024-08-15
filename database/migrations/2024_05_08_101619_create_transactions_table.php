@@ -26,7 +26,7 @@ return new class extends Migration
                 $table->string('transaction_type');
                 $table->string('transaction_mode_type');
                 $table->integer('waybill_num');
-                $table->string('waybill_img');
+                $table->string('waybill_img')->default('');
                 $table->string('qr_code')->nullable();
                 $table->string('CTN')->nullable();
                 $table->timestamps();

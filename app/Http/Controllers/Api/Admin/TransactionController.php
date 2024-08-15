@@ -74,13 +74,14 @@ class TransactionController extends Controller
         $this->transactionRepository->UpdateDonorItemsQuantity($dataItem);
 
         // Handle waybill image upload
-        if ($request->hasFile('waybill_img')) {
-            $file = $request->file('waybill_img');
-            $fileName = 'Transaction/' . 'waybill_Images/' . $file->hashName();
-            $imagePath = $this->createFile($request->file('waybill_img'), Transaction::getDisk(), filename: $fileName);
-            $dataItem['waybill_img'] = $imagePath;
+        // if ($request->hasFile('waybill_img')) {
+        //     $file = $request->file('waybill_img');
+        //     $fileName = 'Transaction/' . 'waybill_Images/' . $file->hashName();
+        //     $imagePath = $this->createFile($request->file('waybill_img'), Transaction::getDisk(), filename: $fileName);
+        //     $dataItem['waybill_img'] = $imagePath;
+        // }
             $transaction = $this->transactionRepository->create($dataItem);
-        }
+        
 
         // Generate QR code
         $imagePath = $this->qrCodeService->generateQRCode($transaction['Transaction']);

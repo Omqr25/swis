@@ -37,7 +37,7 @@ class StoreTransactionRequest extends FormRequest
             'transaction_type' => 'required',new Enum(transactionType::class),
             'type' => 'required',new Enum(transactionModeType::class),
             'waybill_num' => 'required|integer',
-            'waybill_img' => 'required|image',
+         //   'waybill_img' => 'required|image',  
             'qr_code' => 'nullable|image',
             'CTN' => 'nullable|string',
             'items' => 'required|array',
