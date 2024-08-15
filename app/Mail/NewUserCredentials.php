@@ -34,7 +34,6 @@ class NewUserCredentials extends Mailable
         $htmlContent .= "<p><strong>Email:</strong> {$this->details['email']}</p>";
         $htmlContent .= "<p><strong>Password:</strong> {$this->details['password']}</p>";
         $htmlContent .= "<p>Please change your password after logging in for the first time.</p>";
-        $htmlContent .= "<p><a href=\"{$this->details['resetLink']}\">Reset Your Password</a></p>";
         $htmlContent .= "<p>Thank you for joining us!</p>";
 
         return $this->subject('Your New Account Credentials')
