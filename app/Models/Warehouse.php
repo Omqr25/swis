@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Spatie\Searchable\Searchable;
@@ -55,4 +56,8 @@ class Warehouse extends Model implements Searchable
         return $this->belongsTo(User::class);
     }
 
+    public function item(): BelongsToMany
+    {
+        return $this->belongsToMany(Item::class,'warehouse_items');
+    }
 }

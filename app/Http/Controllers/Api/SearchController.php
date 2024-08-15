@@ -10,7 +10,9 @@ use App\Models\Item;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Warehouse;
+use App\Models\WarehouseItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Searchable\ModelSearchAspect;
 use Spatie\Searchable\Search;
 use Throwable;
@@ -95,6 +97,44 @@ class SearchController extends Controller
 
         if ($searchResults->isEmpty()) return Response::Error(null, 'There is no such warehouses');
         return Response::Success($searchResults, 'Warehouses retrieved successfully');
+    }
+
+    public function searchWarehousesItems(Request $request)
+    {
+        $query = $request->query('query');
+
+        // try {
+        //     $searchResults = (new Search())
+        //         ->registerModel(
+        //             WarehouseItem::class,
+        //             function (ModelSearchAspect $modelSearchAspect) {
+        //                 $modelSearchAspect
+        //                     ->addSearchableAttribute('name->en')
+        //                     ->addSearchableAttribute('name->ar')
+        //                     ->has('item')
+        //                     ->with(['warehouse','item']);
+        //             }
+        //         )
+        //         ->search($query);
+        // } catch (Throwable $th) {
+        //     return Response::Error(null, $th->getMessage());
+        // }
+
+        // if ($searchResults->isEmpty()) return Response::Error(null, 'There is no such items in the warehouse');
+        // return Response::Success($searchResults, 'Items in warehouse retrieved successfully');
+
+        // $warehouse = Warehouse::where('user_id',$request->user()->id)->with('item')->first();
+        // $item = Item::where('name', 'LIKE', "%{$query}%")->with('warehouse')->get();
+        //     return $warehouse['item'];
+
+        // $warehouse = Warehouse::where('user_id',$request->user()->id)->first();
+        // $items = WarehouseItem::whereHas('item', function ($q) use ($query) {
+        // $q->where('name', 'LIKE', "%{$query}%");
+        // })->where('warehouse_id',$warehouse['id'])->get();
+        // $items->map(function($item){
+            
+        // });
+        // return $items;
     }
 
     public function searchBranches(Request $request)

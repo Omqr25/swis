@@ -12,6 +12,7 @@ use App\Http\Requests\Transaction\UpdateTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Http\Resources\DonorTransactionResource;
 use App\Http\Responses\Response;
+use App\Http\services\FilterService;
 use App\Http\services\QRCodeService;
 use App\Models\Transaction;
 use App\Services\TransactionService;
@@ -41,9 +42,17 @@ class TransactionController extends Controller
         $this->qrCodeService = $qrCodeService;
         $this->middleware(['auth:sanctum']);
     }
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-
+        if ($request->has('filter') || $request->has('sort')) {
+            try {
+                $data = FilterService::transaction();
+            } catch (Throwable $th) {
+                return Response::Error(null, $th->getMessage());
+            }
+            if ($data->isEmpty()) return Response::Error(null, 'There is no such transactions');
+            return Response::Success($data, 'Transactions filtered successfully');
+        }
         $data=$this->transactionRepository->index();
         return $this->showAll($data['Transaction'],TransactionResource::class,$data['message']);
 

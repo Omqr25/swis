@@ -25,6 +25,7 @@ class itemsResource extends JsonResource
             'size' => $this->size,
             'weight' => $this->weight,
             'quantity in the system' => $this->quantity,
+            // 'created_at' => $this->when($request->has('filter') || $request->has('sort'),$this->created_at->format('y-m-d'))
         ];
     }
 }
