@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Role;
 
 class AuthRepository
@@ -121,5 +122,4 @@ class AuthRepository
 
         return ['User' => $user, 'message' => $message, 'code' => $code];
     }
-
 }

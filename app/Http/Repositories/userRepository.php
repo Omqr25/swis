@@ -53,15 +53,13 @@ class userRepository extends baseRepository
 
         // Prepare email details
         $message = "User created successfully";
-        $resetLink = url('/password/reset', ['token' => Str::random(60)]);
         $details = [
             'email' => $email,
             'password' => $password,
-            'resetLink' => $resetLink,
         ];
 
         // Send email to the generated email address
-        Mail::to($email)->send(new NewUserCredentials($details));
+        Mail::to($data->contact_email)->send(new NewUserCredentials($details));
 
         return ['message' => $message, 'User' => $data];
     }
