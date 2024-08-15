@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Admin\DriverController;
 use App\Http\Controllers\Api\Admin\FileController;
 use App\Http\Controllers\Api\Admin\ItemController;
 use App\Http\Controllers\Api\Admin\BranchController;
+use App\Http\Controllers\Api\Admin\NotificationController;
 use App\Http\Controllers\Api\Admin\WarehouseItemController;
 use App\Http\Controllers\Api\Admin\TransactionController;
 use App\Http\Controllers\Api\Admin\TransactionWarehouseItemController;
@@ -147,5 +148,5 @@ Route::middleware(['auth:sanctum', 'Localization'])->group(function () {
     ]);
     Route::get('/files', [FileController::class, 'index']);
     Route::post('/files/downloader', [FileController::class, 'downloadFile']);
-
+    Route::get('/notifications', [NotificationController::class, 'index']);
 });

@@ -19,12 +19,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->job(MonthlyDonorExportJob::class)->monthlyOn(1, '00:00');
-        $schedule->job(MonthlyKeeperExportJob::class)->monthlyOn(1, '00:00');
-        $schedule->job(MonthlyUserExportJob::class)->monthlyOn(1, '00:00');
-        $schedule->job(MonthlyWarehouseExportJob::class)->monthlyOn(1, '00:00');
-        $schedule->job(MonthlyCompletedTransactionExportJob::class)->monthlyOn(1, '00:00');
-        $schedule->job(MonthlyInDeliveryTransactionExportJob::class)->monthlyOn(1, '00:00');
+        $schedule->job(MonthlyDonorExportJob::class)->everyMinute();
+        $schedule->job(MonthlyKeeperExportJob::class)->everyMinute();
+        $schedule->job(MonthlyUserExportJob::class)->everyMinute();
+        $schedule->job(MonthlyWarehouseExportJob::class)->everyMinute();
+        $schedule->job(MonthlyCompletedTransactionExportJob::class)->everyMinute();
+        $schedule->job(MonthlyInDeliveryTransactionExportJob::class)->everyMinute();
     }
 
     /**
