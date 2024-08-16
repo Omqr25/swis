@@ -37,8 +37,9 @@ class ItemController extends Controller
             } catch (Throwable $th) {
                 return Response::Error(null, $th->getMessage());
             }
-            if ($data->isEmpty()) return Response::Error(null, 'There is no such items');
-            return Response::Success($data, 'Items filtered successfully');
+            if ($data['Item']->isEmpty()) return Response::Error(null, 'There is no such items');
+            return $this->showAll($data['Item'], itemsResource::class, $data['message']);
+            // return Response::Success($data, 'Items filtered successfully');
         }
 
         $data = $this->itemRepository->index();

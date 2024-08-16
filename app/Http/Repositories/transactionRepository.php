@@ -43,7 +43,7 @@ class transactionRepository extends baseRepository
             'is_convoy' => $dataItem['is_convoy'],
             'notes' => $dataItem['notes'] ?? null,
             'waybill_num' => $dataItem['waybill_num'],
-            'waybill_img' => $dataItem['waybill_img'],
+          //  'waybill_img' => $dataItem['waybill_img'],    
             'status' => $dataItem['status'],
             'date' => $dataItem['date'],
             'CTN' => $dataItem['CTN'] ?? null,

@@ -50,6 +50,7 @@ Route::middleware(['auth:sanctum', 'Localization'])->group(function () {
         Route::get('search/searchdrivers', 'searchDrivers')->name('drivers.search');
         Route::get('search/searchtransactions', 'searchTransactions')->name('transactions.search');
         Route::get('search/searchwarehouses', 'searchWarehouses')->name('warehouses.search');
+        Route::get('search/searchwarehouses_items', 'searchWarehousesItems')->name('warehouses_items.search');
         Route::get('search/searchbranches', 'searchBranches')->name('branches.search');
         Route::get('search/searchusers', 'searchUsers')->name('users.search');
     });

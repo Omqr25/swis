@@ -13,6 +13,7 @@ use App\Http\Requests\Transaction\UpdateTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Http\Resources\DonorTransactionResource;
 use App\Http\Responses\Response;
+use App\Http\services\FilterService;
 use App\Http\services\QRCodeService;
 use App\Models\Transaction;
 use App\Models\User;
@@ -48,9 +49,17 @@ class TransactionController extends Controller
 //        $this->middleware(['permission:Donor'])->only(['store']);
 
     }
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-
+        if ($request->has('filter') || $request->has('sort')) {
+            try {
+                $data = FilterService::transaction();
+            } catch (Throwable $th) {
+                return Response::Error(null, $th->getMessage());
+            }
+            if ($data->isEmpty()) return Response::Error(null, 'There is no such transactions');
+            return Response::Success($data, 'Transactions filtered successfully');
+        }
         $data=$this->transactionRepository->index();
         return $this->showAll($data['Transaction'],TransactionResource::class,$data['message']);
 
@@ -78,13 +87,14 @@ class TransactionController extends Controller
         $this->transactionRepository->UpdateDonorItemsQuantity($dataItem);
 
         // Handle waybill image upload
-        if ($request->hasFile('waybill_img')) {
-            $file = $request->file('waybill_img');
-            $fileName = 'Transaction/' . 'waybill_Images/' . $file->hashName();
-            $imagePath = $this->createFile($request->file('waybill_img'), Transaction::getDisk(), filename: $fileName);
-            $dataItem['waybill_img'] = $imagePath;
+        // if ($request->hasFile('waybill_img')) {
+        //     $file = $request->file('waybill_img');
+        //     $fileName = 'Transaction/' . 'waybill_Images/' . $file->hashName();
+        //     $imagePath = $this->createFile($request->file('waybill_img'), Transaction::getDisk(), filename: $fileName);
+        //     $dataItem['waybill_img'] = $imagePath;
+        // }
             $transaction = $this->transactionRepository->create($dataItem);
-        }
+        
 
         // Generate QR code
         $imagePath = $this->qrCodeService->generateQRCode($transaction['Transaction']);

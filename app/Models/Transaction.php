@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\transactionModeType;
 use App\Enums\transactionType;
 use App\Enums\transactionStatusType;
+use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -44,6 +46,14 @@ class Transaction extends Model implements Searchable
     {
         $url = route('transactions.search', $this->slug);
         return new SearchResult($this, $this->code, $url);
+    }
+    public function scopeDate(Builder $query, $startDate , $endDate): Builder
+    {
+        return $query->whereBetween('date', [Carbon::parse($startDate),Carbon::parse($endDate)->addDay()]);
+    }
+    public function scopeCreatedBetween(Builder $query, $startDate , $endDate): Builder
+    {
+        return $query->whereBetween('created_at', [Carbon::parse($startDate),Carbon::parse($endDate)->addDay()]);
     }
     public function user():BelongsTo
     {
