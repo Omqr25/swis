@@ -18,7 +18,9 @@ class WarehouseItemController extends Controller
     public function __construct(warehouseItemRepository $warehouseItemRepository)
     {
         $this->warehouseItemRepository= $warehouseItemRepository;
-        $this->middleware(['auth:sanctum']);
+        $this->middleware(['auth:sanctum', 'Localization']);
+//        $this->middleware(['permission:Admin']);
+
     }
 
     public function destroy(WarehouseItem $warehouseItem)

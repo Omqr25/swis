@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class donorItem extends Model
+class DonorItem extends Model
 {
     use HasFactory,SoftDeletes;
 
@@ -23,7 +23,7 @@ class donorItem extends Model
     ];
 
     /**
-     * Get the donor that owns the DonorItem.
+     * Get the donor that owns the donorItem.
      */
     public function user():BelongsTo
     {
@@ -31,7 +31,7 @@ class donorItem extends Model
     }
 
     /**
-     * Get the item that is associated with the DonorItem.
+     * Get the item that is associated with the donorItem.
      */
     public function item():BelongsTo
     {

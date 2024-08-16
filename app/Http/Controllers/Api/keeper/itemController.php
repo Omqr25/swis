@@ -22,7 +22,9 @@ class itemController extends Controller
     private itemRepository $itemRepository;
      public function __construct( itemRepository $itemRepository){
          $this-> itemRepository =$itemRepository;
-         $this->middleware(['auth:sanctum']);
+         $this->middleware(['auth:sanctum', 'Localization']);
+//         $this->middleware(['permission:Keeper']);
+
 
      }
     public function index(): JsonResponse

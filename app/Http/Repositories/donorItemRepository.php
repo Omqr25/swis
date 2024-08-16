@@ -2,11 +2,11 @@
 
 namespace App\Http\Repositories;
 
-use App\Models\donorItem;
+use App\Models\DonorItem;
 
 class donorItemRepository extends baseRepository
 {
-    public function __construct(donorItem $model)
+    public function __construct(DonorItem $model)
     {
         parent::__construct($model);
     }
@@ -14,7 +14,7 @@ class donorItemRepository extends baseRepository
     public function index():array
     {
 
-        $data =donorItem::with('user','item')->paginate(10);
+        $data =DonorItem::with('user','item')->paginate(10);
         if ($data->isEmpty()){
             $message="There are no donors at the moment";
         }else
@@ -23,7 +23,7 @@ class donorItemRepository extends baseRepository
         }
         return ['message'=>$message,"Donor"=>$data];
     }
-    public function show(donorItem $donorItem)
+    public function show(DonorItem $donorItem)
     {
         $data =$donorItem->with('user','item')->first();
 
@@ -36,7 +36,7 @@ class donorItemRepository extends baseRepository
     public function indexItemForDonor($donor_id):array
     {
 
-        $data =donorItem::where('user_id', $donor_id)
+        $data =DonorItem::where('user_id', $donor_id)
         ->with('user','item')->paginate(10);
         if ($data->isEmpty()){
             $message="There are no donors at the moment";
@@ -49,7 +49,7 @@ class donorItemRepository extends baseRepository
 
     public function showItemForDonor($donor_id,$item_id)
     {
-        $data =donorItem::where('user_id', $donor_id)
+        $data =DonorItem::where('user_id', $donor_id)
             ->where('item_id',$item_id)
             ->with('user','item')->first();
 

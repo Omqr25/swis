@@ -22,19 +22,19 @@ class RolesPermssionsSeeder extends Seeder
 
         // Define permissions
         $permissions = [
-            'Ali',
-            'warehouse'
+            'Admin',
+            'Keeper',
+            'Donor',
         ];
 
         // Create permissions
         foreach ($permissions as $permission) {
-            Permission::findOrCreate($permission, 'web');
-        }
+            Permission::findOrCreate($permission, 'web');}
 
         // Assign permissions to roles
-        $adminRole->syncPermissions(['Ali']);
-        $keeperRole->givePermissionTo('warehouse');
-        $donorRole->givePermissionTo($permissions);
+        $adminRole->syncPermissions(['Admin']);
+        $keeperRole->givePermissionTo('Keeper');
+        $donorRole->givePermissionTo('Donor');
 
         // Create users and assign roles
         $adminUser = User::factory()->create([
@@ -43,7 +43,8 @@ class RolesPermssionsSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
         $adminUser->assignRole($adminRole);
-        $adminUser->givePermissionTo('Ali');
+        $adminUser->givePermissionTo('Admin');
+
 
         $keeperUser = User::factory()->create([
             'name' => 'Keeper name',
@@ -51,7 +52,16 @@ class RolesPermssionsSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
         $keeperUser->assignRole($keeperRole);
-        $keeperUser->givePermissionTo('warehouse');
+        $keeperUser->givePermissionTo('Keeper');
+
+
+        $donorUser = User::factory()->create([
+            'name' => 'donor name',
+            'email' => 'DonorName@Donor.com',
+            'password' => bcrypt('password'),
+        ]);
+        $donorUser->assignRole($donorRole);
+        $donorUser->givePermissionTo('Donor');
 
     }
 }

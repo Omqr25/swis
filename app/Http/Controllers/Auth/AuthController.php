@@ -23,7 +23,8 @@ class AuthController extends Controller
     public function __construct(AuthRepository $authRepository)
     {
         $this->authRepository = $authRepository;
-        $this->middleware(['auth:sanctum'])->only(['logout','completeProfile']);
+        $this->middleware(['auth:sanctum'])
+            ->only(['logout','requestResetPassword','resetWithCode','completeProfile']);
     }
 
     public function login(LoginRequests $request): JsonResponse

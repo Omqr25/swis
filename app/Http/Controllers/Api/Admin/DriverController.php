@@ -22,8 +22,8 @@ class DriverController extends Controller
     public function __construct( driverRepository $driverRepository)
     {
         $this-> driverRepository =$driverRepository;
-        $this->middleware(['auth:sanctum']);
-//        $this->middleware(['permission:Ali']);
+        $this->middleware(['auth:sanctum', 'Localization']);
+//        $this->middleware(['permission:Admin']);
 
     }
     public function index(): JsonResponse

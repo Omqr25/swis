@@ -16,7 +16,8 @@ class transactionController extends Controller
     private transactionRepository $transactionRepository;
      public function __construct(transactionRepository $transactionRepository){
          $this->transactionRepository=$transactionRepository;
-         $this->middleware(['auth:sanctum']);
+         $this->middleware(['auth:sanctum', 'Localization']);
+//         $this->middleware(['permission:Keeper']);
      }
      public function index(): JsonResponse
      {

@@ -15,7 +15,8 @@ class DonorItemController extends Controller
 
     public function __construct(donorItemRepository $donorItemRepository){
         $this->donorItemRepository=$donorItemRepository;
-        $this->middleware(['auth:sanctum']);
+        $this->middleware(['auth:sanctum', 'Localization']);
+//        $this->middleware(['permission:Donor'])->only(['index','show']);
     }
     public function index(): JsonResponse
     {

@@ -11,6 +11,13 @@ use League\Flysystem\UnableToRetrieveMetadata;
 
 class FileController extends Controller
 {
+    public function __construct( )
+    {
+        $this->middleware(['auth:sanctum']);
+//        $this->middleware(['permission:Admin']);
+//        $this->middleware(['permission:Keeper'])->only(['downloadFile']);
+
+    }
     public function index()
     {
         // Get all files in the storage/public/exports directory

@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum']);
+        $this->middleware(['permission:Admin']);
+    }
     /**
      * Get all notifications for the authenticated admin.
      *

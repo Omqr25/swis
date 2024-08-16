@@ -32,8 +32,8 @@ class WarehouseController extends Controller
     public function __construct(warehouseRepository $warehouseRepository)
     {
         $this->warehouseRepository=$warehouseRepository;
-        $this->middleware(['auth:sanctum']);
-        //$this->middleware(['permission']);
+        $this->middleware(['auth:sanctum', 'Localization']);
+//        $this->middleware(['permission:Admin']);
     }
 
 
