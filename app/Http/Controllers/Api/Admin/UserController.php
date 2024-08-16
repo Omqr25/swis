@@ -25,8 +25,14 @@ class UserController extends Controller
     private userRepository $userRepository;
     public function __construct(userRepository $userRepository)
     {
+
         $this->userRepository =$userRepository;
-//        $this->middleware(['auth:sanctum']);
+        $this->middleware(['auth:sanctum', 'Localization']);
+//        $this->middleware(['permission:Donor'])->only(['update']);
+////        $this->middleware(['permission:Keeper'])->only(['update','show']);
+////        $this->middleware(['permission:Admin']);
+
+
     }
     public function index()
     {
@@ -58,6 +64,8 @@ class UserController extends Controller
 
     public function update(updateUserRequests $request,User $user): JsonResponse
     {
+//        $permissions = auth()->user()->getAllPermissions();
+//        dd($permissions);
         $dataUser=$request->validated();
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');

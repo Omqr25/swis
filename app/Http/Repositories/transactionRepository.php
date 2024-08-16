@@ -175,7 +175,7 @@ class transactionRepository extends baseRepository
     {
         $user = User::where('id',$transaction['user_id'])->first();
         $keeper = Warehouse::where('user_id', $transaction['user_id'])->first();
-        
+
         if ($user['type']->value != 2) { // if the user is not a keeper
             $i = 0;
             $updatedQuantities = [];
@@ -253,7 +253,7 @@ class transactionRepository extends baseRepository
             foreach ($transaction['items'] as $item_in_transaction) {
                 $warehouse=Warehouse::where('id',$item_in_transaction['warehouse_id'])->first();
                 if($warehouse == null) throw new InvalidQuantitiesException(null,"Warehouse: ".$item_in_transaction['warehouse_id']." does not exist");
-                
+
                 $source = WarehouseItem::where('warehouse_id', $keeper->id)
                     ->where('item_id', $item_in_transaction['item_id'])
                     ->first();

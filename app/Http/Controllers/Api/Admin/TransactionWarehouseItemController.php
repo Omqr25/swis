@@ -30,7 +30,9 @@ class TransactionWarehouseItemController extends Controller
     public function __construct(transactionWarehousesItemRepository $transactionWarehousesRepository)
     {
         $this->transactionWarehousesRepository =$transactionWarehousesRepository;
-        $this->middleware(['auth:sanctum']);
+//        $this->middleware(['auth:sanctum', 'Localization']);
+//        $this->middleware(['permission:Admin']);
+
     }
 
     public function index(): JsonResponse

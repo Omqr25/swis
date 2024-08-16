@@ -32,12 +32,18 @@ class userRepository extends baseRepository
         switch ($userType) {
             case UserType::keeper:
                 $email = "{$username}{$randomNumber}@keeper.swis.com";
+                $role = 'keeper';
+
                 break;
             case UserType::donor:
                 $email = "{$username}{$randomNumber}@donor.swis.com";
+                $role = 'donor';
+
                 break;
             case UserType::admin:
                 $email = "{$username}{$randomNumber}@admin.swis.com";
+                $role = 'admin';
+
                 break;
             default:
                 // Handle invalid user type
@@ -50,6 +56,8 @@ class userRepository extends baseRepository
 
         // Create the user
         $data = User::create($request);
+
+        $data->assignRole($role);
 
         // Prepare email details
         $message = "User created successfully";

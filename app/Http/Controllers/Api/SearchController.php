@@ -19,7 +19,11 @@ use Spatie\Searchable\Search;
 use Throwable;
 
 class SearchController extends Controller
+{public function __construct()
 {
+    $this->middleware(['auth:sanctum']);
+}
+
     public function searchItems(Request $request)
     {
         $query = $request->query('query');

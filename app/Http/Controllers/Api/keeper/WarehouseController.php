@@ -28,8 +28,8 @@ class WarehouseController extends Controller
     {
         $this->warehouseRepository=$warehouseRepository;
         $this->transactionWarehousesRepository=$transactionWarehousesRepository;
-        $this->middleware(['auth:sanctum']);
-        //$this->middleware(['permission:warehouse']);
+        $this->middleware(['auth:sanctum', 'Localization']);
+//        $this->middleware(['permission:Keeper']);
     }
     public function show()
     {

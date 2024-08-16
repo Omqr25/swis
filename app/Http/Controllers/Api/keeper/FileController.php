@@ -13,6 +13,12 @@ use League\Flysystem\UnableToRetrieveMetadata;
 
 class FileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum']);
+//        $this->middleware(['permission:Keeper']);
+
+    }
     public function index()
     {
         // Retrieve the warehouse for the currently authenticated user

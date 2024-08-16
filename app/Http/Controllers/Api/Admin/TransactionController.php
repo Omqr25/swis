@@ -43,7 +43,11 @@ class TransactionController extends Controller
     {
         $this->transactionRepository = $transactionRepository;
         $this->qrCodeService = $qrCodeService;
-        $this->middleware(['auth:sanctum']);
+        $this->middleware(['auth:sanctum', 'Localization']);
+//        $this->middleware(['permission:Admin']);
+//        $this->middleware(['permission:Keeper'])->only(['store']);
+//        $this->middleware(['permission:Donor'])->only(['store']);
+
     }
     public function index(Request $request): JsonResponse
     {
@@ -99,9 +103,9 @@ class TransactionController extends Controller
         $transaction = $this->transactionRepository->update($dataItem, $transaction['Transaction']);
 
         // Send notification to admins
-        $admin = User::where('type', userType::admin->value)->first();
-        if (!$admin) {
-            $admin->notify(new TransactionCreated($transaction['Transaction'], Auth::user()));
+        $admin = User::role('admin')->first();
+        if (!Auth::user()->hasRole('admin')) {
+            $admin->notify(new TransactionCreated($transaction['Transaction'], $admin));
         }
 
         return $this->showOne($transaction['Transaction'], TransactionResource::class, $transaction['message']);

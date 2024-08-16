@@ -7,7 +7,7 @@ enum transactionModeType :  int
     //for transaction IN
     case Received_from_Partners = 1;
     case Received_from_warehouses= 2;
-    case Received_from_Distribution= 3;
+    case Return_from_Distribution= 3;
 
 
     //for transaction OUT

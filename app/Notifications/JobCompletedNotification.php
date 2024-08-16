@@ -42,7 +42,7 @@ class JobCompletedNotification extends Notification
     {
         return [
             'job_name' => $this->jobName,
-            'message' => 'The job ' . $this->jobName . ' has been completed successfully.',
+            'message' => 'export file has been completed successfully from The job ' . $this->jobName . '.',
         ];
     }
 }
