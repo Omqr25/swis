@@ -263,7 +263,7 @@ class transactionRepository extends baseRepository
                 if ($transaction['transaction_type'] == 1) {
                     if ($source == null) {
                         // $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
-                        throw new InvalidQuantitiesException(null,"Warehouse $source->warehouse_id does not have the following item $item_in_transaction->item_id");
+                        throw new InvalidQuantitiesException(null,"Warehouse ".$keeper['id']." does not have the following item ".$item_in_transaction['item_id']);
                     } else {
                         if ($item_in_transaction['quantity'] > $source->quantity) {
                             $invalidQuantities[$source->item_id] = $item_in_transaction['quantity'];
@@ -291,7 +291,7 @@ class transactionRepository extends baseRepository
                 } else if ($transaction['transaction_type'] == 2) {
                     if ($destination == null) {
                         // $invalidQuantities[$item_in_transaction['item_id']] = $item_in_transaction['quantity'];
-                        throw new InvalidQuantitiesException(null,"Warehouse $destination->warehouse_id does not exist OR does not have the following item $item_in_transaction->item_id");
+                        throw new InvalidQuantitiesException(null,"Warehouse ".$item_in_transaction['warehouse_id']." does not exist OR does not have the following item ".$item_in_transaction['item_id']);
                     } else {
                         if ($item_in_transaction['quantity'] > $destination->quantity) {
                             $invalidQuantities[$destination->item_id] = $item_in_transaction['quantity'];

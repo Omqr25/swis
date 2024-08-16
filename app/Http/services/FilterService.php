@@ -50,7 +50,7 @@ class FilterService
                 'date',
                 'created_at'
             ])
-            ->get();
-        return $data;
+            ->paginate(10);
+        return ['Transaction'=>$data , 'message'=>'Transactions filtered successfully'];
     }
 }

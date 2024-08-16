@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\Response;
 use App\Models\Branch;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Driver;
 use App\Models\Item;
 use App\Models\Transaction;
@@ -102,39 +103,43 @@ class SearchController extends Controller
     public function searchWarehousesItems(Request $request)
     {
         $query = $request->query('query');
+        $warehouse = Warehouse::where('user_id',$request->user()->id)->first();
 
-        // try {
-        //     $searchResults = (new Search())
-        //         ->registerModel(
-        //             WarehouseItem::class,
-        //             function (ModelSearchAspect $modelSearchAspect) {
-        //                 $modelSearchAspect
-        //                     ->addSearchableAttribute('name->en')
-        //                     ->addSearchableAttribute('name->ar')
-        //                     ->has('item')
-        //                     ->with(['warehouse','item']);
-        //             }
-        //         )
-        //         ->search($query);
-        // } catch (Throwable $th) {
-        //     return Response::Error(null, $th->getMessage());
-        // }
+        try {
+            $searchResults = (new Search())
+                ->registerModel(
+                    Item::class,
+                    function (ModelSearchAspect $modelSearchAspect) use ($warehouse){
+                        $modelSearchAspect
+                            ->addSearchableAttribute('name->en')
+                            ->addSearchableAttribute('name->ar')
+                            ->addSearchableAttribute('code')
+                            ->has('warehouseItem','>=',1,'and',function (Builder $q) use ($warehouse) {
+                                $q->where('warehouse_id',$warehouse['id']);
+                            });
+                    }
+                )
+                ->search($query);
+        } catch (Throwable $th) {
+            return Response::Error(null, $th->getMessage());
+        }
 
-        // if ($searchResults->isEmpty()) return Response::Error(null, 'There is no such items in the warehouse');
-        // return Response::Success($searchResults, 'Items in warehouse retrieved successfully');
-
-        // $warehouse = Warehouse::where('user_id',$request->user()->id)->with('item')->first();
-        // $item = Item::where('name', 'LIKE', "%{$query}%")->with('warehouse')->get();
-        //     return $warehouse['item'];
-
-        // $warehouse = Warehouse::where('user_id',$request->user()->id)->first();
-        // $items = WarehouseItem::whereHas('item', function ($q) use ($query) {
-        // $q->where('name', 'LIKE', "%{$query}%");
-        // })->where('warehouse_id',$warehouse['id'])->get();
-        // $items->map(function($item){
-            
-        // });
-        // return $items;
+        if ($searchResults->isEmpty()) return Response::Error(null, 'There is no such items');
+        $final_result = $searchResults->map(function ($item) use ($warehouse) {
+            $warehouseItems=WarehouseItem::where('warehouse_id',$warehouse['id'])->where('item_id',$item->searchable->id)->first();
+            return [
+                "id" => $item->searchable->id,
+                "name"=> $item->searchable->name,
+                "code" => $item->searchable->code,
+                "sectorType" => $item->searchable->sectorType,
+                "unitType" => $item->searchable->unitType,
+                "size" => $item->searchable->size,
+                "weight" => $item->searchable->weight,
+                'quantity_in_warehouse' => $warehouseItems->quantity,
+                "created_at" => $item->searchable->created_at->format('Y-m-d'),
+            ];
+        });
+        return Response::Success($final_result, 'Items retrieved successfully');
     }
 
     public function searchBranches(Request $request)

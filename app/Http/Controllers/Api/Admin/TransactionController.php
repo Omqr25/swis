@@ -53,10 +53,11 @@ class TransactionController extends Controller
             } catch (Throwable $th) {
                 return Response::Error(null, $th->getMessage());
             }
-            if ($data->isEmpty()) return Response::Error(null, 'There is no such transactions');
-            return Response::Success($data, 'Transactions filtered successfully');
+            if ($data['Transaction']->isEmpty()) return Response::Error(null, 'There is no such transactions');
+            // return Response::Success($data, 'Transactions filtered successfully');
         }
-        $data=$this->transactionRepository->index();
+        else $data=$this->transactionRepository->index();
+        
         return $this->showAll($data['Transaction'],TransactionResource::class,$data['message']);
 
     }
