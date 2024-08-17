@@ -12,7 +12,7 @@ class WarehouseObserver
     public function created(Warehouse $warehouse): void
     {
         $var = $warehouse->getTranslation('name', 'en');
-        $code = substr($var, 0, 4) . (2000000 + $warehouse->id);
+        $code = substr($var, 0, 4) . (1000+ $warehouse->id);
         $warehouse->code = $code;
         $warehouse->save();
     }

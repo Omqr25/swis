@@ -9,11 +9,10 @@ class TransactionObserver
     /**
      * Handle the Transaction "created" event.
      */
-    // public function created(Transaction $transaction): void
-    // {   
-    //     $var=$transaction->getTranslation('name', 'en');
-    //     $code = substr($var,0,4).(1000000 + $transaction->id);
-    //     $transaction->code = $code;
-    //     $transaction->save();
-    // }
+     public function created(Transaction $transaction): void
+     {
+         $code = (50000 + $transaction->id);
+         $transaction->code = $code;
+         $transaction->save();
+     }
 }

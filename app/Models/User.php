@@ -22,6 +22,10 @@ class User extends Authenticatable implements Searchable
 {
     use HasApiTokens, HasFactory, Notifiable, hasRoles, SoftDeletes, HasTranslations;
 
+
+
+    protected $table = 'Users'; // Specify the correct table name
+
     /**
      * The attributes that are mass assignable.
      *

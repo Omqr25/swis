@@ -12,7 +12,7 @@ class BranchObserver
     public function created(Branch $branch): void
     {
         $var = $branch->getTranslation('name', 'en');
-        $code = substr($var, 0, 4) . (3000000 + $branch->id);
+        $code = substr($var, 0, 4) . (30000 + $branch->id);
         $branch->code = $code;
         $branch->save();
     }

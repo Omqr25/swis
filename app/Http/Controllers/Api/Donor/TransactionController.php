@@ -8,7 +8,7 @@ use App\Http\Resources\DonorTransactionResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class transactionController extends Controller
+class TransactionController extends Controller
 {
     private transactionRepository $transactionRepository;
     public function __construct(transactionRepository $transactionRepository){

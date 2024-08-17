@@ -12,7 +12,6 @@ use App\Http\Resources\itemsResource;
 use App\Http\Responses\Response;
 use App\Http\services\FilterService;
 use App\Models\Item;
-use App\Services\itemService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;

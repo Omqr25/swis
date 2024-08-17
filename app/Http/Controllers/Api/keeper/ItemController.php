@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
-class itemController extends Controller
+class ItemController extends Controller
 {
-    private itemRepository $itemRepository;
-     public function __construct( itemRepository $itemRepository){
+    private ItemRepository $itemRepository;
+     public function __construct( ItemRepository $itemRepository){
          $this-> itemRepository =$itemRepository;
          $this->middleware(['auth:sanctum', 'Localization']);
 //         $this->middleware(['permission:Keeper']);
