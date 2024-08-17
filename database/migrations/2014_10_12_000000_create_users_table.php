@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    protected $table = 'Users'; // Specify the correct table name
+
     /**
      * Run the migrations.
      */

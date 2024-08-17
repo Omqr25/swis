@@ -19,8 +19,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ItemController extends Controller
 {
-    private ItemRepository $itemRepository;
-     public function __construct( ItemRepository $itemRepository){
+    private itemRepository $itemRepository;
+     public function __construct( itemRepository $itemRepository){
          $this-> itemRepository =$itemRepository;
          $this->middleware(['auth:sanctum', 'Localization']);
 //         $this->middleware(['permission:Keeper']);
